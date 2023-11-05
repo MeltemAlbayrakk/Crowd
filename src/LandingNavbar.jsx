@@ -48,7 +48,7 @@ const LandingNavbar = ()=>{
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
+                fontFamily: '"Segoe UI Emoji"',
                 fontWeight: 700,
                 letterSpacing: '.3rem',
                 color: 'inherit',
@@ -62,6 +62,7 @@ const LandingNavbar = ()=>{
   
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
+              
                 size="large"
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
@@ -77,12 +78,15 @@ const LandingNavbar = ()=>{
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
              
             </Box>
-  
-            <RegisterButton
-            sx={{ mr: 2, color: 'white', display: 'block' }}
-              variant="contained">
-              KAYIT OL
-            </RegisterButton>
+            <Link href="./Register.jsx">
+              <RegisterButton
+                sx={{ fontFamily: '"Segoe UI Emoji"',mr: 2, color: 'white', display: 'block' }}
+          
+                variant="contained">
+                KAYIT OL
+                </RegisterButton>
+            </Link>
+           
           </Toolbar>
         </Container>
         

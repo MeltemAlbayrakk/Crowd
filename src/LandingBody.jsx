@@ -1,12 +1,11 @@
 
-import LandingNavbar from "./LandingNavbar";
 
 import * as React from 'react';
 import { Container } from "@mui/system";
 import Box from '@mui/material/Box';
+import LandingNavbar from "./LandingNavbar";
 
-
-const App=()=>{
+const LandingBody=()=>{
   
   return (
   
@@ -32,4 +31,4 @@ const App=()=>{
 
   )
 }
-export default App;
+export default LandingBody;
