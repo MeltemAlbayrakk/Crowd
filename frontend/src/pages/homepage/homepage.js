@@ -1,7 +1,7 @@
 import api from "../../services/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 import Header from "../../components/layout/header/header";
 import Footer from "../../components/layout/footer/footer";
 import Banner from "../../components/banner/banner";
@@ -41,24 +41,38 @@ export default function Homepage() {
 
   
   const login = async (event) => {
-    event.preventDefault();
-    setError("");
-    setLoading(true);
     try {
-      const response = await api.user.login(email, password);
-      localStorage.setItem("auth", JSON.stringify(response));
-      setAuth(true);
-      setLoginboxVisibility(false);
-      setLoading(false);
-      setTimeout(() => navigate("/loading/profile"));
-    } catch (err) {
-      setError(
-        err.response.data.errorMessage ||
-          err.response.data.errors.msg.errorMessage
-      );
-      setLoading(false);
+      const response = await axios.post('http://localhost:3000/user/login', {
+        email: email,
+        password: password
+      });
+  
+      // Check the response status code
+      if (response.status === 201) {
+        alert("Login successful"); // You can add redirection logic here
+      } else {
+        alert("Unexpected response from server"); // Handle unexpected response codes
+      }
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (error.response.status === 401) {
+          alert("Invalid email or password. Please try again."); // Handle 401 Unauthorized error
+        } else {
+          alert("Server error. Please try again later."); // Handle other server errors
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        alert("No response from server. Please try again later.");
+      } else {
+        // Something happened in setting up the request that triggered an error
+        alert("Request failed. Please check your internet connection and try again.");
+      }
     }
   };
+  
+  
 
 
   const logout = () => {

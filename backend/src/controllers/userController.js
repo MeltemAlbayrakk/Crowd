@@ -6,14 +6,14 @@ import { userRoles } from '../constants/constants.js';
 const registerCompanyUser=async (req,res)=>{
 
     try {
-        const { firstName,lastName,email, password, phone, companyName,passwordconfirm } = req.body;
+        const {firstName,lastName,email, password, phone, companyName,passwordconfirm } = req.body;
         
        const salt=await bcrypt.genSalt(10)
   
        const hashedPassword=await bcrypt.hash(password,salt)
 
          if(password==passwordconfirm){
-           const user = new UserModel({
+           const user =await new UserModel({
             firstName:firstName,
             lastName:lastName,
             email: email,
@@ -38,7 +38,7 @@ const registerCompanyUser=async (req,res)=>{
 const registerPersonelUser=async (req,res)=>{
 
     try {
-        const {firstName,lastName, email, password, phone,passwordconfirm} = req.body;
+        const{firstName,lastName, email, password, phone,passwordconfirm} = req.body;
         
        const salt=await bcrypt.genSalt(10)
   
@@ -46,7 +46,7 @@ const registerPersonelUser=async (req,res)=>{
 
   
        if(password==passwordconfirm){
-        const user = new UserModel({
+        const user = await new UserModel({
             firstName:firstName,
             lastName:lastName,
             email: email,
