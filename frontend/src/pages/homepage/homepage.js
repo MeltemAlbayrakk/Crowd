@@ -68,26 +68,13 @@ export default function Homepage() {
   };
 
   const register = async (event) => {
-    event.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const response = await api.user.register(activeTab, registerData);
-      setRegisterboxVisibility(false);
-      localStorage.setItem("auth", JSON.stringify(response));
-      setAuth(true);
-      setLoading(false);
-    } catch (err) {
-      setError(
-        err.response.data.errorMessage ||
-          err.response.data.errors.msg.errorMessage
-      );
-      setTimeout(() => {
-        const element = document.getElementById("registerbox");
-        element.querySelector("form").scrollTop = element.scrollHeight + 100;
-        setLoading(false);
-      });
-    }
+    fetch("http://localhost:3000/user/register/individual",registerData).then((res) => res.json())
+    .then((data) => {
+       alert(data);
+    })
+    .catch((err) => {
+       console.log(err.message);
+    });
   };
 
   return (
