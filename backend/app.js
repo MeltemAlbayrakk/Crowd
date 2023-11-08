@@ -4,6 +4,9 @@ import dotenv from 'dotenv'
 import UserModel from './src/models/User.js'
 import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
+import jobRoute from './src/routes/jobRoute.js';
+import { checkUser } from './src/middlewares/authMiddleware.js'
+import cookieParser from 'cookie-parser';
 
 dotenv.config()
 
@@ -27,6 +30,10 @@ app.use(express.json())
 conn()
 
 app.use('/user', userRoute);
+app.use("/job",jobRoute)
+app.use(cookieParser());
+app.use('*', checkUser);
+
 
 
 app.listen(port, () => {

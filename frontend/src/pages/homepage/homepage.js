@@ -71,10 +71,6 @@ export default function Homepage() {
       }
     }
   };
-  
-  
-
-
   const logout = () => {
     setAuth(false);
     setLoginboxVisibility(false);

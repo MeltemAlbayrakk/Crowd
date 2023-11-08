@@ -34,7 +34,6 @@ const registerCompanyUser=async (req,res)=>{
 
 }
 
-
 const registerPersonelUser=async (req,res)=>{
 
     try {
@@ -56,12 +55,9 @@ const registerPersonelUser=async (req,res)=>{
 
         });
 
-
         await user.save();
         res.status(201).json({ message: 'User registered successfully' });
-       }
-         
-  
+       }  
         
     } catch (error) {
         console.error(error);
@@ -82,9 +78,14 @@ const login=async (req,res)=>{
     
     if(passwordMatch){
     
-      res.status(201).json({ message: 'User login successfully' });
-    
-    
+      const token = createToken(user._id);
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24,
+      }); 
+
+      res.status(201).json({ message: 'User login successfully',token });
+        
     }else {
       return res.status(401).json({
         succeded: false,
@@ -99,4 +100,17 @@ const login=async (req,res)=>{
       });
     }}
 
-    export {registerCompanyUser,registerPersonelUser,login}
+    const createToken = (userId) => {
+      return jwt.sign({ userId }, process.env.JWT_SECRET, {
+        expiresIn: '1d',
+      });
+    };
+
+    const getLogout = (req, res) => {
+      res.cookie('jwt', '', {
+        maxAge: 1,
+      });
+  
+    };
+
+    export {registerCompanyUser,registerPersonelUser,login,getLogout}
