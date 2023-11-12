@@ -56,7 +56,7 @@ export default function Homepage() {
         setLoading(false);
         
 /*         setTimeout(() =>
- */     navigate("/profile/index.js");
+     navigate("/profile"); */
         alert("Login successful");
         
       } else {
@@ -92,7 +92,7 @@ export default function Homepage() {
     event.preventDefault();
     if (activeTab==="corporate"){
 
-      try {
+    try {
     const response = await axios.post("http://localhost:3001/user/company/register",{
     registerData:registerData});
 
@@ -111,7 +111,7 @@ export default function Homepage() {
       setLoading(false);
      
       if (error.response.status === 401) {
-        alert("Passwords are not matched.");
+        alert(error.response.data.error);
       } else {
         alert("Server error. Please try again later."); 
       }
@@ -145,7 +145,7 @@ export default function Homepage() {
         setLoading(false);
        
         if (error.response.status === 401) {
-          alert("Passwords are not matched.");
+          alert(error.response.data.error);
         } else {
           alert("Server error. Please try again later."); 
         }

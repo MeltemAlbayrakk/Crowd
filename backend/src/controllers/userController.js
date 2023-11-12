@@ -10,70 +10,101 @@ const registerCompanyUser=async (req,res)=>{
         const {registerData} = req.body;
        const salt=await bcrypt.genSalt(10)
 
+       const phoneNumber=await UserModel.findOne({phone:registerData.phone})
+  
+       const email=await UserModel.findOne({email:registerData.email})
+
        const hashedPassword=await bcrypt.hash(registerData.password,salt)
-       console.log("registercompanycalıstı");
 
-         if(registerData.password==registerData.passwordConfirmation){
-           const user =await new UserModel({
-            firstName:registerData.firstName,
-            lastName:registerData.lastName,
-            email:registerData.email,
-            password: hashedPassword,
-            phone:registerData.phone,
-            companyName: registerData.companyName,
-            role:userRoles.COMPANY
-           });
-            
-            await user.save();
-          res.status(201).json({ message: 'User registered successfully' })
-         }else{
-          return res.status(401).json({
-            succeded: false,
-            error: 'Passwords are not matched',
-          });
-        }
-       } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }   
+       if (registerData.password !== registerData.passwordConfirmation) {
+        return res.status(401).json({
+          succeeded: false,
+          error: 'Passwords are not matched',
+        });
+      }
+  
+      if (phoneNumber) {
+        return res.status(401).json({
+          succeeded: false,
+          error: 'Sistemde kayıtlı telefon numarası bulunmaktadır. Farklı bir numara deneyiniz.',
+        });
+      }
 
-}
+      if (email) {
+        return res.status(401).json({
+          succeeded: false,
+          error: 'Sistemde kayıtlı email numarası bulunmaktadır. Farklı bir email adresi deneyiniz.',
+        });
+      }
+  
+      const user = await new UserModel({
+        firstName: registerData.firstName,
+        lastName: registerData.lastName,
+        email: registerData.email,
+        password: hashedPassword,
+        phone: registerData.phone,
+        role: userRoles.PERSONAL,
+      });
+  
+      await user.save();
+      res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 
 
 const registerPersonelUser=async (req,res)=>{
 
     try {
-        const{registerData} = req.body;
-
+       const{registerData} = req.body;
+       
        const salt=await bcrypt.genSalt(10)
   
-       const hashedPassword=await bcrypt.hash(registerData.password,salt)       
+       const hashedPassword=await bcrypt.hash(registerData.password,salt)
+       
+       const phoneNumber=await UserModel.findOne({phone:registerData.phone})
   
-       if(registerData.password==registerData.passwordConfirmation){
-            const user = await new UserModel({
-            firstName:registerData.firstName,
-            lastName:registerData.lastName,
-            email:registerData.email,
-            password: hashedPassword,
-            phone:registerData.phone,    
-            role:userRoles.PERSONAL
-        });
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
-       }else{
+       const email=await UserModel.findOne({email:registerData.email})
+
+       if (registerData.password !== registerData.passwordConfirmation) {
         return res.status(401).json({
-          succeded: false,
+          succeeded: false,
           error: 'Passwords are not matched',
         });
       }
-      console.log("register user4 calıstı")
-         
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }   
+  
+      if (phoneNumber) {
+        return res.status(401).json({
+          succeeded: false,
+          error: 'Sistemde kayıtlı telefon numarası bulunmaktadır. Farklı bir numara deneyiniz.',
+        });
+      }
 
-}
+      if (email) {
+        return res.status(401).json({
+          succeeded: false,
+          error: 'Sistemde kayıtlı email numarası bulunmaktadır. Farklı bir email adresi deneyiniz.',
+        });
+      }
+  
+      const user = await new UserModel({
+        firstName: registerData.firstName,
+        lastName: registerData.lastName,
+        email: registerData.email,
+        password: hashedPassword,
+        phone: registerData.phone,
+        role: userRoles.PERSONAL,
+      });
+  
+      await user.save();
+      res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 
 const login=async (req,res)=>{
 
