@@ -40,7 +40,8 @@ export default function Homepage() {
   const navigate = useNavigate();
 
   
-  const login = async () => {
+  const login = async (event) => {
+    event.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/user/login', {
         email:email,
@@ -54,7 +55,7 @@ export default function Homepage() {
         setLoginboxVisibility(false);
         setLoading(false);
         
-        setTimeout(() => navigate("/profile/index.js"));
+        //setTimeout(() => navigate("../loading/index.js"));
         alert("Login successful");
         
       } else {
@@ -84,6 +85,7 @@ export default function Homepage() {
     localStorage.removeItem("auth");
   };
 
+ 
   
   const register = async (event) => {
 

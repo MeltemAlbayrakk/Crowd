@@ -17,7 +17,8 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (401 === error.response.status) {
+    if (401 === error.response.status && error.response) {
+      
       localStorage.clear();
       window.location.href = "/";
     } else {
@@ -175,6 +176,7 @@ export default {
       }
     },
     async search(title) {
+   
       const response = await instance.post("/job/search", { title });
       return response.data;
     },

@@ -115,4 +115,6 @@ const login=async (req,res)=>{
     res.redirect("/homepage");
    }
 
+
+ 
     export {registerCompanyUser,registerPersonelUser,login,logout}

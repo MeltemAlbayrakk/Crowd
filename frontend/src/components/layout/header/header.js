@@ -39,7 +39,7 @@ export default function Header(props) {
           <ul className={!auth ? "" : "active"}>
             {!isProfileHidden && (
               <li>
-                <Link to={"/profile/index.js"} >My Profile</Link>
+                <Link to={"/denemesayfasi"} >My Profile</Link>
               </li>
             )}
             <li>
