@@ -1,4 +1,4 @@
-import api from "../../services/api";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -37,37 +37,45 @@ export default function Homepage() {
     passwordConfirmation: "",
   });
 
+
   const navigate = useNavigate();
 
   
   const login = async (event) => {
-      event.preventDefault();
+    event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/login', {
-        email: email,
-        password: password
+      const response = await axios.post('http://localhost:3001/user/login', {
+        email:email,
+        password:password
       });
-  
-      // Check the response status code
+     
       if (response.status === 201) {
-        alert("Login successful"); // You can add redirection logic here
+        localStorage.setItem("auth", JSON.stringify(response));
+        setAuth(true);
+        setLoginboxVisibility(false);
+        setLoading(false);
+        
+/*         setTimeout(() =>
+     navigate("/profile"); */
+        alert("Login successful");
+        
       } else {
-        alert("Unexpected response from server"); // Handle unexpected response codes
+        alert("Unexpected response from server"); 
       }
     } catch (error) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
+        setLoading(false);
+       
         if (error.response.status === 401) {
-          alert("Invalid email or password. Please try again."); // Handle 401 Unauthorized error
+          alert("Password are not matched");
         } else {
-          alert("Server error. Please try again later."); // Handle other server errors
+          alert("Server error. Please try again later."); 
         }
       } else if (error.request) {
-        // The request was made but no response was received
+       
         alert("No response from server. Please try again later.");
       } else {
-        // Something happened in setting up the request that triggered an error
+    
         alert("Request failed. Please check your internet connection and try again.");
       }
     }
@@ -78,15 +86,78 @@ export default function Homepage() {
     localStorage.removeItem("auth");
   };
 
+  
   const register = async (event) => {
-    fetch("http://localhost:3000/user/register/individual",registerData).then((res) => res.json())
-    .then((data) => {
-       alert(data);
-    })
-    .catch((err) => {
-       console.log(err.message);
-    });
-  };
+    
+    event.preventDefault();
+    if (activeTab==="corporate"){
+
+    try {
+    const response = await axios.post("http://localhost:3001/user/company/register",{
+    registerData:registerData});
+
+    if (response.status === 201) {
+      setRegisterboxVisibility(false);
+      setLoading(false);
+      
+      alert("Register successful");
+      
+    } else {
+      alert("Unexpected response from server"); 
+    }}
+   
+   catch (error) {
+    if (error.response) {
+      setLoading(false);
+     
+      if (error.response.status === 401) {
+        alert(error.response.data.error);
+      } else {
+        alert("Server error. Please try again later."); 
+      }
+    } else if (error.request) {
+     
+      alert("No response from server. Please try again later.");
+    } else {
+  
+      alert("Request failed. Please check your internet connection and try again.");
+    }
+  }
+}
+   else if (activeTab==="individual"){
+   
+    try {
+      const response = await axios.post("http://localhost:3001/user/personal/register",{
+      registerData:registerData});
+  
+      if (response.status === 201) {
+        setRegisterboxVisibility(false);
+        setLoading(false);
+        
+        alert("Register successful");
+        
+      } else {
+        alert("Unexpected response from server"); 
+      }}
+     
+     catch (error) {
+      if (error.response) {
+        setLoading(false);
+       
+        if (error.response.status === 401) {
+          alert(error.response.data.error);
+        } else {
+          alert("Server error. Please try again later."); 
+        }
+      } else if (error.request) {
+       
+        alert("No response from server. Please try again later.");
+      } else {
+    
+        alert("Request failed. Please check your internet connection and try again.");
+      }
+    }
+  }}
 
   return (
     <div className="wrapper homepage">
