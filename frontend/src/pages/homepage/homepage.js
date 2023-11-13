@@ -41,6 +41,7 @@ export default function Homepage() {
 
   
   const login = async (event) => {
+      event.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/user/login', {
         email: email,
