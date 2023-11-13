@@ -9,7 +9,7 @@ router.route("/personal/register").post(userController.registerPersonelUser)
 router.route("/company/register").post(userController.registerCompanyUser)
 router.route("/login").post(userController.login)
 router.route("/logout").get(userController.logout)
-router.route("/update/personal/profile/:id").post(userController.createPersonelProfile)
+router.route("/update/personal/profile").post(userController.createPersonelProfile)
 
 
 export default router

@@ -50,14 +50,16 @@ export default function Homepage() {
       });
      
       if (response.status === 201) {
-        localStorage.setItem("auth", JSON.stringify(response));
-        setAuth(true);
-        setLoginboxVisibility(false);
-        setLoading(false);
-        
-/*         setTimeout(() =>
-     navigate("/profile"); */
-        alert("Login successful");
+        const token = response.data.token; 
+      localStorage.setItem("auth", JSON.stringify({ token }));
+      setAuth(true);
+      setLoginboxVisibility(false);
+      setLoading(false);
+      alert("Login successful");
+
+     
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
         
       } else {
         alert("Unexpected response from server"); 
