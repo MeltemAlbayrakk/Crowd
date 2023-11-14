@@ -1,3 +1,7 @@
+import RememberMe from "./rememberMe";
+import React, { useState } from 'react';
+
+
 export default function Loginbox(props) {
   const {
     login,
@@ -11,6 +15,12 @@ export default function Loginbox(props) {
     setError,
     loading,
   } = props;
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+  };
 
   return (
     <div
@@ -49,9 +59,10 @@ export default function Loginbox(props) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+         <RememberMe rememberMe={rememberMe} handleRememberMeChange={handleRememberMeChange}/>
           <button className={loading ? "loading" : undefined}>Login</button>
-          {error && <p>{error}</p>}
-        </form>
+          {error && <p>{error}</p>}       
+          </form>
       </div>
     </div>
   );

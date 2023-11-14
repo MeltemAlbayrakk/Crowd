@@ -96,10 +96,8 @@ const registerPersonelUser=async (req,res)=>{
       }
 
       if (!checkPasswordValidity(registerData.password)) {
-        return res.status(401).json({
-          succeeded: false,
-          error: 'Şifre geçerli değil. Özel karakter, rakam ve büyük harf içermelidir. Minimum 8 karakter uzunluğunda olmalıdır.',
-        });
+        return res.status(409).send(
+         'Şifre geçerli değil. Özel karakter, rakam ve büyük harf içermelidir. Minimum 8 karakter uzunluğunda olmalıdır.');
       }
   
       const user = await new UserModel({

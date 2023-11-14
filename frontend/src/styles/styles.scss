@@ -805,7 +805,7 @@ select {
   color: white;
   padding: 10px 0;
   border-bottom: 1px solid #ffffff63;
-  opacity: 0.15;
+  /* opacity: 0.15; */
   letter-spacing: 1px;
   cursor: pointer;
   transition: all ease-in-out 0.3s;
@@ -1312,3 +1312,5 @@ select {
     }
   }
 }
+
+

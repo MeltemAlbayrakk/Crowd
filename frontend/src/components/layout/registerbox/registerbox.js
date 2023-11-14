@@ -1,3 +1,5 @@
+import PasswordValidation from "./PasswordValidation";
+
 export default function Registerbox(props) {
   const {
     register,
@@ -122,6 +124,8 @@ export default function Registerbox(props) {
               }
             />
           </div>
+          <PasswordValidation password={registerData.password}/>
+
           <div>
             <label>Password Confirm:</label>
             <input
