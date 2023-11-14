@@ -466,7 +466,7 @@ export default function Profile(props) {
           </ul>
         </div>
         <div className="card">
-          <div className="card__header">Achievement</div>
+          <div className="card__header"></div>
           <ul className="card__body">
             <Table
               data={profileData.achievements}

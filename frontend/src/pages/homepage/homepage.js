@@ -88,39 +88,76 @@ export default function Homepage() {
  
   
   const register = async (event) => {
+    
+    event.preventDefault();
+    if (activeTab==="corporate"){
 
+    try {
     const response = await axios.post("http://localhost:3001/user/company/register",{
-    registerData:registerData
-    
-    }).then(()=>{
-      console.log(registerData)
-    }).catch((event)=>{
-      console.log(event)
-    })
+    registerData:registerData});
 
-   if (response.status === 201) {
-    console.log("kayıt edildin")
+    if (response.status === 201) {
+      setRegisterboxVisibility(false);
+      setLoading(false);
+      
+      alert("Register successful");
+      
+    } else {
+      alert("Unexpected response from server"); 
+    }}
+   
+   catch (error) {
+    if (error.response) {
+      setLoading(false);
+     
+      if (error.response.status === 401) {
+        alert(error.response.data.error);
+      } else {
+        alert("Server error. Please try again later."); 
+      }
+    } else if (error.request) {
+     
+      alert("No response from server. Please try again later.");
+    } else {
+  
+      alert("Request failed. Please check your internet connection and try again.");
     }
-
-   }
-  ;  
-  const register2 = async (event) => {
-
-    const response = await axios.post("http://localhost:3001/user/personal/register",{
-    registerData:registerData
+  }
+}
+   else if (activeTab==="individual"){
+   
+    try {
+      const response = await axios.post("http://localhost:3001/user/personal/register",{
+      registerData:registerData});
+  
+      if (response.status === 201) {
+        setRegisterboxVisibility(false);
+        setLoading(false);
+        
+        alert("Register successful");
+        
+      } else {
+        alert("Unexpected response from server"); 
+      }}
+     
+     catch (error) {
+      if (error.response) {
+        setLoading(false);
+       
+        if (error.response.status === 401) {
+          alert(error.response.data.error);
+        } else {
+          alert("Server error. Please try again later."); 
+        }
+      } else if (error.request) {
+       
+        alert("No response from server. Please try again later.");
+      } else {
     
-    }).then(()=>{
-      console.log(registerData)
-    }).catch((event)=>{
-      console.log(event)
-    })
-
-   if (response.status === 201) {
-    console.log("kayıt edildin")
+        alert("Request failed. Please check your internet connection and try again.");
+      }
     }
-
-   }
-  ;
+  }}
 
   return (
     <div className="wrapper homepage">
@@ -149,7 +186,6 @@ export default function Homepage() {
           />
           <Registerbox
             register={register}
-            register2={register2}
             registerboxVisibility={registerboxVisibility}
             setRegisterboxVisibility={setRegisterboxVisibility}
             activeTab={activeTab}

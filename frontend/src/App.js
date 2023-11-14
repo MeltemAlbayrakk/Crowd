@@ -8,7 +8,7 @@ import Homepage from "./pages/homepage/homepage";
 import Profile from "./pages/profile/index";
 import LoadingProfile from "./pages/loading/index";
 // import Profile2 from "./pages/profile/tabs/profile/personal/profile";
-import DenemeSayfasi from "./pages/profile/tabs/search-job/search-job"
+import DenemeSayfasi from "./pages/profile/tabs/job-posting/job-posting.js"
 
 function App() {
   return (

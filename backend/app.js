@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import UserModel from './src/models/User.js'
 import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
+import jobRoute from './src/routes/jobRoute.js';
 
 
 dotenv.config()
@@ -28,6 +29,7 @@ app.use(express.json())
 conn()
 
 app.use('/user', userRoute);
+app.use('/job',jobRoute);
 
 
 app.listen(port, () => {

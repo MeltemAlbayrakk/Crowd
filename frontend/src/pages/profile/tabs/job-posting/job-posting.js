@@ -3,6 +3,7 @@ import api from "../../../../services/api";
 import { useState } from "react";
 
 export default function JobPosting(props) {
+
   const categoryOptions = [
     {
       label: "Graphic Designer",
@@ -53,6 +54,7 @@ export default function JobPosting(props) {
   const jobPosting = async () => {
     setLoading(true);
     setActivejobPostingErrors(null);
+    console.log("AAACCCCCCCCCCCCCCC")
     const res = await api.job.add("company", form).catch((err) => {
       setActivejobPostingErrors(err.response.data.errorMessage);
       setLoading(false);
