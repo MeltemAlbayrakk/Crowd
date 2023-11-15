@@ -55,7 +55,7 @@ export default {
     },
     profile: {
       async get() {
-        const response = await instance.post("/user/profile");
+        const response = await instance.get("/user/profile");
         return response.data;
       },
       async update(type, payload) {

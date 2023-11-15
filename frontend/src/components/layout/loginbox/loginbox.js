@@ -49,10 +49,11 @@ export default function Loginbox(props) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          
-          <a color="white" href ="https://www.youtube.com">Şifremi unuttum</a>
-
+          <label>Şifremi unuttum</label>
+          {/* <a color="white" href ="https://www.youtube.com">Şifremi unuttum</a> */}
           <button className={loading ? "loading" : undefined}>Login</button>
+          
+          
           {error && <p>{error}</p>}
         </form>
       </div>

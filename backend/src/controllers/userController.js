@@ -154,7 +154,7 @@ function checkPasswordValidity(password) {
     if (passwordMatch) {
       
       req.session.userId = user._id; 
-      console.log(req.session.userId)
+     
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
@@ -218,14 +218,18 @@ function checkPasswordValidity(password) {
    
   const getProfile = async(req,res)=>{
 
+     
     const userId = req.session.userId;
-    const user = UserModel.findOne({ _id: "6553d214d0c238efc441ee7a" })
-
+    const user = await UserModel.findById("6554c49866b1daf0b71b069b")
+   // console.log(user.firstName);
     if (!user) {
       res.status(404).json({message:"profile is not found "})
     }
 
-    console.log(user);
+    return res.send(user);
+
+
+
 
 
   }
@@ -235,7 +239,7 @@ function checkPasswordValidity(password) {
   try {
       
     const userId = req.session.userId;
-    
+    console.log("personal update calıstı")
 
       if (!userId) {
         return res.status(400).json({ message: 'Kullanıcı kimliği bulunamadı' });
