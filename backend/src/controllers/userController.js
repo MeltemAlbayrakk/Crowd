@@ -1,8 +1,8 @@
-// userController.js
-import UserModel from '../models/User.js';
-import bcrypt from 'bcrypt';
-import { userRoles } from '../constants/constants.js';
-import jwt from 'jsonwebtoken';
+    // userController.js
+    import UserModel from '../models/User.js';
+    import bcrypt from 'bcrypt';
+    import { userRoles } from '../constants/constants.js';
+    import jwt from 'jsonwebtoken';
 
 const registerCompanyUser = async (req, res) => {
   try {
@@ -34,7 +34,7 @@ const registerCompanyUser = async (req, res) => {
         error: 'Sistemde kayıtlı telefon numarası bulunmaktadır. Farklı bir numara deneyiniz.',
       });
     }
-
+UserModel.findById()
     if (email) {
       return res.status(401).json({
         succeeded: false,
@@ -158,15 +158,28 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Session termination error");
-    } else {
-      res.redirect('/homepage');
-    }
-  });
-  res.redirect("/homepage");
+const logout = (req, res) => {
+  try {
+    // Oturumu sonlandırma işlemi
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({
+          succeded: false,
+          error: 'Logout failed',
+        });
+      }
+      res.clearCookie('session-id'); // Opsiyonel: Oturum kimliğiyle ilişkili çerezin silinmesi
+      res.status(200).json({
+        succeded: true,
+        message: 'User logged out successfully',
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      succeded: false,
+      error: 'Server error',
+    });
+  }
 };
 
 const checkAuth = async (req, res) => {
@@ -177,8 +190,8 @@ const checkAuth = async (req, res) => {
   }
 };
 
-const createPersonelProfile = async (req, res) => {
-  try {
+  const createPersonelProfile = async (req, res) => {
+    try {
     
     if (req.session.userId) {
             const userId = req.session.userId;
@@ -203,5 +216,28 @@ const createPersonelProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+  const getprofiledetails=async(req,res)=>{
+
+try{
+
+
+                   
+  
+  
+
+
+
+}
+
+
+
+
+
+
+  }
+
+
+
 
 export { registerCompanyUser, registerPersonelUser, login, logout, createPersonelProfile, checkAuth };

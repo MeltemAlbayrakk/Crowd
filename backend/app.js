@@ -6,6 +6,7 @@ import UserModel from './src/models/User.js';
 import bcrypt from 'bcrypt';
 import userRoute from './src/routes/userRoute.js';
 
+
 dotenv.config();
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } 
-}));
+}));  
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
