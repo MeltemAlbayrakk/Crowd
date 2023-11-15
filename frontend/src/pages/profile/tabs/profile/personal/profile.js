@@ -55,6 +55,7 @@ export default function Profile(props) {
   ];
 
   const profileData = props.profile;
+  api.user.profile.get().then(res=>console.log("...",res))
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
