@@ -153,8 +153,8 @@ function checkPasswordValidity(password) {
 
     if (passwordMatch) {
       
-      req.session.userId = user._id; 
-     
+      req.session.userId = user._id.valueOf(); 
+      console.log(req)
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
@@ -198,53 +198,24 @@ function checkPasswordValidity(password) {
   }
 };
   
-
-
-   const getUserIdFromRequest = (req) => {
-    // Eğer kullanıcı kimliği request içinde varsa, onu kullan
-    if (req.user && req.user.id) {
-      return req.user.id;
-    }
- 
-    // Eğer request içinde kullanıcı kimliği yoksa, isteği gönderenin kullanıcı kimliğini kullan
-    // Bu durumu kullanmanın güvenli olduğundan emin olun, genellikle bu bilgiyi kullanmaktan kaçınılmalıdır.
-    if (req.headers && req.headers["user-id"]) {
-      return req.headers["user-id"];
-    }
-  
-    // Eğer yukarıdaki durumlar sağlanmazsa, null veya başka bir değer dönebilirsiniz.
-    return null;
-  };
    
   const getProfile = async(req,res)=>{
 
-     
-    const userId = req.session.userId;
-    const user = await UserModel.findById("6554c49866b1daf0b71b069b")
-   // console.log(user.firstName);
+     //bu halde veri geliyor 
+    const user = await UserModel.findById("6555c6cf398d0f47bcf2a304")
+    
     if (!user) {
       res.status(404).json({message:"profile is not found "})
     }
 
     return res.send(user);
 
-
-
-
-
   }
 
    const personalUpdate= async (req,res)=>{
 
-  try {
-      
-    const userId = req.session.userId;
-    console.log("personal update calıstı")
-
-      if (!userId) {
-        return res.status(400).json({ message: 'Kullanıcı kimliği bulunamadı' });
-      }
-        console.log("personal update calıstı")
+    try {
+   
       const {
         firstName,
         lastName,
@@ -255,6 +226,15 @@ function checkPasswordValidity(password) {
         profileDescription,
         address,
       } = req.body;
+
+        req.session.userId = user._id.valueOf(); 
+      
+        console.log(req.session.userId)
+  
+        if (!userId) {
+          return res.status(400).json({ message: 'Kullanıcı kimliği bulunamadı' });
+        }
+
   
     
       await UserModel.update(

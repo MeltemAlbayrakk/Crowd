@@ -12,7 +12,7 @@ router.route("/login").post(userController.login)
 
 router.route("/logout").post(userController.logout)
 
-router.route("personal/update").post(userController.personalUpdate)
+router.route("/personal/update").post(userController.personalUpdate)
 router.route("/profile").get(userController.getProfile)
 
 
