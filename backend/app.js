@@ -18,21 +18,21 @@ const port = 3001
 
 app.use(session({
   secret: process.env.SECRET_TOKEN, 
-  resave: false,
+  resave: true,
   saveUninitialized: true,
-  cookie: { secure: false } 
+  // cookie: { secure: true }
 }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET, POST");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-access-token");
   res.header("Access-Control-Allow-Credentials", "true");
 
- 
   res.locals.user = req.session.user;
   next();
 });
+
 
 
 app.use(express.json())

@@ -46,7 +46,7 @@ export default function Homepage() {
       const response = await axios.post('http://localhost:3001/user/login', {
         email:email,
         password:password
-      });
+      }, { withCredentials: true });
 
      
       if (response.status === 201) {

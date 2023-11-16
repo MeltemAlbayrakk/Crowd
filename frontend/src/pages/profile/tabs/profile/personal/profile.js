@@ -3,7 +3,7 @@ import { useState,useEffect } from "react";
 import Select from "react-select";
 
 import Table from "../../../../../components/layout/table/table";
-
+import axios from "axios";
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -88,8 +88,16 @@ export default function Profile(props) {
   const getProfile1 = async () => {
     // debugger
      //setProfile(await api.user.profile.get());
-     const res= await api.user.profile.get();
-    setForm(res);
+     // const res= await fetch("http://localhost:3001/user/profile");
+     /*
+          const res= await fetch("http://localhost:3001/user/profile", {
+      method: "GET",
+      credentials: 'include',
+    });
+    res = await res.json();
+    */
+     const res = await axios.get('http://localhost:3001/user/profile', { withCredentials: true });
+    setForm(res.data);
     
    };
  
