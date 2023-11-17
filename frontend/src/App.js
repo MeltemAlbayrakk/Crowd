@@ -8,6 +8,7 @@ import Homepage from "./pages/homepage/homepage";
 import Profile from "./pages/profile/index";
 import LoadingProfile from "./pages/loading/index";
 
+
 function App() {
   return (
     <HashRouter>
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/" element={<Homepage />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/profile" element={<LoadingProfile />} />
+     
 {/*         <Route exact path="/personal/beFreelancer" element={<BecomeFreelancer />} />
  */}
       </Routes>

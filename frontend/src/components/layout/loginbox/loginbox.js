@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Loginbox(props) {
   const {
     login,
@@ -50,6 +52,9 @@ export default function Loginbox(props) {
             />
           </div>
           <button className={loading ? "loading" : undefined}>Login</button>
+          <button className={loading ? "loading" : undefined}>Forgot Password</button>
+          <Link to={"/forgot-password"}style={{ alignSelf: "flex-start" }}/>
+          <p style={{ padding: "0 15px" }}>Forgot Password ?</p>
           {error && <p>{error}</p>}
         </form>
       </div>

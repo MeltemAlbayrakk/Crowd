@@ -1,6 +1,13 @@
 import UserModel from '../models/User.js'
 import bcrypt from 'bcrypt';
 import { userRoles } from '../constants/constants.js';
+import sendMail from '../Utils/sendMail.js';
+//import user from '../models/User.js'
+import crypto from "crypto";
+import moment from "moment";
+
+
+
 
 
 const registerCompanyUser=async (req,res)=>{
@@ -96,10 +103,8 @@ const registerPersonelUser=async (req,res)=>{
       }
 
       if (!checkPasswordValidity(registerData.password)) {
-        return res.status(401).json({
-          succeeded: false,
-          error: 'Şifre geçerli değil. Özel karakter, rakam ve büyük harf içermelidir. Minimum 8 karakter uzunluğunda olmalıdır.',
-        });
+        return res.status(409).send(
+         'Şifre geçerli değil. Özel karakter, rakam ve büyük harf içermelidir. Minimum 8 karakter uzunluğunda olmalıdır.');
       }
   
       const user = await new UserModel({
@@ -177,4 +182,56 @@ const login=async (req,res)=>{
     res.redirect("/homepage");
    }
 
-    export {registerCompanyUser,registerPersonelUser,login,logout}
+   
+const forgetPassword =async(req,res)=>{
+  const{email} = req.body
+
+  const userInfo =await UserModel.findOne({email}).select("email")
+if (!userInfo) return new Error("Geçersiz kullnaıcı",400)
+console.log("userInfo",userInfo);
+const resetCode=crypto.randomBytes(3).toString("hex")
+
+await sendMail({
+  from:"mervebingool@gmail.com",
+  to:userInfo.email,
+  subject: "şifre sıfırlama",
+  text: `Şifre sıfırlama kodunuz ${resetCode}`
+})
+
+await UserModel.updateOne(
+  {email},
+  {
+    reset:{
+      code:resetCode,
+      time:moment(new Date()).add(15,"minute").format("YYYY-MM-DD HH:mm:ss")
+    }
+  }
+)
+return new Response(true," Lütfen mail kutunuzu kontrol ediniz").success(res)
+
+}
+const resetCodeCheck = async(req,res)=> {
+  const {email,code} =req.body
+
+  const userInfo = await UserModel.findOne({email}).select("Id firstName  lastName  email reset")
+
+  if(!userInfo) throw new Error("Gçersiz kod ! ",401)
+
+  const dbTime= moment(userInfo.reset.time)
+  const nowTime = moment(new Date())
+
+  const timeDiff= dbTime.diff(nowTime,"minutes")
+console.log("zaman Farkı:",timeDiff)
+
+if(timeDiff <= 0 || !userInfo.reset.code === code){
+  throw new Error("Geçersiz kod ",401)
+}
+
+
+const temporaryToken = await createTemporaryToken(userInfo.id,userInfo.email)
+
+return new Response(temporaryToken,"şifre sıfırlama yapabilrisiniz.").success(res)
+}
+const resetPassword =async(req,res) => {
+}
+    export {registerCompanyUser,registerPersonelUser,login,logout,forgetPassword,resetCodeCheck}

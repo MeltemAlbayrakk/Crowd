@@ -1,10 +1,12 @@
 import express from 'express';
 import conn from './db.js';
 import dotenv from 'dotenv'
-import UserModel from './src/models/User.js'
+import user from './src/models/User.js'
 import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 
+import  moment from "moment-timezone";
+moment.tz.setDefault("Europe/Istanbul")
 
 dotenv.config()
 
@@ -24,6 +26,7 @@ app.use((req, res, next) => {
 
 
 app.use(express.json())
+
 
 conn()
 
