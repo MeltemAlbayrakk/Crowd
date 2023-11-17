@@ -20,7 +20,7 @@ app.use(session({
   secret: process.env.SECRET_TOKEN, 
   resave: true,
   saveUninitialized: true,
-  // cookie: { secure: true }
+   //cookie: { secure: false }
 }));
 
 app.use((req, res, next) => {

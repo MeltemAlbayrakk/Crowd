@@ -185,7 +185,7 @@ function checkPasswordValidity(password) {
           error: 'Logout failed',
         });
       }
-      res.clearCookie('session-id'); // Opsiyonel: Oturum kimliğiyle ilişkili çerezin silinmesi
+      res.clearCookie('connect.sid'); // Opsiyonel: Oturum kimliğiyle ilişkili çerezin silinmesi
       res.status(200).json({
         succeded: true,
         message: 'User logged out successfully',
@@ -286,6 +286,22 @@ function checkPasswordValidity(password) {
     }
   };
 
+
+const checkUser=async(req,res)=>{
+
+  if(req.session.userId){
+
+    return res.json({loggedIn:true})
+
+  }
+else {
+
+  return res.json({loggedIn:false})
+
+}
+
+} 
+
    
  
-    export {registerCompanyUser,registerPersonelUser,login,logout, personalUpdate,getProfile}
+    export {registerCompanyUser,registerPersonelUser,login,logout, personalUpdate,getProfile,checkUser}

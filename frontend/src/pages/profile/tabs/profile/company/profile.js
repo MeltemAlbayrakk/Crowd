@@ -26,7 +26,8 @@ export default function Profile(props) {
 
   return (
     <>
-      <div className="cards">
+<div className="wrapper"> 
+ <div className="cards">
         <div className="card">
           <div className="card__header">Company Details</div>
           <ul className="card__body">
@@ -207,6 +208,11 @@ export default function Profile(props) {
             </li>
           </ul>
         </div>
+
+
+
+    </div>
+     
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 import "./styles/reset.scss";
-import "./styles/styles.scss";
+//import "./styles/styles.scss";
 import "./styles/responsive.scss";
-
 
 import { Routes, Route, HashRouter } from "react-router-dom";
 
