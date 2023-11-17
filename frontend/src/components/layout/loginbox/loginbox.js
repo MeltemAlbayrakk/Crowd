@@ -1,3 +1,7 @@
+import RememberMe from "./rememberMe";
+import React, { useState } from 'react';
+
+
 import { Link } from "react-router-dom";
 
 export default function Loginbox(props) {
@@ -13,6 +17,12 @@ export default function Loginbox(props) {
     setError,
     loading,
   } = props;
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
+  };
 
   return (
     <div
@@ -51,7 +61,10 @@ export default function Loginbox(props) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+         <RememberMe rememberMe={rememberMe} handleRememberMeChange={handleRememberMeChange}/>
           <button className={loading ? "loading" : undefined}>Login</button>
+          {error && <p>{error}</p>}       
+          </form>
           <button className={loading ? "loading" : undefined}>Forgot Password</button>
           <Link to={"/forgot-password"}style={{ alignSelf: "flex-start" }}/>
           <p style={{ padding: "0 15px" }}>Forgot Password ?</p>

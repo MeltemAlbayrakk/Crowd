@@ -1,3 +1,6 @@
+import React from 'react';
+import PasswordValidation from './PasswordValidation';
+
 export default function Registerbox(props) {
   const {
     register,
@@ -30,9 +33,9 @@ export default function Registerbox(props) {
           X
         </a>
         <a className="logo">Register</a>
-        <ul cka>
+        <ul>
           <li
-            className={activeTab == "individual" ? "active" : undefined}
+            className={activeTab === "individual" ? "active" : undefined}
             onClick={() => {
               setError("");
               setActiveTab("individual");
@@ -41,7 +44,7 @@ export default function Registerbox(props) {
             Individual
           </li>
           <li
-            className={activeTab == "corporate" ? "active" : undefined}
+            className={activeTab === "corporate" ? "active" : undefined}
             onClick={() => {
               setError("");
               setActiveTab("corporate");
@@ -73,7 +76,7 @@ export default function Registerbox(props) {
               }
             />
           </div>
-          {activeTab == "corporate" ? (
+          {activeTab === "corporate" && (
             <div>
               <label>Company Name:</label>
               <input
@@ -88,12 +91,12 @@ export default function Registerbox(props) {
                 }
               />
             </div>
-          ) : undefined}
+          )}
           <div>
             <label>E-Mail:</label>
             <input
               type="email"
-              placeholder="Please enter your email adress"
+              placeholder="Please enter your email address"
               value={registerData.email}
               onChange={(e) =>
                 setRegisterData({ ...registerData, email: e.target.value })
@@ -111,17 +114,10 @@ export default function Registerbox(props) {
               }
             />
           </div>
-          <div>
-            <label>Password:</label>
-            <input
-              type="password"
-              placeholder="Please enter your password"
-              value={registerData.password}
-              onChange={(e) =>
-                setRegisterData({ ...registerData, password: e.target.value })
-              }
-            />
-          </div>
+          <PasswordValidation
+            password={registerData.password}
+            setRegisterData={setRegisterData}
+          />
           <div>
             <label>Password Confirm:</label>
             <input

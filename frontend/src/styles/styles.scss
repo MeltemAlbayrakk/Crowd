@@ -819,6 +819,9 @@ select {
 .wrapper .registerbox li.active {
   opacity: 1;
 }
+.wrapper.registerbox .table{
+  opacity: 1;
+}
 
 .wrapper .profile {
   justify-content: flex-start;
@@ -1312,3 +1315,5 @@ select {
     }
   }
 }
+
+

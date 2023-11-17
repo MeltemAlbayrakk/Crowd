@@ -151,6 +151,11 @@ export default function Homepage() {
         }
         
         else {
+        }else if(error.response.status===409){
+          alert(error.response.data)
+        }
+        
+        else {
           alert("Server error. Please try again later."); 
         }
       } else if (error.request) {
