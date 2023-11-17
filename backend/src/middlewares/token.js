@@ -6,7 +6,7 @@ const createToken =async (user,res) =>{
 
     const payload ={
         sub:userId,
-        name: user.firstName
+        firstName: user.firstName
     }
 const token = await jwt.sign(payload,process.env.SECRET_TOKEN,{
     algorithm:'HS512',
