@@ -19,7 +19,7 @@
       document.getElementById("root").classList.add("homepage");
     }, []);
 
-    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
+    //const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
 
     const [loginboxVisibility, setLoginboxVisibility] = useState(false);
     const [registerboxVisibility, setRegisterboxVisibility] = useState(false);
@@ -62,7 +62,8 @@
           setLoading(false);
           
           //setTimeout(() => navigate("../loading/index.js"));
-          alert("Login successful");
+          window.location.reload();
+
           
         } else {
           alert("Unexpected response from server"); 
@@ -234,3 +235,4 @@ try {
       </div>
     );
   }
+  
