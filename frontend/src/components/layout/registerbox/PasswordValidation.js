@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-const PasswordValidation = () => {
-  const [password, setPassword] = useState('');
+const PasswordValidation = ({ password, setRegisterData }) => {
   const [isValidLength, setIsValidLength] = useState(false);
   const [hasUpperCase, setHasUpperCase] = useState(false);
   const [hasLowerCase, setHasLowerCase] = useState(false);
@@ -12,9 +11,8 @@ const PasswordValidation = () => {
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
-    setPassword(newPassword);
 
-    // Şifre koşullarını kontrol et
+    // Koşulları kontrol et ve durumları güncelle
     const isLengthValid = newPassword.length >= 8;
     const hasUpperCaseValid = /[A-Z]/.test(newPassword);
     const hasLowerCaseValid = /[a-z]/.test(newPassword);
@@ -27,19 +25,14 @@ const PasswordValidation = () => {
     setHasLowerCase(hasLowerCaseValid);
     setHasDigit(hasDigitValid);
     setHasSpecialChar(hasSpecialCharValid);
-  };
 
-  const handleSubmit = () => {
-    if (isValidLength && hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar) {
-      console.log('Şifre geçerli, işlem yapılıyor...');
-    } else {
-      console.log('Şifre geçerli değil, uyarı göster');
-    }
+    // Ana bileşene şifreyi güncelle
+    setRegisterData((prevData) => ({ ...prevData, password: newPassword }));
   };
 
   return (
     <div>
-      <label htmlFor="password">Şifre:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
         id="password"
@@ -47,10 +40,10 @@ const PasswordValidation = () => {
         onChange={handlePasswordChange}
       />
 
-      <table>
+<table>
       <div>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-        <li style={{ fontSize: '10px', marginBottom: '5px' }}>
+        <ul style={{ listStyleType: 'none', padding: 0 ,display:'inline'}}>
+        <li style={{ fontSize: '10px', marginBottom: '5px',opacity:1 }}>
             {isValidLength ? (
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginRight: '5px' }} />
             ) : (
@@ -58,7 +51,7 @@ const PasswordValidation = () => {
             )}
             En az 8 karakter
           </li>
-          <li style={{ fontSize: '10px', marginBottom: '10px' }}>
+          <li style={{ fontSize: '10px', marginBottom: '10px',opacity:1 }}>
             {hasUpperCase ? (
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginRight: '5px' }} />
             ) : (
@@ -66,7 +59,7 @@ const PasswordValidation = () => {
             )}
             Bir büyük harf
           </li>
-          <li style={{ fontSize: '10px' }}>
+          <li style={{ fontSize: '10px',opacity:1}}>
             {hasLowerCase ? (
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginRight: '5px' }} />
             ) : (
@@ -74,7 +67,7 @@ const PasswordValidation = () => {
             )}
             Bir küçük harf
           </li>
-          <li style={{ fontSize: '10px' }}>
+          <li style={{ fontSize: '10px',opacity:1}}>
             {hasDigit ? (
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginRight: '5px' }} />
             ) : (
@@ -82,7 +75,7 @@ const PasswordValidation = () => {
             )}
             Bir rakam
           </li>
-          <li style={{ fontSize: '10px' }}>
+          <li style={{ fontSize: '10px',opacity:1 }}>
             {hasSpecialChar ? (
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginRight: '5px' }} />
             ) : (
