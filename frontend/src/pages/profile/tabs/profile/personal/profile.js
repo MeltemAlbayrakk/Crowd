@@ -109,7 +109,7 @@ const addPersonalDetail = async ()=>{
   setLoading(true);
   setactivePersonalDetailErrors(null);
   console.log("deneme seysi")
-   const res = await api.user.profile.update("personal",activePersonalDetail)
+   const res = await api.user.profile.update("personal",form)
    .catch((err) => {
     setactivePersonalDetailErrors(err.response.data.errorMessage);
     setLoading(false);
@@ -117,7 +117,7 @@ const addPersonalDetail = async ()=>{
    console.log("bu profile de ki res :",res)
    if(res.user){
     setactivePersonalDetail({
-      ...activePersonalDetail,
+      ...form,
       firstName:"",
       lastName:"",
       birthday:"",

@@ -15,7 +15,7 @@ router.route("/logout").get(userController.logout)
 router.route("/personal/update").post(userController.addPersonalDetail)
 router.route("/personal/achievement").post(userAchievement.addAchievement)
 
-router.route("/profile").get(checkAuth,userController.getProfile)
+// router.route("/profile").get(checkAuth,userController.addPersonalDetail)
 
 router.route("/check-session").get(userController.checkUser)
 

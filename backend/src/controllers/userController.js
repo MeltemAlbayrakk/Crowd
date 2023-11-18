@@ -225,38 +225,38 @@ function checkPasswordValidity(password) {
 
   const addPersonalDetail= async (req,res)=>{
 
-  try {
-  
-    const {activePersonalDetail} = req.body;
-    console.log("bu cont daki veri",activePersonalDetail)
+    try {
     
+      const {form} = req.body;
+      console.log("bu cont daki veri",form)
+      
+      
+    const personalDetails = await UserModel.updateMany({
+      
+        firstName:form.firstName,
+        lastName: form.lastName,
+        birthday:form.birthday,
+        gender:form.gender,
+        languages:form.languages,
+        skills:form.skills,
+        description:form.description,
+        address:form.address
+      
+      })
+      if (personalDetails.nModified >0) {
+        res.status(200).json({
+          message: 'Personal details has been updated successfully',})
+      } else {
+        res.status(404).json({
+          message: 'Personal details not found or not updated',
+        });
     
-   const personalDetails = await UserModel.updateMany({
-    
-      firstName:activePersonalDetail.firstName,
-      lastName: activePersonalDetail.lastName,
-      birthday:activePersonalDetail.birthday,
-      gender:activePersonalDetail.gender,
-      languages:activePersonalDetail.languages,
-      skills:activePersonalDetail.skills,
-      description:activePersonalDetail.description,
-      address:activePersonalDetail.address
-    
-     })
-    if (personalDetails.nModified >0) {
-      res.status(200).json({
-        message: 'Personal details has been updated successfully',})
-    } else {
-      res.status(404).json({
-        message: 'Personal details not found or not updated',
-      });
-   
 
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'İç sunucu hatası' });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'İç sunucu hatası' });
-  }
 };
 
 
