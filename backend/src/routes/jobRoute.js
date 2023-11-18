@@ -1,14 +1,13 @@
 import express from 'express'
-import * as jobController from '../controllers/jobcontroller.js';
+import * as job from '../controllers/job.js'
 
 
+const router= express.Router()
 
-const router=express.Router()
 
-
-router.route("/create").post(jobController.createjob)
-router.route("/jobs").get(jobController.getAlljobs)
-router.route("/ai").post(jobController.aiAnalysis)
+router.route("/").post(job.add);
+router.route("/").get(job.get);
+router.route("/search").post(job.search);
 
 
 

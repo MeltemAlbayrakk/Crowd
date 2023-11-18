@@ -1,5 +1,5 @@
 export const userRoles ={
-PERSONAL:"personal",
-COMPANY:"company"
-
-    }
+    PERSONAL:"personal",
+    COMPANY:"company"
+    
+        }

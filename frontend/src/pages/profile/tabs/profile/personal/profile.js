@@ -1,11 +1,11 @@
 import api from "../../../../../services/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Select from "react-select";
-
 import Table from "../../../../../components/layout/table/table";
-
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
+import "../../../../../styles/styles.scss"
 
 export default function Profile(props) {
   const languages = [
@@ -56,13 +56,20 @@ export default function Profile(props) {
 
   const profileData = props.profile;
 
+  //profile data dbden geliyor formu dolduruyor
+
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
 
+  const [isPersonalDEtailsCollapsed, setIsPersonalDetailsCollapsed] = useState(true);
   const [isEducationsCollapsed, setIsEducationsCollapsed] = useState(true);
   const [isProjectsCollapsed, setIsProjectsCollapsed] = useState(true);
   const [isAchievementsCollapsed, setIsAchievementsCollapsed] = useState(true);
   const [isExperiencesCollapsed, setIsExperiencesCollapsed] = useState(true);
+
+  const [activePersonalDetail, setactivePersonalDetail] = useState({});
+  const [activePersonalDetailErrors, setactivePersonalDetailErrors] = useState(null);
 
   const [activeEducations, setActiveEducations] = useState({});
   const [activeEducationsErrors, setActiveEducationsErrors] = useState(null);
@@ -76,6 +83,16 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
+
+
+  const getProfile1 = async () => {
+   
+    const res = await axios.get("http://localhost:3001/user/profile", {
+      withCredentials: true,
+    });
+    setForm(res.data);
+  };
+
   const onChange = async (prop, value) => {
     setForm({
       ...form,
@@ -86,6 +103,36 @@ export default function Profile(props) {
   const onBlur = async (prop, value) => {
     await api.user.profile.update("personal", form);
   };
+
+
+const addPersonalDetail = async ()=>{
+  setLoading(true);
+  setactivePersonalDetailErrors(null);
+  console.log("deneme seysi")
+   const res = await api.user.profile.update("personal",form)
+   .catch((err) => {
+    setactivePersonalDetailErrors(err.response.data.errorMessage);
+    setLoading(false);
+   });
+   console.log("bu profile de ki res :",res)
+   if(res.user){
+    setactivePersonalDetail({
+      ...form,
+      firstName:"",
+      lastName:"",
+      birthday:"",
+      gender:"",
+      languages:"",
+      skills:"",
+      description:"",
+      address:""
+    });
+    setIsPersonalDetailsCollapsed(true);
+    props.getProfile();
+   }
+   setLoading(false);
+   
+};
 
   const addEducation = async () => {
     setLoading(true);
@@ -210,17 +257,29 @@ export default function Profile(props) {
     setLoading(false);
   };
 
+  useEffect(() => {
+    getProfile1();
+  }, []);
+
   return (
     <>
-      <div className="cards">
+   <div className="wrapper">
+   
+    
+    <div className="">
+
+      <div class="container">
+      <div className=" cards">
         <div className="card">
-          <div className="card__header">Personal Details</div>
+        
+       <div className="card__header">Personal Details</div>
+
           <ul className="card__body">
             <li>
-              <label>First Name</label>
+              <label class="">First Name</label>
               <input
                 type="input"
-                value={form.firstName}
+                value={form?.firstName}
                 required
                 onChange={(e) => onChange("firstName", e.target.value)}
                 onBlur={(e) => onBlur("firstName", e.target.value)}
@@ -231,7 +290,7 @@ export default function Profile(props) {
               <input
                 type="input"
                 required
-                value={form.lastName}
+                value={form?.lastName}
                 onChange={(e) => onChange("lastName", e.target.value)}
                 onBlur={(e) => onBlur("lastName", e.target.value)}
               />
@@ -241,7 +300,7 @@ export default function Profile(props) {
               <input
                 type="date"
                 required
-                defaultValue={form.birthDay}
+                defaultValue={form?.birthDay}
                 onChange={(e) => onChange("birthDay", e.target.value)}
                 onBlur={(e) => onBlur("birthDay", e.target.value)}
               />
@@ -249,7 +308,7 @@ export default function Profile(props) {
             <li>
               <label>Gender</label>
               <Select
-                defaultValue={form.gender}
+                defaultValue={form?.gender}
                 options={genderOptions}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
@@ -263,7 +322,7 @@ export default function Profile(props) {
             <li>
               <label>Languages</label>
               <Select
-                defaultValue={form.languages}
+                defaultValue={form?.languages}
                 options={languages}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
@@ -278,7 +337,7 @@ export default function Profile(props) {
             <li>
               <label>Skills</label>
               <Select
-                defaultValue={form.skills}
+                defaultValue={form?.skills}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
                 options={skills}
@@ -294,7 +353,7 @@ export default function Profile(props) {
               <label>Description</label>
               <textarea
                 required
-                value={form.profileDescription}
+                value={form?.profileDescription}
                 onChange={(e) => onChange("profileDescription", e.target.value)}
                 onBlur={(e) => onBlur("profileDescription", e.target.value)}
               />
@@ -302,19 +361,25 @@ export default function Profile(props) {
             <li>
               <label>Address</label>
               <textarea
-                value={form.address}
+                value={form?.address}
                 required
                 onChange={(e) => onChange("address", e.target.value)}
                 onBlur={(e) => onBlur("address", e.target.value)}
               />
             </li>
           </ul>
+          <button
+            className={loading ? "loading" : undefined}
+            onClick={addPersonalDetail}
+          >
+            Save
+          </button>
         </div>
         <div className="card">
           <div className="card__header">Education Information</div>
           <ul className="card__body">
             <Table
-              data={profileData.educations}
+              data={profileData?.educations}
               headline={educationHeadlines}
               onRemove={deleteEducation}
               loading={loading}
@@ -339,7 +404,7 @@ export default function Profile(props) {
                   <label>School Name</label>
                   <input
                     type="text"
-                    value={activeEducations.school}
+                    value={activeEducations?.school}
                     onChange={(e) =>
                       setActiveEducations({
                         ...activeEducations,
@@ -352,7 +417,7 @@ export default function Profile(props) {
                   <label>Section</label>
                   <input
                     type="text"
-                    value={activeEducations.section}
+                    value={activeEducations?.section}
                     onChange={(e) =>
                       setActiveEducations({
                         ...activeEducations,
@@ -364,7 +429,7 @@ export default function Profile(props) {
                 <li>
                   <label>Graduation Date</label>
                   <input
-                    value={activeEducations.date}
+                    value={activeEducations?.date}
                     onChange={(e) =>
                       setActiveEducations({
                         ...activeEducations,
@@ -393,7 +458,7 @@ export default function Profile(props) {
           <div className="card__header">Projects</div>
           <ul className="card__body">
             <Table
-              data={profileData.projects}
+              data={profileData?.projects}
               headline={projectHeadlines}
               onRemove={deleteProject}
               loading={loading}
@@ -465,11 +530,12 @@ export default function Profile(props) {
             </section>
           </ul>
         </div>
+        
         <div className="card">
           <div className="card__header">Achievement</div>
           <ul className="card__body">
             <Table
-              data={profileData.achievements}
+              data={profileData?.achievements}
               headline={achievementHeadlines}
               onRemove={deleteAchievement}
               loading={loading}
@@ -484,7 +550,7 @@ export default function Profile(props) {
                   setIsAchievementsCollapsed(!isAchievementsCollapsed)
                 }
               >
-                Add New
+                <span>Add New Achievement</span>
                 {isAchievementsCollapsed ? (
                   <FontAwesomeIcon icon={faPlus} />
                 ) : (
@@ -537,7 +603,7 @@ export default function Profile(props) {
           <div className="card__header">Experiences</div>
           <ul className="card__body">
             <Table
-              data={profileData.experiences}
+              data={profileData?.experiences}
               headline={experienceHeadlines}
               onRemove={deleteExperience}
               loading={loading}
@@ -552,7 +618,7 @@ export default function Profile(props) {
                   setIsExperiencesCollapsed(!isExperiencesCollapsed)
                 }
               >
-                Add New
+                <span>Add New Experience</span>
                 {isExperiencesCollapsed ? (
                   <FontAwesomeIcon icon={faPlus} />
                 ) : (
@@ -626,7 +692,14 @@ export default function Profile(props) {
             </section>
           </ul>
         </div>
+
+
+
       </div>
+      </div>
+      </div>
+   </div>
+      
     </>
   );
 }
