@@ -223,68 +223,41 @@ function checkPasswordValidity(password) {
      res.status(201).json({message:"session id empty "})
   }
 
-   const personalUpdate= async (req,res)=>{
+  const addPersonalDetail= async (req,res)=>{
 
-    try {
-   
-      const {
-        firstName,
-        lastName,
-        birthDay,
-        gender,
-        languages,
-        skills,
-        profileDescription,
-        address,
-      } = req.body;
-
-        req.session.userId = user._id.valueOf(); 
-      
-        console.log(req.session.userId)
+  try {
   
-        if (!userId) {
-          return res.status(400).json({ message: 'Kullanıcı kimliği bulunamadı' });
-        }
-
-  
+    const {activePersonalDetail} = req.body;
+    console.log("bu cont daki veri",activePersonalDetail)
     
-      await UserModel.update(
-        { _id: userId },
-        {
-          firstName,
-          lastName,
-          birthDay,
-          gender,
-          languages,
-          skills,
-          profileDescription,
-          address,
-        }
-      );
-  
-
-      const updatedUser = await UserModel.findOne(userId);
-  
+    
+   const personalDetails = await UserModel.updateMany({
+    
+      firstName:activePersonalDetail.firstName,
+      lastName: activePersonalDetail.lastName,
+      birthday:activePersonalDetail.birthday,
+      gender:activePersonalDetail.gender,
+      languages:activePersonalDetail.languages,
+      skills:activePersonalDetail.skills,
+      description:activePersonalDetail.description,
+      address:activePersonalDetail.address
+    
+     })
+    if (personalDetails.nModified >0) {
       res.status(200).json({
-        data: {
-          
-          firstName: updatedUser.firstName,
-          lastName: updatedUser.lastName,
-          birthDay: updatedUser.birthDay,
-          gender: updatedUser.gender,
-          languages: updatedUser.languages,
-          skills: updatedUser.skills,
-          profileDescription: updatedUser.profileDescription,
-          address: updatedUser.address
-     
-        },
-        message: 'Profil başarıyla güncellendi',
+        message: 'Personal details has been updated successfully',})
+    } else {
+      res.status(404).json({
+        message: 'Personal details not found or not updated',
       });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'İç sunucu hatası' });
+   
+
     }
-  };
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'İç sunucu hatası' });
+  }
+};
 
 
 const checkUser=async(req,res)=>{
@@ -304,4 +277,4 @@ else {
 
    
  
-    export {registerCompanyUser,registerPersonelUser,login,logout, personalUpdate,getProfile,checkUser}
+    export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser}

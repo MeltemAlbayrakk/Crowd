@@ -62,10 +62,14 @@ export default function Profile(props) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
 
+  const [isPersonalDEtailsCollapsed, setIsPersonalDetailsCollapsed] = useState(true);
   const [isEducationsCollapsed, setIsEducationsCollapsed] = useState(true);
   const [isProjectsCollapsed, setIsProjectsCollapsed] = useState(true);
   const [isAchievementsCollapsed, setIsAchievementsCollapsed] = useState(true);
   const [isExperiencesCollapsed, setIsExperiencesCollapsed] = useState(true);
+
+  const [activePersonalDetail, setactivePersonalDetail] = useState({});
+  const [activePersonalDetailErrors, setactivePersonalDetailErrors] = useState(null);
 
   const [activeEducations, setActiveEducations] = useState({});
   const [activeEducationsErrors, setActiveEducationsErrors] = useState(null);
@@ -79,17 +83,10 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
+
+
   const getProfile1 = async () => {
-    // debugger
-    //setProfile(await api.user.profile.get());
-    // const res= await fetch("http://localhost:3001/user/profile");
-    /*
-          const res= await fetch("http://localhost:3001/user/profile", {
-      method: "GET",
-      credentials: 'include',
-    });
-    res = await res.json();
-    */
+   
     const res = await axios.get("http://localhost:3001/user/profile", {
       withCredentials: true,
     });
@@ -106,6 +103,36 @@ export default function Profile(props) {
   const onBlur = async (prop, value) => {
     await api.user.profile.update("personal", form);
   };
+
+
+const addPersonalDetail = async ()=>{
+  setLoading(true);
+  setactivePersonalDetailErrors(null);
+  console.log("deneme seysi")
+   const res = await api.user.profile.update("personal",activePersonalDetail)
+   .catch((err) => {
+    setactivePersonalDetailErrors(err.response.data.errorMessage);
+    setLoading(false);
+   });
+   console.log("bu profile de ki res :",res)
+   if(res.user){
+    setactivePersonalDetail({
+      ...activePersonalDetail,
+      firstName:"",
+      lastName:"",
+      birthday:"",
+      gender:"",
+      languages:"",
+      skills:"",
+      description:"",
+      address:""
+    });
+    setIsPersonalDetailsCollapsed(true);
+    props.getProfile();
+   }
+   setLoading(false);
+   
+};
 
   const addEducation = async () => {
     setLoading(true);
@@ -236,15 +263,20 @@ export default function Profile(props) {
 
   return (
     <>
-    <div className="wrapper">
-<div className="profile">
+   <div className="wrapper">
+   
+    
+    <div className="">
 
-<div className=" cards">
+      <div class="container">
+      <div className=" cards">
         <div className="card">
-          <div className="card__header">Personal Details</div>
+        
+       <div className="card__header">Personal Details</div>
+
           <ul className="card__body">
             <li>
-              <label>First Name</label>
+              <label class="">First Name</label>
               <input
                 type="input"
                 value={form?.firstName}
@@ -336,6 +368,12 @@ export default function Profile(props) {
               />
             </li>
           </ul>
+          <button
+            className={loading ? "loading" : undefined}
+            onClick={addPersonalDetail}
+          >
+            Save
+          </button>
         </div>
         <div className="card">
           <div className="card__header">Education Information</div>
@@ -512,7 +550,7 @@ export default function Profile(props) {
                   setIsAchievementsCollapsed(!isAchievementsCollapsed)
                 }
               >
-                Add New
+                <span>Add New Achievement</span>
                 {isAchievementsCollapsed ? (
                   <FontAwesomeIcon icon={faPlus} />
                 ) : (
@@ -580,7 +618,7 @@ export default function Profile(props) {
                   setIsExperiencesCollapsed(!isExperiencesCollapsed)
                 }
               >
-                Add New
+                <span>Add New Experience</span>
                 {isExperiencesCollapsed ? (
                   <FontAwesomeIcon icon={faPlus} />
                 ) : (
@@ -657,11 +695,11 @@ export default function Profile(props) {
 
 
 
-</div>
-
-    </div>
-      
       </div>
+      </div>
+      </div>
+   </div>
+      
     </>
   );
 }

@@ -1,29 +1,29 @@
-import UserModel from "../models/User";
+
 import EducationModel from "../models/profile/Education";
 
 //denenecek
 
 const addEducation = async (req, res) => {
     try {
-      const userId = req.UserModel.id;
+     
       const { school, section, date } = req.body;
   
       
-      const education = await EducationModel.create({ school, section, date, userId }).save();
+      const education = (await EducationModel.create({ school, section, date })).save();
   
       res.status(201).json({
         data: {
-          id: education.id,
+         
           school: education.school,
           section: education.section,
           date: education.date,
           
         },
-        message: 'Eğitim bilgisi başarıyla eklendi',
+        message: 'Education information has been added successfully',
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'İç sunucu hatası' });
+      res.status(500).json({ message: 'server error ' });
     }
   };
   

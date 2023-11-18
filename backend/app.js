@@ -38,9 +38,7 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 conn()
-app.post('/asd',()=>{
-  console.log("user pforile calıstı" );
-})
+
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
 
