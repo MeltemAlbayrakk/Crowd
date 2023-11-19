@@ -90,6 +90,7 @@ export default function Profile(props) {
     const res = await axios.get("http://localhost:3001/user/profile", {
       withCredentials: true,
     });
+    
     setForm(res.data);
   };
 
@@ -98,41 +99,31 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
+    console.log("bu  onchange form :",form)
   };
 
   const onBlur = async (prop, value) => {
-    await api.user.profile.update("personal", form);
+
+    console.log("onblurdasın")
+    try {
+      console.log("try ıcı ")
+      const res = await api.user.profile.update("personal", form);
+      if (res.status === 201) {
+        console.log("200 döndü",res)
+      }
+      else if (res.status === 404){
+        console.log("200 dönmedi",res)
+      }
+      else{
+        console.log("hata ama ne oldugu bellı degıl")
+      }
+    } catch (error) {
+      console.log("onblur hatası:",error.message)
+    }
+    
+    
   };
 
-
-const addPersonalDetail = async ()=>{
-  setLoading(true);
-  setactivePersonalDetailErrors(null);
-  console.log("deneme seysi")
-   const res = await api.user.profile.update("personal",form)
-   .catch((err) => {
-    setactivePersonalDetailErrors(err.response.data.errorMessage);
-    setLoading(false);
-   });
-   console.log("bu profile de ki res :",res)
-   if(res.user){
-    setactivePersonalDetail({
-      ...form,
-      firstName:"",
-      lastName:"",
-      birthday:"",
-      gender:"",
-      languages:"",
-      skills:"",
-      description:"",
-      address:""
-    });
-    setIsPersonalDetailsCollapsed(true);
-    props.getProfile();
-   }
-   setLoading(false);
-   
-};
 
   const addEducation = async () => {
     setLoading(true);
@@ -368,12 +359,7 @@ const addPersonalDetail = async ()=>{
               />
             </li>
           </ul>
-          <button
-            className={loading ? "loading" : undefined}
-            onClick={addPersonalDetail}
-          >
-            Save
-          </button>
+          
         </div>
         <div className="card">
           <div className="card__header">Education Information</div>

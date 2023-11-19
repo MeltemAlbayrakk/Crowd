@@ -154,7 +154,7 @@ function checkPasswordValidity(password) {
     if (passwordMatch) {
       
       req.session.userId = user._id
-      console.log(req.session.userId)
+      
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
@@ -226,24 +226,32 @@ function checkPasswordValidity(password) {
   const addPersonalDetail= async (req,res)=>{
 
     try {
-    
-      const {form} = req.body;
-      console.log("bu cont daki veri",form)
+     
+
       
+        console.log("add persona geliyor ")
       
-    const personalDetails = await UserModel.updateMany({
-      
-        firstName:form.firstName,
-        lastName: form.lastName,
-        birthday:form.birthday,
-        gender:form.gender,
-        languages:form.languages,
-        skills:form.skills,
-        description:form.description,
-        address:form.address
-      
+
+      const {firstName,lastName,birthDay,gender,languages,skills,profileDescription,address} = req.body;
+      //console.log("bu type:")
+      //console.log("bu cont daki veri",form)
+      console.log(firstName,lastName)
+      console.log(languages[0])
+      const personalDetails = await UserModel.findByIdAndUpdate("65589180d5c3aee8fbb060ed",{
+
+        firstName:firstName,
+        lastName: lastName,
+        birthday:birthDay,
+        gender:gender,
+        languages:languages,
+        skills:skills,
+        profileDescription:profileDescription,
+        address:address
+
       })
-      if (personalDetails.nModified >0) {
+
+      
+      if (personalDetails) {
         res.status(200).json({
           message: 'Personal details has been updated successfully',})
       } else {

@@ -60,7 +60,7 @@ export default {
       },
       async update(type, payload) {
         if (type === "personal") {
-          const response = await instance.patch(
+          const response = await instance.post(
             "/user/personal/update",
             payload
           );
