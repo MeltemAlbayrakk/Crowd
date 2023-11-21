@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
 import session from 'express-session';
+import MongoStore from 'connect-mongo'
 
 dotenv.config()
 
@@ -13,7 +14,13 @@ const app = express()
 const port = 3001
 
 
+app.use(session({
+  secret: process.env.SECRET_TOKEN,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.DB_URI })
 
+}));
 
 
 app.use(session({

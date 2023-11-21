@@ -29,6 +29,4 @@ const addExperience = async (req,res) =>{
    
 };
 
-module.exports = {
-    addExperience
-}
+export{addExperience}

@@ -200,48 +200,46 @@ function checkPasswordValidity(password) {
 };
   
    
-  const getProfile = async (req,res)=>{
+const getProfile = async (req,res)=>{
 
-   if(req.session.userId) {
-    const user = await UserModel.findById(req.session.userId)
-    
 
-    if (!user) {
-      res.status(404).json({message:"profile is not found "})
-    }
 
-    return res.send(user);
-   }
-   else {
-    console.log('session id empty')
-   }
 
-   //const userId = req.session.userId;
-//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
-     //bu halde veri geliyor 
+ if(req.session.userId) {
+  const user = await UserModel.findById(req.session.userId).populate('projects').populate('educations');
+  
 
-     res.status(201).json({message:"session id empty "})
+
+
+  if (!user) {
+    res.status(404).json({message:"profile is not found "})
   }
+  
+  //console.log('User Educations:', user.educations);
+  return res.send(user);
+ }
+ else {
+  console.log('session id empty')
+ }
+
+ //const userId = req.session.userId;
+//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
+   //bu halde veri geliyor 
+
+   res.status(201).json({message:"session id empty "})
+}
 
   const addPersonalDetail= async (req,res)=>{
 
     try {
-     
 
-      
-        console.log("add persona geliyor ")
-      
-
-      const {firstName,lastName,birthDay,gender,languages,skills,profileDescription,address} = req.body;
-      //console.log("bu type:")
-      //console.log("bu cont daki veri",form)
-      console.log(firstName,lastName)
-      console.log(languages[0])
-      const personalDetails = await UserModel.findByIdAndUpdate("65589180d5c3aee8fbb060ed",{
+      const {firstName,lastName,birthday,gender,languages,skills,profileDescription,address} = req.body;
+      if (req.session.userId) {
+        const personalDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
 
         firstName:firstName,
         lastName: lastName,
-        birthday:birthDay,
+        birthday:birthday,
         gender:gender,
         languages:languages,
         skills:skills,
@@ -249,8 +247,6 @@ function checkPasswordValidity(password) {
         address:address
 
       })
-
-      
       if (personalDetails) {
         res.status(200).json({
           message: 'Personal details has been updated successfully',})
@@ -261,6 +257,10 @@ function checkPasswordValidity(password) {
     
 
       }
+
+      }
+      
+      
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'İç sunucu hatası' });

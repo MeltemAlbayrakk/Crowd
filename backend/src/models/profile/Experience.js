@@ -10,6 +10,6 @@ const ExperienceSchema = new Schema({
     date:{type:String,required:true}
   });
 
-  const ExperienceModel = mongoose.model('experience', ExperienceSchema);
+  const ExperienceModel = mongoose.model('Experience', ExperienceSchema);
 
 export default ExperienceModel;

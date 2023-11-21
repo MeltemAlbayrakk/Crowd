@@ -10,6 +10,6 @@ const AchievementSchema = new Schema({
 
   });
 
-  const AchievementModel = mongoose.model('achievement', AchievementSchema);
+  const AchievementModel = mongoose.model('Achievement', AchievementSchema);
 
 export default AchievementModel;

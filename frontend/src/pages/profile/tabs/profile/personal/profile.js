@@ -62,14 +62,10 @@ export default function Profile(props) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
 
-  const [isPersonalDEtailsCollapsed, setIsPersonalDetailsCollapsed] = useState(true);
   const [isEducationsCollapsed, setIsEducationsCollapsed] = useState(true);
   const [isProjectsCollapsed, setIsProjectsCollapsed] = useState(true);
   const [isAchievementsCollapsed, setIsAchievementsCollapsed] = useState(true);
   const [isExperiencesCollapsed, setIsExperiencesCollapsed] = useState(true);
-
-  const [activePersonalDetail, setactivePersonalDetail] = useState({});
-  const [activePersonalDetailErrors, setactivePersonalDetailErrors] = useState(null);
 
   const [activeEducations, setActiveEducations] = useState({});
   const [activeEducationsErrors, setActiveEducationsErrors] = useState(null);
@@ -83,7 +79,9 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
-
+  const [defaultLanguages, setdefaultLanguages] = useState({});
+  const [educations, setEducations] = useState({});
+  const [projects,setProjects] = useState({});
 
   const getProfile1 = async () => {
    
@@ -92,6 +90,12 @@ export default function Profile(props) {
     });
     
     setForm(res.data);
+    //console.log("get profildeki resdata:",res.data)
+    console.log("profile res data diller:",res.data.languages)
+    setdefaultLanguages(res.data.languages)
+    setEducations(res.data.educations);
+    setProjects(res.data.projects)
+    
   };
 
   const onChange = async (prop, value) => {
@@ -99,7 +103,7 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
-    console.log("bu  onchange form :",form)
+    console.log("form :",form)
   };
 
   const onBlur = async (prop, value) => {
@@ -108,6 +112,9 @@ export default function Profile(props) {
     try {
       console.log("try ıcı ")
       const res = await api.user.profile.update("personal", form);
+
+      console.log("onchange diller:",form)
+
       if (res.status === 201) {
         console.log("200 döndü",res)
       }
@@ -162,7 +169,7 @@ export default function Profile(props) {
     if (res.id) {
       setActiveProject({
         ...activeProject,
-        project: "",
+        headline: "",
         description: "",
         date: "",
       });
@@ -248,9 +255,29 @@ export default function Profile(props) {
     setLoading(false);
   };
 
+ 
+
+  
+ 
   useEffect(() => {
     getProfile1();
   }, []);
+
+ 
+
+  const formattedEducations = form?.educations.map((education) => ({
+    id: education._id,
+    school: education.school,
+    section: education.section,
+    date: education.date,
+  }));
+
+  const formattedProjects = form?.projects.map((project)=>({
+    id:project._id,
+    headline:project.headline,
+    description:project.description,
+    date:project.date
+  }))
 
   return (
     <>
@@ -291,15 +318,15 @@ export default function Profile(props) {
               <input
                 type="date"
                 required
-                defaultValue={form?.birthDay}
-                onChange={(e) => onChange("birthDay", e.target.value)}
-                onBlur={(e) => onBlur("birthDay", e.target.value)}
+                defaultValue={form?.birthday}
+                onChange={(e) => onChange("birthday", e.target.value)}
+                onBlur={(e) => onBlur("birthday", e.target.value)}
               />
             </li>
             <li>
               <label>Gender</label>
               <Select
-                defaultValue={form?.gender}
+                value={form?.gender}
                 options={genderOptions}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
@@ -313,15 +340,18 @@ export default function Profile(props) {
             <li>
               <label>Languages</label>
               <Select
-                defaultValue={form?.languages}
-                options={languages}
+                defaultValue={form?.languages || defaultLanguages}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
+                options={languages|| defaultLanguages}
                 unstyled
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(e) => onChange("languages", e)}
+                onChange={(selectedLanguages) => {
+                  const selectedLanguageValues = selectedLanguages.map(lang => lang.value);
+                  onChange("languages", selectedLanguageValues);
+                }}
                 onBlur={(e) => onBlur("languages", e)}
               />
             </li>
@@ -336,7 +366,10 @@ export default function Profile(props) {
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(e) => onChange("skills", e)}
+                onChange={(selectedSkills) => {
+                  const selectedSkillValues = selectedSkills.map(lang => lang.value);
+                  onChange("skills", selectedSkillValues);
+                }}
                 onBlur={(e) => onBlur("skills", e)}
               />
             </li>
@@ -364,13 +397,12 @@ export default function Profile(props) {
         <div className="card">
           <div className="card__header">Education Information</div>
           <ul className="card__body">
-            <Table
-              data={profileData?.educations}
+          <Table
+              data={formattedEducations}
               headline={educationHeadlines}
-              onRemove={deleteEducation}
+              onRemove={(id) => deleteEducation(id)}
               loading={loading}
             />
-
             <section
               className={isEducationsCollapsed ? "collapsed" : undefined}
             >
@@ -444,9 +476,9 @@ export default function Profile(props) {
           <div className="card__header">Projects</div>
           <ul className="card__body">
             <Table
-              data={profileData?.projects}
+              data={formattedProjects}
               headline={projectHeadlines}
-              onRemove={deleteProject}
+              onRemove={(id) => deleteProject(id)}
               loading={loading}
             />
             <section className={isProjectsCollapsed ? "collapsed" : undefined}>
