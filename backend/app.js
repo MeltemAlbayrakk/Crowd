@@ -6,15 +6,12 @@ import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
 import session from 'express-session';
-
+import moment from 'moment-timezone';
+moment.tz.setDefault('Europe/Istanbul')
 dotenv.config()
 
 const app = express()
 const port = 3001
-
-
-
-
 
 app.use(session({
   secret: process.env.SECRET_TOKEN, 

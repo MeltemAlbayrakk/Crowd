@@ -18,5 +18,10 @@ router.route("/personal/achievement").post(userAchievement.addAchievement)
 // router.route("/profile").get(checkAuth,userController.addPersonalDetail)
 
 router.route("/check-session").get(userController.checkUser)
+router.route("/forget-password").post(userController.forgetPassword)
+router.route("/reset-code-check").post(userController.resetCodeCheck)
+router.route("/reset-password").post(userController.resetPassword)
+//router.route("/update-password").post(userController.updatePassword)
+
 
 export default router   
