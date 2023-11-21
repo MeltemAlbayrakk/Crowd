@@ -80,8 +80,7 @@ export default function Profile(props) {
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
   const [defaultLanguages, setdefaultLanguages] = useState({});
-  const [educations, setEducations] = useState({});
-  const [projects,setProjects] = useState({});
+ 
 
   const getProfile1 = async () => {
    
@@ -93,8 +92,7 @@ export default function Profile(props) {
     //console.log("get profildeki resdata:",res.data)
     console.log("profile res data diller:",res.data.languages)
     setdefaultLanguages(res.data.languages)
-    setEducations(res.data.educations);
-    setProjects(res.data.projects)
+    
     
   };
 
@@ -193,7 +191,7 @@ export default function Profile(props) {
     if (res.id) {
       setActiveAchievement({
         ...activeAchievement,
-        name: "",
+        headline: "",
         description: "",
       });
       setIsAchievementsCollapsed(true);
@@ -216,9 +214,10 @@ export default function Profile(props) {
     if (res.id) {
       setActiveExperience({
         ...activeExperience,
-        name: "",
+        headline: "",
         company: "",
         description: "",
+        date:"",
       });
       setIsExperiencesCollapsed(true);
       props.getProfile();
@@ -277,6 +276,18 @@ export default function Profile(props) {
     headline:project.headline,
     description:project.description,
     date:project.date
+  }))
+  const formattedAchievements = form?.achievements.map((achievement)=>({
+    id:achievement._id,
+    headline:achievement.headline,
+    description:achievement.description,
+  }))
+  const formattedExperiences = form?.experiences.map((experience)=>({
+    id:experience._id,
+    headline:experience.headline,
+    company: experience.company,
+    description:experience.description,
+    date:experience.date
   }))
 
   return (
@@ -553,9 +564,9 @@ export default function Profile(props) {
           <div className="card__header">Achievement</div>
           <ul className="card__body">
             <Table
-              data={profileData?.achievements}
+              data={formattedAchievements}
               headline={achievementHeadlines}
-              onRemove={deleteAchievement}
+              onRemove={(id) => deleteAchievement(id)}
               loading={loading}
             />
 
@@ -621,9 +632,9 @@ export default function Profile(props) {
           <div className="card__header">Experiences</div>
           <ul className="card__body">
             <Table
-              data={profileData?.experiences}
+              data={formattedExperiences}
               headline={experienceHeadlines}
-              onRemove={deleteExperience}
+              onRemove={(id) => deleteExperience(id)}
               loading={loading}
             />
 

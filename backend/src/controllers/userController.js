@@ -206,7 +206,7 @@ const getProfile = async (req,res)=>{
 
 
  if(req.session.userId) {
-  const user = await UserModel.findById(req.session.userId).populate('projects').populate('educations');
+  const user = await UserModel.findById(req.session.userId).populate('experiences achievements projects educations');
   
 
 

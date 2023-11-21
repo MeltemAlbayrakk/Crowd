@@ -127,15 +127,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/achievement",
-              payload
+              payload,{withCredentials: true}
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/achievement/" + id
+            const response = await instance.get(
+              "/user/personal/achievement/" + id,{withCredentials: true}
             );
             return response.data;
           }
@@ -146,15 +146,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/experience",
-              payload
+              payload,{withCredentials: true}
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/experience/" + id
+            const response = await instance.get(
+              "/user/personal/experience/" + id,{withCredentials: true}
             );
             return response.data;
           }
