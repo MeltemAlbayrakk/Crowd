@@ -154,7 +154,7 @@ function checkPasswordValidity(password) {
     if (passwordMatch) {
       
       req.session.userId = user._id
-      console.log(req.session.userId)
+      
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
@@ -200,50 +200,54 @@ function checkPasswordValidity(password) {
 };
   
    
-  const getProfile = async (req,res)=>{
+const getProfile = async (req,res)=>{
 
-   if(req.session.userId) {
-    const user = await UserModel.findById(req.session.userId)
-    
 
-    if (!user) {
-      res.status(404).json({message:"profile is not found "})
-    }
 
-    return res.send(user);
-   }
-   else {
-    console.log('session id empty')
-   }
 
-   //const userId = req.session.userId;
-//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
-     //bu halde veri geliyor 
+ if(req.session.userId) {
+  const user = await UserModel.findById(req.session.userId).populate('experiences achievements projects educations');
+  
 
-     res.status(201).json({message:"session id empty "})
+
+
+  if (!user) {
+    res.status(404).json({message:"profile is not found "})
   }
+  
+  //console.log('User Educations:', user.educations);
+  return res.send(user);
+ }
+ else {
+  console.log('session id empty')
+ }
+
+ //const userId = req.session.userId;
+//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
+   //bu halde veri geliyor 
+
+   res.status(201).json({message:"session id empty "})
+}
 
   const addPersonalDetail= async (req,res)=>{
 
     try {
-    
-      const {form} = req.body;
-      console.log("bu cont daki veri",form)
-      
-      
-    const personalDetails = await UserModel.updateMany({
-      
-        firstName:form.firstName,
-        lastName: form.lastName,
-        birthday:form.birthday,
-        gender:form.gender,
-        languages:form.languages,
-        skills:form.skills,
-        description:form.description,
-        address:form.address
-      
+
+      const {firstName,lastName,birthday,gender,languages,skills,profileDescription,address} = req.body;
+      if (req.session.userId) {
+        const personalDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
+
+        firstName:firstName,
+        lastName: lastName,
+        birthday:birthday,
+        gender:gender,
+        languages:languages,
+        skills:skills,
+        profileDescription:profileDescription,
+        address:address
+
       })
-      if (personalDetails.nModified >0) {
+      if (personalDetails) {
         res.status(200).json({
           message: 'Personal details has been updated successfully',})
       } else {
@@ -253,6 +257,10 @@ function checkPasswordValidity(password) {
     
 
       }
+
+      }
+      
+      
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'İç sunucu hatası' });

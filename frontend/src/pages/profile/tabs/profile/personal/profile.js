@@ -62,14 +62,10 @@ export default function Profile(props) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
 
-  const [isPersonalDEtailsCollapsed, setIsPersonalDetailsCollapsed] = useState(true);
   const [isEducationsCollapsed, setIsEducationsCollapsed] = useState(true);
   const [isProjectsCollapsed, setIsProjectsCollapsed] = useState(true);
   const [isAchievementsCollapsed, setIsAchievementsCollapsed] = useState(true);
   const [isExperiencesCollapsed, setIsExperiencesCollapsed] = useState(true);
-
-  const [activePersonalDetail, setactivePersonalDetail] = useState({});
-  const [activePersonalDetailErrors, setactivePersonalDetailErrors] = useState(null);
 
   const [activeEducations, setActiveEducations] = useState({});
   const [activeEducationsErrors, setActiveEducationsErrors] = useState(null);
@@ -83,14 +79,21 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
-
+  const [defaultLanguages, setdefaultLanguages] = useState({});
+ 
 
   const getProfile1 = async () => {
    
     const res = await axios.get("http://localhost:3001/user/profile", {
       withCredentials: true,
     });
+    
     setForm(res.data);
+    //console.log("get profildeki resdata:",res.data)
+    console.log("profile res data diller:",res.data.languages)
+    setdefaultLanguages(res.data.languages)
+    
+    
   };
 
   const onChange = async (prop, value) => {
@@ -98,41 +101,34 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
+    console.log("form :",form)
   };
 
   const onBlur = async (prop, value) => {
-    await api.user.profile.update("personal", form);
+
+    console.log("onblurdasın")
+    try {
+      console.log("try ıcı ")
+      const res = await api.user.profile.update("personal", form);
+
+      console.log("onchange diller:",form)
+
+      if (res.status === 201) {
+        console.log("200 döndü",res)
+      }
+      else if (res.status === 404){
+        console.log("200 dönmedi",res)
+      }
+      else{
+        console.log("hata ama ne oldugu bellı degıl")
+      }
+    } catch (error) {
+      console.log("onblur hatası:",error.message)
+    }
+    
+    
   };
 
-
-const addPersonalDetail = async ()=>{
-  setLoading(true);
-  setactivePersonalDetailErrors(null);
-  console.log("deneme seysi")
-   const res = await api.user.profile.update("personal",form)
-   .catch((err) => {
-    setactivePersonalDetailErrors(err.response.data.errorMessage);
-    setLoading(false);
-   });
-   console.log("bu profile de ki res :",res)
-   if(res.user){
-    setactivePersonalDetail({
-      ...form,
-      firstName:"",
-      lastName:"",
-      birthday:"",
-      gender:"",
-      languages:"",
-      skills:"",
-      description:"",
-      address:""
-    });
-    setIsPersonalDetailsCollapsed(true);
-    props.getProfile();
-   }
-   setLoading(false);
-   
-};
 
   const addEducation = async () => {
     setLoading(true);
@@ -171,7 +167,7 @@ const addPersonalDetail = async ()=>{
     if (res.id) {
       setActiveProject({
         ...activeProject,
-        project: "",
+        headline: "",
         description: "",
         date: "",
       });
@@ -195,7 +191,7 @@ const addPersonalDetail = async ()=>{
     if (res.id) {
       setActiveAchievement({
         ...activeAchievement,
-        name: "",
+        headline: "",
         description: "",
       });
       setIsAchievementsCollapsed(true);
@@ -218,9 +214,10 @@ const addPersonalDetail = async ()=>{
     if (res.id) {
       setActiveExperience({
         ...activeExperience,
-        name: "",
+        headline: "",
         company: "",
         description: "",
+        date:"",
       });
       setIsExperiencesCollapsed(true);
       props.getProfile();
@@ -257,9 +254,41 @@ const addPersonalDetail = async ()=>{
     setLoading(false);
   };
 
+ 
+
+  
+ 
   useEffect(() => {
     getProfile1();
   }, []);
+
+ 
+
+  const formattedEducations = form?.educations.map((education) => ({
+    id: education._id,
+    school: education.school,
+    section: education.section,
+    date: education.date,
+  }));
+
+  const formattedProjects = form?.projects.map((project)=>({
+    id:project._id,
+    headline:project.headline,
+    description:project.description,
+    date:project.date
+  }))
+  const formattedAchievements = form?.achievements.map((achievement)=>({
+    id:achievement._id,
+    headline:achievement.headline,
+    description:achievement.description,
+  }))
+  const formattedExperiences = form?.experiences.map((experience)=>({
+    id:experience._id,
+    headline:experience.headline,
+    company: experience.company,
+    description:experience.description,
+    date:experience.date
+  }))
 
   return (
     <>
@@ -300,15 +329,15 @@ const addPersonalDetail = async ()=>{
               <input
                 type="date"
                 required
-                defaultValue={form?.birthDay}
-                onChange={(e) => onChange("birthDay", e.target.value)}
-                onBlur={(e) => onBlur("birthDay", e.target.value)}
+                defaultValue={form?.birthday}
+                onChange={(e) => onChange("birthday", e.target.value)}
+                onBlur={(e) => onBlur("birthday", e.target.value)}
               />
             </li>
             <li>
               <label>Gender</label>
               <Select
-                defaultValue={form?.gender}
+                value={form?.gender}
                 options={genderOptions}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
@@ -322,15 +351,18 @@ const addPersonalDetail = async ()=>{
             <li>
               <label>Languages</label>
               <Select
-                defaultValue={form?.languages}
-                options={languages}
+                defaultValue={form?.languages || defaultLanguages}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
+                options={languages|| defaultLanguages}
                 unstyled
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(e) => onChange("languages", e)}
+                onChange={(selectedLanguages) => {
+                  const selectedLanguageValues = selectedLanguages.map(lang => lang.value);
+                  onChange("languages", selectedLanguageValues);
+                }}
                 onBlur={(e) => onBlur("languages", e)}
               />
             </li>
@@ -345,7 +377,10 @@ const addPersonalDetail = async ()=>{
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(e) => onChange("skills", e)}
+                onChange={(selectedSkills) => {
+                  const selectedSkillValues = selectedSkills.map(lang => lang.value);
+                  onChange("skills", selectedSkillValues);
+                }}
                 onBlur={(e) => onBlur("skills", e)}
               />
             </li>
@@ -368,23 +403,17 @@ const addPersonalDetail = async ()=>{
               />
             </li>
           </ul>
-          <button
-            className={loading ? "loading" : undefined}
-            onClick={addPersonalDetail}
-          >
-            Save
-          </button>
+          
         </div>
         <div className="card">
           <div className="card__header">Education Information</div>
           <ul className="card__body">
-            <Table
-              data={profileData?.educations}
+          <Table
+              data={formattedEducations}
               headline={educationHeadlines}
-              onRemove={deleteEducation}
+              onRemove={(id) => deleteEducation(id)}
               loading={loading}
             />
-
             <section
               className={isEducationsCollapsed ? "collapsed" : undefined}
             >
@@ -458,9 +487,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Projects</div>
           <ul className="card__body">
             <Table
-              data={profileData?.projects}
+              data={formattedProjects}
               headline={projectHeadlines}
-              onRemove={deleteProject}
+              onRemove={(id) => deleteProject(id)}
               loading={loading}
             />
             <section className={isProjectsCollapsed ? "collapsed" : undefined}>
@@ -535,9 +564,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Achievement</div>
           <ul className="card__body">
             <Table
-              data={profileData?.achievements}
+              data={formattedAchievements}
               headline={achievementHeadlines}
-              onRemove={deleteAchievement}
+              onRemove={(id) => deleteAchievement(id)}
               loading={loading}
             />
 
@@ -603,9 +632,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Experiences</div>
           <ul className="card__body">
             <Table
-              data={profileData?.experiences}
+              data={formattedExperiences}
               headline={experienceHeadlines}
-              onRemove={deleteExperience}
+              onRemove={(id) => deleteExperience(id)}
               loading={loading}
             />
 
