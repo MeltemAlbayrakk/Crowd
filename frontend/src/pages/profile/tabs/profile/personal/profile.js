@@ -383,25 +383,30 @@ export default function Profile(props) {
               />
             </li>
             <li>
-      <label>Languages</label>
-      <Select
-        value={selectedLanguages}
-        options={languagesOptions}
-        isMulti
-        onChange={(selectedOptions) => {
-          setSelectedLanguages(selectedOptions);
-          const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
-          onChange("languages", selectedLanguageValues);
-        }}
-        onBlur={() => onBlur("languages", selectedLanguages)}
-      />
-    </li>
+            <label>Languages</label>
+            <Select
+              value={selectedLanguages}
+              options={languagesOptions}
+              isMulti
+              unstyled
+              classNamePrefix="react-select"
+              className="react-select-container" 
+              onChange={(selectedOptions) => {
+                setSelectedLanguages(selectedOptions);
+                const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+                onChange("languages", selectedLanguageValues);
+              }}
+              onBlur={() => onBlur("languages", selectedLanguages)}
+            />
+          </li>
             <li>
               <label>Skills</label>
               <Select
                  value={selectedSkills}
                  options={skillsOptions}
                  isMulti
+                 unstyled
+                 classNamePrefix="react-select"
                  className="react-select-container" 
                  onChange={(selectedOptions) => {
                    setSelectedSkills(selectedOptions);
