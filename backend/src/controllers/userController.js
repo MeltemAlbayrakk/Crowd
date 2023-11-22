@@ -322,10 +322,17 @@ const forgetPassword = async (req, res) => {
     const resetCode = crypto.randomBytes(3).toString("hex");
 
   await sendEmail({
-      from: process.env.EMAIL_USER,
+      from: 'unreact07@gmail.com',
       to: userInfo.email,
       subject: "Şifre Sıfırlama",
       text: `Şifre sıfırlama kodunuz: ${resetCode}`,
+     /* html:
+  '<p>Please click on the following link to verify your email address:</p>' +
+  '<a href="http://localhost:3001/verify/' +
+  token +
+  '">http://localhost:3001/verify/' +
+  token +
+    '</a>',*/
   });
 
     await UserModel.updateOne(
