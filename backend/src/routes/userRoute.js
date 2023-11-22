@@ -27,6 +27,8 @@ router.route("/personal/achievement/:id").get(userAchievement.deleteAchievement)
 router.route("/personal/experience").post(userExperience.addExperience)
 router.route("/personal/experience/:id").get(userExperience.deleteExperience)
 //
+router.route("/addProfilePicture").post(userController.addProfilePicture)
+//
 router.route("/profile").get(checkAuth,userController.getProfile)
 
 router.route("/check-session").get(userController.checkUser)

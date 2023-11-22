@@ -79,14 +79,15 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
+ 
+
   const [languagesOptions, setLanguagesOptions] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]); 
 
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
-
-
   const getProfile1 = async () => {
+   
     try {
       const res = await axios.get("http://localhost:3001/user/profile", {
         withCredentials: true,
@@ -122,12 +123,12 @@ export default function Profile(props) {
       );
 
 
-
-
-
     } catch (error) {
-      console.error("Error fetching profile:", error);
+
     }
+    
+    
+    
   };
 
   const onChange = async (prop, value) => {
@@ -381,24 +382,24 @@ export default function Profile(props) {
                 onChange={(e) => onChange("gender", e)}
                 onBlur={(e) => onBlur("gender", e)}
               />
-            </li>
+              </li>
             <li>
-            <label>Languages</label>
-            <Select
-              value={selectedLanguages}
-              options={languagesOptions}
-              isMulti
-              unstyled
-              classNamePrefix="react-select"
-              className="react-select-container" 
-              onChange={(selectedOptions) => {
-                setSelectedLanguages(selectedOptions);
-                const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
-                onChange("languages", selectedLanguageValues);
-              }}
-              onBlur={() => onBlur("languages", selectedLanguages)}
-            />
-          </li>
+              <label>Languages</label>
+              <Select
+                value={selectedLanguages}
+                options={languagesOptions}
+                isMulti
+                unstyled
+                classNamePrefix="react-select"
+                className="react-select-container" 
+                onChange={(selectedOptions) => {
+                  setSelectedLanguages(selectedOptions);
+                  const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+                  onChange("languages", selectedLanguageValues);
+                }}
+                onBlur={() => onBlur("languages", selectedLanguages)}
+              />
+            </li>
             <li>
               <label>Skills</label>
               <Select
