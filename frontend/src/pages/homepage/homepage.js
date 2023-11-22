@@ -19,7 +19,6 @@
       document.getElementById("root").classList.add("homepage");
     }, []);
 
-    //const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
 
     const [loginboxVisibility, setLoginboxVisibility] = useState(false);
     const [registerboxVisibility, setRegisterboxVisibility] = useState(false);
@@ -56,12 +55,10 @@
       
         if (response.status === 201) {
           
-          //localStorage.setItem("auth", JSON.stringify(response));
           setIsLoggedIn(true);
           setLoginboxVisibility(false);
           setLoading(false);
           
-          //setTimeout(() => navigate("../loading/index.js"));
           window.location.reload();
 
           

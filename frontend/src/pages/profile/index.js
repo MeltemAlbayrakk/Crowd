@@ -66,11 +66,16 @@ export default function Index() {
   };
 
   useEffect(() => {
-    if (!auth) navigate("/");
+  
+   // if (!auth) navigate("/");
     if (!profile) {
+      console.log("auth",JSON.parse(localStorage.getItem("auth")))
+
       const getData = async () => {
         const resp = await api.user.profile.get();
+        //console.log("bu respti",resp)
         setProfile(resp);
+
       };
       getData();
     }
@@ -78,6 +83,8 @@ export default function Index() {
 
   return (
     profile && (
+
+      <div>
       <div className="wrapper">
         <Header auth={auth} logout={logout} isProfileHidden={true} />
         <div className="content">
@@ -223,6 +230,7 @@ export default function Index() {
           )}
         </div>
         <Footer />
+      </div>
       </div>
     )
   );

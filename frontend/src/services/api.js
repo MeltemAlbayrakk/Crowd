@@ -55,7 +55,7 @@ export default {
     },
     profile: {
       async get() {
-        const response = await instance.get("/user/profile");
+        const response = await instance.get("/user/profile",{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
@@ -76,12 +76,13 @@ export default {
       async updatePicture(payload) {
         const response = await instance({
           url: "/user/addProfilePicture",
-          method: "patch",
+          method: "post",
           data: payload,
+          
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        });
+        },{withCredentials: true},);
         return response;
       },
       project: {
