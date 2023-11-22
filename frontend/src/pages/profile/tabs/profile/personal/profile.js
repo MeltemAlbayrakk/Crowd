@@ -330,7 +330,7 @@ export default function Profile(props) {
    <div className="wrapper">
    
     
-    <div className="">
+      <div class="">
 
       <div class="container">
       <div className=" cards">
@@ -760,8 +760,9 @@ export default function Profile(props) {
       </div>
       </div>
       </div>
-   </div>
-      
+   
+      </div>
     </>
   );
 }
+

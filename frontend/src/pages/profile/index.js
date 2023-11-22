@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../services/api";
+import axios from "axios";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -30,22 +31,42 @@ import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
 
 export default function Index() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+
   useEffect(() => {
+    checkSession();
+
     document.querySelector("#root.homepage")?.classList.remove("homepage");
   }, []);
 
-  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
+  //const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
   const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
   const [loading, setLoadloading] = useState(false);
 
   const navigate = useNavigate();
 
-  const logout = () => {
-    setAuth(false);
-    localStorage.removeItem("auth");
-    navigate("/");
-  };
+  const logout =async (event) => {
+    event.preventDefault();
+
+
+    try {
+      const response = await axios.get("http://localhost:3001/user/logout", { withCredentials: true });
+    
+    
+          setIsLoggedIn(false);
+         navigate("/");
+          //setLoginboxVisibility(false);
+          //localStorage.removeItem("auth");
+    
+    
+    }catch(error){
+    
+    }
+         
+        };
 
   const getProfile = async () => {
     setProfile(await api.user.profile.get());
@@ -67,9 +88,9 @@ export default function Index() {
 
   useEffect(() => {
   
-   // if (!auth) navigate("/");
+    //if (!isLoggedIn) navigate("/");
     if (!profile) {
-      console.log("auth",JSON.parse(localStorage.getItem("auth")))
+      //console.log("auth",JSON.parse(localStorage.getItem("auth")))
 
       const getData = async () => {
         const resp = await api.user.profile.get();
@@ -81,12 +102,31 @@ export default function Index() {
     }
   });
 
+  const checkSession = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
+
+      if (response.data.loggedIn) {
+        setIsLoggedIn(true); // Oturum varsa true yap
+      } else {
+        setIsLoggedIn(false); // Oturum yoksa false yap
+      }
+    } catch (error) {
+      console.error("Oturum kontrolünde hata:", error);
+      setIsLoggedIn(false);
+    }
+  };
+
+
+
+
   return (
     profile && (
 
-      <div>
+      
       <div className="wrapper">
-        <Header auth={auth} logout={logout} isProfileHidden={true} />
+  
+        <Header auth={isLoggedIn} logout={logout} isProfileHidden={true} />
         <div className="content">
           {profile && (
             <div className="container profile">
@@ -202,6 +242,9 @@ export default function Index() {
                 )}
               </div>
               <div className="profile__right">
+               <div class="container">
+       
+            
                 {activeTab == "profile" && profile.role == "personal" ? (
                   <PersonalProfile profile={profile} getProfile={getProfile} />
                 ) : null}
@@ -225,13 +268,15 @@ export default function Index() {
                 {activeTab == "job-posting" ? <JobPosting /> : null}
                 {activeTab == "my-posts" ? <MyPosts /> : null}
                 {activeTab == "freelancers" ? <Freelancers /> : null}
+               
               </div>
+          </div>
             </div>
           )}
         </div>
         <Footer />
       </div>
-      </div>
+    
     )
   );
 
