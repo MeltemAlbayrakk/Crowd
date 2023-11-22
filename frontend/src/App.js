@@ -30,12 +30,15 @@ function App() {
 
         if (response.data.loggedIn) {
           setIsLoggedIn(true); // Oturum varsa true yap
+    
         } else {
           setIsLoggedIn(false); // Oturum yoksa false yap
+         
         }
       } catch (error) {
         console.error("Oturum kontrolünde hata:", error);
         setIsLoggedIn(false);
+      
       }
     };
 
@@ -50,9 +53,9 @@ function App() {
         <Route  path="/personal/update"   element={isLoggedIn ? <UpdateUser /> : <Navigate to="/" />}
  />
 
-        {/* <Route  path="/profile" element={<Profile />} />
+        <Route  path="/profile" element={isLoggedIn ? <Profile />: <Navigate to="/"/>} />
         <Route  path="/loading/profile" element={<LoadingProfile />} />
-         <Route  path="/personal/update" element={<UpdateUser profile={api.user.profile.get()} />}/>  */}
+         
    
 
       </Routes>

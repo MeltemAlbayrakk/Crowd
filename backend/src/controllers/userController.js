@@ -154,11 +154,10 @@ function checkPasswordValidity(password) {
     if (passwordMatch) {
       
       req.session.userId = user._id
-      
-
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
       });
+
       
       return res.status(201).json({ message: 'User login successfully', token });
     } else {
@@ -177,7 +176,6 @@ function checkPasswordValidity(password) {
 
   const logout = (req, res) => {
   try {
-    // Oturumu sonlandırma işlemi
     req.session.destroy((err) => {
       if (err) {
         return res.status(500).json({
@@ -185,7 +183,7 @@ function checkPasswordValidity(password) {
           error: 'Logout failed',
         });
       }
-      res.clearCookie('connect.sid'); // Opsiyonel: Oturum kimliğiyle ilişkili çerezin silinmesi
+      res.clearCookie('connect.sid'); 
       res.status(200).json({
         succeded: true,
         message: 'User logged out successfully',
@@ -208,23 +206,17 @@ const getProfile = async (req,res)=>{
  if(req.session.userId) {
   const user = await UserModel.findById(req.session.userId).populate('experiences achievements projects educations');
   
-
-
-
   if (!user) {
     res.status(404).json({message:"profile is not found "})
   }
   
-  //console.log('User Educations:', user.educations);
   return res.send(user);
+  
  }
  else {
   console.log('session id empty')
  }
 
- //const userId = req.session.userId;
-//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
-   //bu halde veri geliyor 
 
    res.status(201).json({message:"session id empty "})
 }
@@ -270,19 +262,26 @@ const getProfile = async (req,res)=>{
 
 const checkUser=async(req,res)=>{
 
-  if(req.session.userId){
+    if(req.session.userId){
 
-    return res.json({loggedIn:true})
+      return res.json({loggedIn:true})
+
+    }
+  else {
+
+    return res.json({loggedIn:false})
 
   }
-else {
-
-  return res.json({loggedIn:false})
-
-}
 
 } 
 
-   
- 
-    export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser}
+const addProfilePicture = async(req,res)=>{
+
+const {profilePhoto} = req.body;
+
+
+
+}
+
+
+ export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}
