@@ -55,14 +55,14 @@ export default {
     },
     profile: {
       async get() {
-        const response = await instance.get("/user/profile");
+        const response = await instance.get("/user/profile",{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
         if (type === "personal") {
-          const response = await instance.patch(
+          const response = await instance.post(
             "/user/personal/update",
-            payload
+            payload,{withCredentials: true},
           );
           return response.data;
         } else if (type === "company") {
@@ -76,12 +76,13 @@ export default {
       async updatePicture(payload) {
         const response = await instance({
           url: "/user/addProfilePicture",
-          method: "patch",
+          method: "post",
           data: payload,
+          
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        });
+        },{withCredentials: true},);
         return response;
       },
       project: {
@@ -89,15 +90,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/project",
-              payload
+              payload,{withCredentials: true},
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/project/" + id
+            const response = await instance.get(
+              "/user/personal/project/" + id,{withCredentials: true},
             );
             return response.data;
           }
@@ -108,15 +109,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/education",
-              payload
+              payload,{withCredentials: true},
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/education/" + id
+            const response = await instance.get(
+              "/user/personal/education/" + id,{withCredentials: true}
             );
             return response.data;
           }
@@ -127,15 +128,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/achievement",
-              payload
+              payload,{withCredentials: true}
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/achievement/" + id
+            const response = await instance.get(
+              "/user/personal/achievement/" + id,{withCredentials: true}
             );
             return response.data;
           }
@@ -146,15 +147,15 @@ export default {
           if (type === "personal") {
             const response = await instance.post(
               "/user/personal/experience",
-              payload
+              payload,{withCredentials: true}
             );
             return response.data;
           }
         },
         async delete(type, id) {
           if (type === "personal") {
-            const response = await instance.delete(
-              "/user/personal/experience/" + id
+            const response = await instance.get(
+              "/user/personal/experience/" + id,{withCredentials: true}
             );
             return response.data;
           }

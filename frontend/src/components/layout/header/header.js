@@ -39,7 +39,7 @@ export default function Header(props) {
           <ul className={!auth ? "" : "active"}>
             {!isProfileHidden && (
               <li>
-                <Link to={"/personal/update"} >My Profile</Link>
+                <Link to={"/profile"} >My Profile</Link>
               </li>
             )}
             <li>

@@ -6,10 +6,13 @@ const { Schema } = mongoose;
 const AchievementSchema = new Schema({
     headline:{type:String,required:true},
     description:{type:String,required:true},
-
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User' 
+    }
 
   });
 
-  const AchievementModel = mongoose.model('achievement', AchievementSchema);
+  const AchievementModel = mongoose.model('Achievement', AchievementSchema);
 
 export default AchievementModel;
