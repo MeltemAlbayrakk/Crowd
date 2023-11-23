@@ -14,6 +14,7 @@ router.route("/personal/register").post(userController.registerPersonelUser)
 router.route("/company/register").post(userController.registerCompanyUser)
 //
 router.route("/personal/update").post(userController.addPersonalDetail)
+router.route("/company/update").post(userController.addCompanyDetail)
 //
 router.route("/personal/education").post(userEducation.addEducation)
 router.route("/personal/education/:id").get(userEducation.deleteEducation)

@@ -66,9 +66,9 @@ export default {
           );
           return response.data;
         } else if (type === "company") {
-          const response = await instance.patch(
+          const response = await instance.post(
             "/user/company/update",
-            payload
+            payload,{withCredentials: true},
           );
           return response.data;
         }

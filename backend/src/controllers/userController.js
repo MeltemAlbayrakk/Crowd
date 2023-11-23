@@ -48,6 +48,7 @@ const registerCompanyUser=async (req,res)=>{
     firstName: registerData.firstName,
     lastName: registerData.lastName,
     email: registerData.email,
+    companyName:registerData.companyName,
     password: hashedPassword,
     phone: registerData.phone,
     role: userRoles.COMPANY,
@@ -260,6 +261,63 @@ const getProfile = async (req,res)=>{
 };
 
 
+const addCompanyDetail  = async (req,res)=>{
+  
+
+  try {
+
+    const {companyName,  firstName , lastName,companyWebsite, companyYearOfFoundation, companySector, 
+      companyDescription,
+      email, companyAddress, companyCountry, companyCity, companyFacebookUrl
+      ,companyTwitterUrl, companyGoogleUrl,companyLinkedinUrl,
+      phone
+    } = req.body;
+
+    if (req.session.userId) {
+      console.log("burdayım be burdayım ")
+      const  companyDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
+
+
+        
+        companyName:companyName,
+        companyWebsite:companyWebsite,
+        companyYearOfFoundation:companyYearOfFoundation,
+        companySector:companySector,
+        companyDescription:companyDescription,
+        firstName:firstName,
+        lastName: lastName,
+        email:email,
+        companyAddress:companyAddress,
+        companyCountry:companyCountry,
+        companyCity:companyCity,
+        companyFacebookUrl:companyFacebookUrl,
+        companyTwitterUrl:companyTwitterUrl,
+        companyGoogleUrl:companyGoogleUrl,
+        companyLinkedinUrl:companyLinkedinUrl,
+        phone:phone
+    
+
+    })
+    if (companyDetails) {
+      res.status(200).json({
+        message: 'Personal details has been updated successfully',})
+    } else {
+      res.status(404).json({
+        message: 'Personal details not found or not updated',
+      });
+  
+
+    }
+
+    }
+    
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'İç sunucu hatası' });
+  }
+}
+
 const checkUser=async(req,res)=>{
 
     if(req.session.userId){
@@ -284,4 +342,4 @@ const {profilePhoto} = req.body;
 }
 
 
- export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}
+ export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture,addCompanyDetail}
