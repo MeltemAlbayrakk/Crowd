@@ -29,10 +29,14 @@ import BecomeFreelancer from "./tabs/become-freelancer/become-freelancer";
 import SearchJob from "./tabs/search-job/search-job";
 import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function Index() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const { id } = useParams();
 
 
   useEffect(() => {
@@ -68,10 +72,12 @@ export default function Index() {
          
         };
 
+       
   const getProfile = async () => {
     setProfile(await api.user.profile.get());
     setLoadloading(false);
   };
+
 
   const updateProfilePhoto = async (e) => {
     setLoadloading(true);
@@ -93,7 +99,7 @@ export default function Index() {
       //console.log("auth",JSON.parse(localStorage.getItem("auth")))
 
       const getData = async () => {
-        const resp = await api.user.profile.get();
+        const resp = await api.user.profile.get(id);
         //console.log("bu respti",resp)
         setProfile(resp);
 

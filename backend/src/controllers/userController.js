@@ -201,9 +201,8 @@ function checkPasswordValidity(password) {
 const getProfile = async (req,res)=>{
 
 
-
-
- if(req.session.userId) {
+console.log(req.params.id,"backenddesin")
+ if(req.session.userId==req.params.id) {
   const user = await UserModel.findById(req.session.userId).populate('experiences achievements projects educations');
   
   if (!user) {
@@ -214,7 +213,9 @@ const getProfile = async (req,res)=>{
   
  }
  else {
-  console.log('session id empty')
+  const user2 = await UserModel.findById(req.params.id).populate('experiences achievements projects educations');
+  return res.send(user2);
+
  }
 
 
@@ -262,9 +263,12 @@ const getProfile = async (req,res)=>{
 
 const checkUser=async(req,res)=>{
 
+const userId=req.session.userId
+
+
     if(req.session.userId){
 
-      return res.json({loggedIn:true})
+      return res.json({loggedIn:true,userId})
 
     }
   else {
