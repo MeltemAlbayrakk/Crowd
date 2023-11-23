@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
 import path from "path";
+import { v2 as cloudinary } from 'cloudinary';
 
 
 const registerCompanyUser=async (req,res)=>{
@@ -281,22 +282,29 @@ const userId=req.session.userId
 } 
 
 const addProfilePicture = async (req, res) => {
+  const result = await cloudinary.uploader.upload(
+    req.files.tempFilePath,
+    {
+      use_filename: true,
+      folder: 'unreact',
+    }
+  );
   try {
     const { profilePhoto } = req.files;
     console.log(req.session.userId,"adddddddddd")
 
     // Resmin kaydedileceği dizin
-    const uploadDir = 'public/profilephotos'; // Statik dosyaların yükleneceği dizin
+    //const uploadDir = 'public/profilephotos'; // Statik dosyaların yükleneceği dizin
 
 // Dosyaları yüklenecek dizine kaydetme işlemi
-await profilePhoto.mv(path.join(uploadDir, profilePhoto.name));
+//await profilePhoto.mv(path.join(uploadDir, profilePhoto.name));
 
 
 console.log(req.session.userId)
 // Kullanıcı veritabanında profil fotoğrafını güncelleme
-const updatedUser = await UserModel.findByIdAndUpdate(
-  "65546ac485bebbb16f78bbe9",  { profilePhoto: `${uploadDir}/${profilePhoto.name}` },
-);
+// const updatedUser = await UserModel.findByIdAndUpdate(
+//   "65546ac485bebbb16f78bbe9",  { profilePhoto:  },
+// );
 
 res.status(200).json({ message: 'Profil fotoğrafı başarıyla yüklendi',  });
   } catch (error) {

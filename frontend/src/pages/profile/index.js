@@ -137,19 +137,22 @@ export default function Index() {
           {profile && (
             <div className="container profile">
               <div className="profile__left">
-                <div
-                  className={
-                    loading ? "profile__avatar loading" : "profile__avatar"
-                  }
-                  style={{
-                    backgroundImage: `url(${
-                      (profile && profile.profilePhoto) ||
-                      require("../../images/profile.png")
-                    })`,
-                  }}
-                >
-                  <input type="file" onChange={updateProfilePhoto} />
-                </div>
+              <div className="profile-avatar">
+            <input type="file" onChange={updateProfilePhoto} />
+            {profile.profilePhoto ? (
+               <img
+               src={`${profile.profilePhoto}`}
+               alt="Profile"
+               style={{ width: "100px", height: "100px" }}
+             />
+           ) : (
+              <img
+                src="/images/default-profile.png"
+                alt="Default Profile"
+                style={{ width: "100px", height: "100px" }}
+              />
+            )}
+          </div>
                 <div className="profile__fullname">
                   {profile.firstName + " " + profile.lastName}
                 </div>

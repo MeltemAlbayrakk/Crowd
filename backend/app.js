@@ -8,8 +8,7 @@ import jobRoute from './src/routes/jobRoute.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import fileUpload from 'express-fileupload';
-
-
+import { v2 as cloudinary } from 'cloudinary';
 
 
 dotenv.config()
@@ -18,7 +17,11 @@ const app = express()
 const port = 3001
 
 app.use(fileUpload())
-
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 app.use(session({
   secret: process.env.SECRET_TOKEN,
@@ -45,6 +48,7 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
 });
+app.use(fileUpload({ useTempFiles: true }));
 
 
 
