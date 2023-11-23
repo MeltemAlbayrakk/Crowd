@@ -98,8 +98,7 @@ export default function Profile(props) {
     try {
 
       console.log(id,"profildeki id")
-      console.log(id)
-      console.log(id)
+  
 
       const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,

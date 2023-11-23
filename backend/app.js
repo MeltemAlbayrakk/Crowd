@@ -6,12 +6,27 @@ import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
 import session from 'express-session';
-import MongoStore from 'connect-mongo'
-
+import MongoStore from 'connect-mongo';
+import multer from 'multer';
+import path from 'path';
 dotenv.config()
 
 const app = express()
 const port = 3001
+
+
+
+const storage = multer.diskStorage({
+  destination: 'uploads/',
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+app.use(upload.single('profilePhoto'));
+
+
+
 
 
 app.use(session({
@@ -48,7 +63,7 @@ conn()
 
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
-
+app.use('/uploads',express.static('src/uploads'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

@@ -77,12 +77,12 @@ export default {
         const response = await instance({
           url: "/user/addProfilePicture",
           method: "post",
-          data: payload,
+          data: payload,withCredentials: true,
           
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },{withCredentials: true},);
+        });
         return response;
       },
       project: {

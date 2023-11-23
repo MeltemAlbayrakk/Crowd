@@ -2,7 +2,7 @@ import UserModel from '../models/User.js'
 import bcrypt from 'bcrypt';
 import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
-
+import multer from 'multer';
 
 const registerCompanyUser=async (req,res)=>{
 
@@ -220,7 +220,7 @@ console.log(req.params.id,"backenddesin")
  }
 
 
-   res.status(201).json({message:"session id empty "})
+   
 }
 
   const addPersonalDetail= async (req,res)=>{
@@ -275,7 +275,6 @@ const addCompanyDetail  = async (req,res)=>{
     } = req.body;
 
     if (req.session.userId) {
-      console.log("burdayım be burdayım ")
       const  companyDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
 
 
@@ -337,12 +336,36 @@ const userId=req.session.userId
 
 } 
 
+
+
 const addProfilePicture = async(req,res)=>{
 
-const {profilePhoto} = req.body;
+console.log("addprofilepicture calıstı")
 
+try {
+//const {profilePhoto}= req.body;
 
+  const  userId  = req.session.userId; 
+  console.log("allahım yardım et 1")// Varsayalım ki kullanıcı kimliği bir önceki adımda middleware veya başka bir yerde ayarlanmıştır
+ 
+  console.log("profil:",req.file.path)
 
+  // Kullanıcıyı bul ve profil fotoğrafını güncelle
+  const user = await UserModel.findById(userId);
+console.log("allahım yardım et 2")
+console.log("IDDDDDD",userId)
+  if (!user) {
+    return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+  }
+console.log("allahım yardım et 3")
+  user.profilePhoto = req.file.path;
+  await user.save();
+
+  res.send(user)
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: 'Bir hata oluştu' });
+}
 }
 
 

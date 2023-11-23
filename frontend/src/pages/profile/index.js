@@ -31,9 +31,7 @@ import SearchJob from "./tabs/search-job/search-job";
 import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
 import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import axios from 'axios';
 export default function Index() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -90,15 +88,17 @@ export default function Index() {
 
     const form = new FormData();
     form.append("profilePhoto", e.target.files[0]);
-    await api.user.profile.updatePicture(form);
+    console.log("foto:",e.target.files[0])
+    const response = await api.user.profile.updatePicture(form); 
+    console.log("geri donen user",response)
+    setProfile(response)
     getProfile();
   };
 
   useEffect(() => {
   
-    //if (!isLoggedIn) navigate("/");
+    if (!isLoggedIn) navigate("/");
     if (!profile) {
-      //console.log("auth",JSON.parse(localStorage.getItem("auth")))
 
       const getData = async () => {
         const resp = await api.user.profile.get(id);
@@ -253,7 +253,7 @@ export default function Index() {
               <div className="profile__right">
                <div class="container">
        
-            
+                <div class="content-profile">
                 {activeTab == "profile" && profile.role == "personal" ? (
                   <PersonalProfile profile={profile} getProfile={getProfile} />
                 ) : null}
@@ -277,7 +277,7 @@ export default function Index() {
                 {activeTab == "job-posting" ? <JobPosting /> : null}
                 {activeTab == "my-posts" ? <MyPosts /> : null}
                 {activeTab == "freelancers" ? <Freelancers /> : null}
-               
+                </div>
               </div>
           </div>
             </div>

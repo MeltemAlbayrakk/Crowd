@@ -2,9 +2,9 @@ import JobModel from "../models/Job.js";
 
 
 const add  = async (req,res)=>{
-  console.log("AAAAAAAAAAAAAAAAAAAA")
+ 
     try {
-      console.log("AAAAAAAAAAAAAAAAAAAA")
+     
         const {form} = req.body;
         const job = await new JobModel({
         title: form.title,
