@@ -7,11 +7,17 @@ import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo'
+import fileUpload from 'express-fileupload';
+
+
+
 
 dotenv.config()
 
 const app = express()
 const port = 3001
+
+app.use(fileUpload())
 
 
 app.use(session({

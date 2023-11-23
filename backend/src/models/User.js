@@ -16,7 +16,7 @@ const UserSchema = new Schema({
   companyName:  {type:String,required:false},
   role: {type:String},
   isFreelancer:{type:Boolean,required:false},
-  profilePhoto:{type:String,default:""},
+  profilePhoto:{type:String},
   jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],

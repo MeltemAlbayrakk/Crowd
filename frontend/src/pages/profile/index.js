@@ -99,7 +99,7 @@ export default function Index() {
       //console.log("auth",JSON.parse(localStorage.getItem("auth")))
 
       const getData = async () => {
-        const resp = await api.user.profile.get(id);
+        const resp = await api.user.profile.get();
         //console.log("bu respti",resp)
         setProfile(resp);
 
@@ -248,8 +248,10 @@ export default function Index() {
                 )}
               </div>
               <div className="profile__right">
-               <div class="container">
-       
+
+              <div class="container">
+
+<div class="content-profile">       
             
                 {activeTab == "profile" && profile.role == "personal" ? (
                   <PersonalProfile profile={profile} getProfile={getProfile} />
@@ -274,6 +276,7 @@ export default function Index() {
                 {activeTab == "job-posting" ? <JobPosting /> : null}
                 {activeTab == "my-posts" ? <MyPosts /> : null}
                 {activeTab == "freelancers" ? <Freelancers /> : null}
+               </div>
                
               </div>
           </div>

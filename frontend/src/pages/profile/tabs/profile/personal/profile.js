@@ -101,7 +101,7 @@ export default function Profile(props) {
       console.log(id)
       console.log(id)
 
-      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
+      const res = await axios.get(`http://localhost:3001/user/profile/65546ac485bebbb16f78bbe9`, {
         withCredentials: true,
 
       });
@@ -306,10 +306,10 @@ export default function Profile(props) {
  
 
   
- 
+  
   useEffect(() => {
     getProfile1();
-  }, []);
+  }, [id]);
 
  
 

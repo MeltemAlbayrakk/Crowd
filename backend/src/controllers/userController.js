@@ -2,6 +2,7 @@ import UserModel from '../models/User.js'
 import bcrypt from 'bcrypt';
 import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
+import path from "path";
 
 
 const registerCompanyUser=async (req,res)=>{
@@ -231,7 +232,7 @@ console.log(req.params.id,"backenddesin")
         const personalDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
 
         firstName:firstName,
-        lastName: lastName,
+        lastName:lastName,
         birthday:birthday,
         gender:gender,
         languages:languages,
@@ -279,13 +280,29 @@ const userId=req.session.userId
 
 } 
 
-const addProfilePicture = async(req,res)=>{
+const addProfilePicture = async (req, res) => {
+  try {
+    const { profilePhoto } = req.files;
+    console.log(req.session.userId,"adddddddddd")
 
-const {profilePhoto} = req.body;
+    // Resmin kaydedileceği dizin
+    const uploadDir = 'public/profilephotos'; // Statik dosyaların yükleneceği dizin
+
+// Dosyaları yüklenecek dizine kaydetme işlemi
+await profilePhoto.mv(path.join(uploadDir, profilePhoto.name));
 
 
+console.log(req.session.userId)
+// Kullanıcı veritabanında profil fotoğrafını güncelleme
+const updatedUser = await UserModel.findByIdAndUpdate(
+  "65546ac485bebbb16f78bbe9",  { profilePhoto: `${uploadDir}/${profilePhoto.name}` },
+);
 
-}
+res.status(200).json({ message: 'Profil fotoğrafı başarıyla yüklendi',  });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
  export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}

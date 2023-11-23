@@ -54,8 +54,8 @@ export default {
       return response.data;
     },
     profile: {
-      async get(id) {
-        const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
+      async get() {
+        const response = await instance.get(`/user/profile/65546ac485bebbb16f78bbe9`,{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
@@ -77,12 +77,12 @@ export default {
         const response = await instance({
           url: "/user/addProfilePicture",
           method: "post",
-          data: payload,
-          
+          credentials: "include",
+          data: payload,  
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },{withCredentials: true},);
+        },{withCredentials: true});
         return response;
       },
       project: {

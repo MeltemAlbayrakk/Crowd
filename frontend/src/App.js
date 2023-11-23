@@ -1,3 +1,8 @@
+import "./styles/reset.scss";
+import "./styles/styles.scss";
+import "./styles/responsive.scss";
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route, Navigate } from 'react-router-dom';
