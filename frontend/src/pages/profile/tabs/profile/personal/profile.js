@@ -80,18 +80,55 @@ export default function Profile(props) {
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
   const [defaultLanguages, setdefaultLanguages] = useState({});
+  const [languagesOptions, setLanguagesOptions] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState([]); 
+
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
  
 
   const getProfile1 = async () => {
    
-    const res = await axios.get("http://localhost:3001/user/profile", {
-      withCredentials: true,
-    });
-    
-    setForm(res.data);
-    //console.log("get profildeki resdata:",res.data)
-    console.log("profile res data diller:",res.data.languages)
-    setdefaultLanguages(res.data.languages)
+    try {
+      const res = await axios.get("http://localhost:3001/user/profile", {
+        withCredentials: true,
+      });
+
+      setForm(res.data);
+      //console.log("get profildeki resdata:",res.data)
+      console.log("profile res data diller:",res.data.languages)
+
+      const languagesFromApi = res.data.languages|| [];
+      const skillsFromApi = res.data.skills || []; 
+
+      const formattedLanguages = languages.map((lang) => ({
+        label: lang.label,
+        value: lang.value,
+      }));
+      setLanguagesOptions(formattedLanguages);
+      setSelectedLanguages(
+        languagesFromApi.map((lang) => ({
+          label: lang,
+          value: lang,
+        }))
+      );
+      setSkillsOptions(
+        skills.map((skill) => ({
+          label: skill.label,
+          value: skill.value,
+        }))
+      );
+
+      setSelectedSkills(
+        skillsFromApi.map((skill) => ({
+          label: skill,
+          value: skill,
+        }))
+      )
+
+    } catch (error) {
+
+    }
     
     
   };
@@ -351,37 +388,40 @@ export default function Profile(props) {
             <li>
               <label>Languages</label>
               <Select
-                defaultValue={form?.languages || defaultLanguages}
+                value={selectedLanguages}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
-                options={languages|| defaultLanguages}
+                options={languagesOptions}
                 unstyled
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(selectedLanguages) => {
-                  const selectedLanguageValues = selectedLanguages.map(lang => lang.value);
+                onChange={(selectedOptions) => {
+                  setSelectedLanguages(selectedOptions);
+                  const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
                   onChange("languages", selectedLanguageValues);
-                }}
-                onBlur={(e) => onBlur("languages", e)}
+                  }}
+                  onBlur={() => onBlur("languages", selectedLanguages)}
               />
             </li>
             <li>
               <label>Skills</label>
               <Select
-                defaultValue={form?.skills}
+                value={selectedSkills}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
-                options={skills}
+                options={skillsOptions}
                 unstyled
                 isMulti
                 className="react-select-container"
                 classNamePrefix="react-select"
-                onChange={(selectedSkills) => {
-                  const selectedSkillValues = selectedSkills.map(lang => lang.value);
+                onChange={(selectedOptions) => {
+                  setSelectedSkills(selectedOptions);
+                  const selectedSkillValues = selectedOptions.map(skill => skill.value);
                   onChange("skills", selectedSkillValues);
                 }}
-                onBlur={(e) => onBlur("skills", e)}
+                onBlur={() => onBlur("skills", selectedSkills)}
+                
               />
             </li>
             <li>

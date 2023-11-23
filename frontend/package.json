@@ -1,5 +1,5 @@
 {
-  "homepage": ".",
+  "homepage": "http://.",
   "name": "crowd-frontend",
   "version": "0.1.0",
   "private": true,
@@ -39,5 +39,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
