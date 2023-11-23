@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import api from "../../services/api";
+import axios from "axios";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,15 +30,20 @@ import BecomeFreelancer from "./tabs/become-freelancer/become-freelancer";
 import SearchJob from "./tabs/search-job/search-job";
 import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import axios from 'axios';
 export default function Index() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const { id } = useParams();
+
 
   useEffect(() => {
-
     checkSession();
+
     document.querySelector("#root.homepage")?.classList.remove("homepage");
   }, []);
 
@@ -54,19 +60,26 @@ export default function Index() {
 
     try {
       const response = await axios.get("http://localhost:3001/user/logout", { withCredentials: true });
+    
+    
           setIsLoggedIn(false);
          navigate("/");
-
+          //setLoginboxVisibility(false);
+          //localStorage.removeItem("auth");
+    
+    
     }catch(error){
-
+    
     }
-
+         
         };
 
+       
   const getProfile = async () => {
     setProfile(await api.user.profile.get());
     setLoadloading(false);
   };
+
 
   const updateProfilePhoto = async (e) => {
     setLoadloading(true);
@@ -83,12 +96,12 @@ export default function Index() {
 
   useEffect(() => {
   
-   // if (!auth) navigate("/");
+    //if (!isLoggedIn) navigate("/");
     if (!profile) {
-      console.log("auth",JSON.parse(localStorage.getItem("auth")))
+      //console.log("auth",JSON.parse(localStorage.getItem("auth")))
 
       const getData = async () => {
-        const resp = await api.user.profile.get();
+        const resp = await api.user.profile.get(id);
         //console.log("bu respti",resp)
         setProfile(resp);
         console.log("rolü bu :",resp.role)
@@ -98,8 +111,6 @@ export default function Index() {
     }
   });
 
-
-  
   const checkSession = async () => {
     try {
       const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
@@ -114,6 +125,9 @@ export default function Index() {
       setIsLoggedIn(false);
     }
   };
+
+
+
 
   return (
     profile && (
@@ -237,9 +251,9 @@ export default function Index() {
                 )}
               </div>
               <div className="profile__right">
-               <div class="profile_content">
+               <div class="container">
        
-                 
+            
                 {activeTab == "profile" && profile.role == "personal" ? (
                   <PersonalProfile profile={profile} getProfile={getProfile} />
                 ) : null}
@@ -263,10 +277,10 @@ export default function Index() {
                 {activeTab == "job-posting" ? <JobPosting /> : null}
                 {activeTab == "my-posts" ? <MyPosts /> : null}
                 {activeTab == "freelancers" ? <Freelancers /> : null}
-               </div>
+               
               </div>
           </div>
-          
+            </div>
           )}
         </div>
         <Footer />

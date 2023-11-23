@@ -30,7 +30,7 @@ router.route("/personal/experience/:id").get(userExperience.deleteExperience)
 //
 router.route("/addProfilePicture").post(userController.addProfilePicture)
 //
-router.route("/profile").get(checkAuth,userController.getProfile)
+router.route("/profile/:id").get(userController.getProfile)
 
 router.route("/check-session").get(userController.checkUser)
 

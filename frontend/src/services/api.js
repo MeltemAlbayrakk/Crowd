@@ -54,8 +54,8 @@ export default {
       return response.data;
     },
     profile: {
-      async get() {
-        const response = await instance.get("/user/profile",{withCredentials:true});
+      async get(id) {
+        const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
