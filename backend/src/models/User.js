@@ -17,7 +17,7 @@ const UserSchema = new Schema({
   role: {type:String},
   reset:{code:{type:String,default:null},time:{type:String,default:null}},
   isFreelancer:{type:Boolean,required:false},
-  profilePhoto:{type:String,default:""},
+  profilePhoto:{type:String,default:" "},
   jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],

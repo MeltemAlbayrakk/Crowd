@@ -32,9 +32,10 @@ router.route("/addProfilePicture").post(userController.addProfilePicture)
 router.route("/profile").get(checkAuth,userController.getProfile)
 
 router.route("/check-session").get(userController.checkUser)
-router.route("/forget-password").post(userController.forgetPassword)
+
+/*router.route("/forget-password").post(userController.forgetPassword)
 router.route("/reset-code-check").post(userController.resetCodeCheck)
-router.route("/reset-password").post(userController.resetPassword)
+router.route("/reset-password").post(userController.resetPassword)*/
 //router.route("/update-password").post(userController.updatePassword)
 
 

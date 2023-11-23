@@ -4,9 +4,11 @@ import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto'
 import sendEmail from "../utils/sendEmail.js"
-import moment from 'moment/moment.js';
+//import moment from 'moment/moment.js';
 import { createTemporaryToken,decodedTemporaryToken} from '../middlewares/authMiddleware.js';
 import Response from '../utils/response.js';
+import multer from 'multer';
+//import upload from multer({dest:'uploads'/})
  
 const registerCompanyUser = async (req, res) => {
 
@@ -279,13 +281,54 @@ const checkUser = async (req, res) => {
 
 } 
 
-const addProfilePicture = async(req,res)=>{
+/*const addProfilePicture = async(req,res)=>{
 
 const {profilePhoto} = req.body;
 
+}*/
 
 
-}
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'upload/'); 
+    console.log("Foto dosyası")
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'profilePhoto' + uniqueSuffix + '.jpg'); 
+    console.log("dosyayı buldu ")
+  },
+});
+const upload = multer({ storage: storage });
+
+
+const addProfilePicture = async (req, res) => {
+  try {
+    const { profilePhoto } = req.body;
+
+    upload.single('profilePhoto')(req, res, async function (err) {
+      if (err) {
+        console.log("Yükleyemedi")
+        return res.status(500).json({ error: 'Dosya yükleme hatası' });
+        
+      }
+
+     
+      const user = await UserModel.findByIdAndUpdate(req.session.userId,(profilePhoto=req.file.path)); 
+      if (!user) {
+        return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+      }
+
+      return res.status(200).json({ success: true, message: 'Profil fotoğrafı başarıyla güncellendi' });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Sunucu hatası' });
+  }
+};
+
+
+
 
 
  export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}

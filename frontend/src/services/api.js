@@ -82,8 +82,8 @@ export default {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },{withCredentials: true},);
-        return response;
+        },payload,{withCredentials: true},);
+        return response.data;
       },
       project: {
         async add(type, payload) {

@@ -81,6 +81,7 @@ export default function Index() {
     }
   });
 
+  
   return (
     profile && (
 
@@ -102,6 +103,7 @@ export default function Index() {
                     })`,
                   }}
                 >
+                  
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
                 <div className="profile__fullname">
