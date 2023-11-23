@@ -134,25 +134,22 @@ export default function Index() {
   
         <Header auth={isLoggedIn} logout={logout} isProfileHidden={true} />
         <div className="content">
-          {profile && (
+        {profile && (
             <div className="container profile">
               <div className="profile__left">
-              <div className="profile-avatar">
-            <input type="file" onChange={updateProfilePhoto} />
-            {profile.profilePhoto ? (
-               <img
-               src={`${profile.profilePhoto}`}
-               alt="Profile"
-               style={{ width: "100px", height: "100px" }}
-             />
-           ) : (
-              <img
-                src="/images/default-profile.png"
-                alt="Default Profile"
-                style={{ width: "100px", height: "100px" }}
-              />
-            )}
-          </div>
+                <div
+                  className={
+                    loading ? "profile__avatar loading" : "profile__avatar"
+                  }
+                  style={{
+                    backgroundImage: `url(${
+                      (profile && profile.profilePhoto) ||
+                      require("../../images/profile.png")
+                    })`,
+                  }}
+                >
+                  <input type="file" onChange={updateProfilePhoto} />
+                </div>
                 <div className="profile__fullname">
                   {profile.firstName + " " + profile.lastName}
                 </div>
@@ -251,10 +248,8 @@ export default function Index() {
                 )}
               </div>
               <div className="profile__right">
-
-              <div class="container">
-
-<div class="content-profile">       
+               <div class="container">
+       
             
                 {activeTab == "profile" && profile.role == "personal" ? (
                   <PersonalProfile profile={profile} getProfile={getProfile} />
@@ -279,7 +274,6 @@ export default function Index() {
                 {activeTab == "job-posting" ? <JobPosting /> : null}
                 {activeTab == "my-posts" ? <MyPosts /> : null}
                 {activeTab == "freelancers" ? <Freelancers /> : null}
-               </div>
                
               </div>
           </div>
