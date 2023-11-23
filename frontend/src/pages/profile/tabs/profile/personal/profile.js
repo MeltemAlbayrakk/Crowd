@@ -6,6 +6,8 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../../../../styles/styles.scss"
+import { useParams } from 'react-router-dom';
+
 
 export default function Profile(props) {
   const languages = [
@@ -86,12 +88,24 @@ export default function Profile(props) {
 
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
+
+  const { id } = useParams();
+  const [userProfile, setUserProfile] = useState(null);
+
+
   const getProfile1 = async () => {
    
     try {
-      const res = await axios.get("http://localhost:3001/user/profile", {
+
+      console.log(id,"profildeki id")
+      console.log(id)
+      console.log(id)
+
+      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
+
       });
+        //setUserProfile(res.data);
 
       setForm(res.data);
       const languagesFromApi = res.data.languages || []; 
@@ -330,7 +344,7 @@ export default function Profile(props) {
    <div className="wrapper">
    
     
-    <div className="">
+      <div class="">
 
       <div class="container">
       <div className=" cards">
@@ -760,8 +774,9 @@ export default function Profile(props) {
       </div>
       </div>
       </div>
-   </div>
-      
+   
+      </div>
     </>
   );
 }
+

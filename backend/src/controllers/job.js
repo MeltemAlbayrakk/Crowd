@@ -36,7 +36,7 @@ const search = async (req,res)=>{
     //title veriyo
     try {
  
-        const job = await Job.find({
+        const job = await JobModel.find({
           $or: [
             { title: { $regex: title, $options: 'i' } },
             { description: { $regex: title, $options: 'i' } }, 
