@@ -55,7 +55,7 @@ export default {
     },
     profile: {
       async get(id) {
-        const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
+        const response = await instance.get(`/user/profile/655c8cf2e66a2e23de917a83`,{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {

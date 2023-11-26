@@ -281,11 +281,33 @@ const userId=req.session.userId
 
 const addProfilePicture = async(req,res)=>{
 
-const {profilePhoto} = req.body;
-
-
-
-}
-
-
- export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}
+  console.log("addprofilepicture calıstı")
+  
+  try {
+  //const {profilePhoto}= req.body;
+  
+    const  userId  = req.session.userId; 
+    console.log("allahım yardım et 1")// Varsayalım ki kullanıcı kimliği bir önceki adımda middleware veya başka bir yerde ayarlanmıştır
+   
+    console.log("profil:",req.file.path)
+  
+    // Kullanıcıyı bul ve profil fotoğrafını güncelle
+    const user = await UserModel.findById(userId);
+  console.log("allahım yardım et 2")
+  console.log("IDDDDDD",userId)
+    if (!user) {
+      return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+    }
+  console.log("allahım yardım et 3")
+    user.profilePhoto = req.file.path;
+    await user.save();
+  
+    res.send(user)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Bir hata oluştu' });
+  }
+  }
+  
+  
+   export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture}
