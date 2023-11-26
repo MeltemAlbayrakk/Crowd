@@ -5,21 +5,9 @@ import * as userEducation from '../controllers/userEducation.js';
 import * as userProject from '../controllers/userProject.js';
 import * as userExperience from '../controllers/userExperience.js';
 import checkAuth from '../middlewares/checkAuth.js';
-import  multer from "multer";
+
 
 const router=express.Router()
-
-
-
-const storage = multer.diskStorage({
-    destination: 'src/uploads/', // Dosyanın kaydedileceği klasör
-    filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    },
-  });
-  
-  
-  const upload = multer({ storage: storage });
 
 router.route("/login").post(userController.login)
 router.route("/logout").get(userController.logout)

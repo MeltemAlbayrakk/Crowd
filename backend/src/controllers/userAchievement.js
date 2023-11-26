@@ -8,12 +8,15 @@ const addAchievement = async (req,res) =>{
         const {headline,description} = req.body;
 
         const userId = req.session.userId; 
-        const achievement = await AchievementModel.create({
+        if(!headline || !description){
+          res.status(204).json({message:"This field is required and can not be empty:!!"})
+        }
+        else{
+          const achievement = await AchievementModel.create({
           headline,
           description,
           userId 
-        });
-    
+        })
         res.status(201).json({
           message: 'Achievement information has been added successfully',
         });
@@ -21,6 +24,11 @@ const addAchievement = async (req,res) =>{
         const user = await UserModel.findById(userId);
         user.achievements.push(achievement._id);
         await user.save();
+      
+      }
+        
+          
+        
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: 'server error ' });

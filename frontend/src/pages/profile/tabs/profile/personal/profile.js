@@ -154,12 +154,11 @@ export default function Profile(props) {
 
   const onBlur = async (prop, value) => {
 
-    console.log("onblurdasın")
+    
     try {
-      console.log("try ıcı ")
+      
       const res = await api.user.profile.update("personal", form);
 
-      console.log("onchange diller:",form)
 
       if (res.status === 201) {
         console.log("200 döndü",res)
@@ -167,9 +166,7 @@ export default function Profile(props) {
       else if (res.status === 404){
         console.log("200 dönmedi",res)
       }
-      else{
-        console.log("hata ama ne oldugu bellı degıl")
-      }
+     
     } catch (error) {
       console.log("onblur hatası:",error.message)
     }
@@ -236,15 +233,22 @@ export default function Profile(props) {
         setLoading(false);
       });
 
-    if (res.id) {
-      setActiveAchievement({
-        ...activeAchievement,
-        headline: "",
-        description: "",
-      });
-      setIsAchievementsCollapsed(true);
-      props.getProfile();
-    }
+      if(res.status ===201){
+        setActiveAchievement({
+          ...activeAchievement,
+          headline: "",
+          description: "",
+        });
+        setIsAchievementsCollapsed(true);
+        props.getProfile();
+      }
+      else if (res.status ===204){
+        alert("This field is required and can not be empty:!!")
+      }
+      else{
+        alert("server error ")
+      }
+     
 
     setLoading(false);
   };

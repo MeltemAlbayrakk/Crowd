@@ -88,9 +88,9 @@ export default function Index() {
 
     const form = new FormData();
     form.append("profilePhoto", e.target.files[0]);
-    console.log("foto:",e.target.files[0])
+
     const response = await api.user.profile.updatePicture(form); 
-    console.log("geri donen user",response)
+
     setProfile(response)
     getProfile();
   };
@@ -104,8 +104,8 @@ export default function Index() {
         const resp = await api.user.profile.get(id);
         //console.log("bu respti",resp)
         setProfile(resp);
-        console.log("rolü bu :",resp.role)
 
+        
       };
       getData();
     }
@@ -153,6 +153,7 @@ export default function Index() {
                 >
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
+                  
                 <div className="profile__fullname">
                   {profile.firstName + " " + profile.lastName}
                 </div>
