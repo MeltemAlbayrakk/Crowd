@@ -62,6 +62,7 @@ conn()
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
 app.use(express.static('uploads'));
+//app.use('/uploads',express.static('uploads'));
 
 
 app.listen(port, () => {
