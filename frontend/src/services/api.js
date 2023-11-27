@@ -66,9 +66,9 @@ export default {
           );
           return response.data;
         } else if (type === "company") {
-          const response = await instance.patch(
+          const response = await instance.post(
             "/user/company/update",
-            payload
+            payload,{withCredentials: true},
           );
           return response.data;
         }
@@ -77,12 +77,12 @@ export default {
         const response = await instance({
           url: "/user/addProfilePicture",
           method: "post",
-          data: payload,
+          data: payload,withCredentials: true,
           
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },{withCredentials: true},);
+        });
         return response;
       },
       project: {

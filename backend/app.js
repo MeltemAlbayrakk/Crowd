@@ -9,6 +9,8 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import multer from 'multer';
 import path from 'path';
+
+
 dotenv.config()
 
 const app = express()
@@ -17,13 +19,16 @@ const port = 3001
 
 
 const storage = multer.diskStorage({
-  destination: 'uploads/',
+  destination: '../frontend/public/uploads',
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
 const upload = multer({ storage: storage });
 app.use(upload.single('profilePhoto'));
+//  const maxWidth = 1000; // Maksimum genişlik
+//  const maxHeight = 795; // Maksimum yükseklik
+
 
 
 
@@ -61,8 +66,9 @@ conn()
 
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
-app.use(express.static('uploads'));
-//app.use('/uploads',express.static('uploads'));
+//app.use(express.static('../frontend/public/uploads'));
+//app.use('../frontend/public/uploads',express.static('../frontend/public/uploads'));
+app.use('/uploads', express.static(path.join('../frontend/public/uploads')));
 
 
 app.listen(port, () => {

@@ -18,15 +18,20 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
+    console.log("bu formdu:",form)
   };
 
   const onBlur = async (prop, value) => {
+    
     await api.user.profile.update("company", form);
   };
 
   return (
     <>
 <div className="wrapper"> 
+
+
+<div class="container">
  <div className="cards">
         <div className="card">
           <div className="card__header">Company Details</div>
@@ -208,7 +213,7 @@ export default function Profile(props) {
             </li>
           </ul>
         </div>
-
+        </div>
 
 
     </div>

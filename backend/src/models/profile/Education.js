@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const EducationSchema = new Schema({
-  school: { type: String, required: true },
-  section: { type: String, required: true },
-  date: { type: String, required: true },
+  school: { type: String, required:false },
+  section: { type: String, required: false },
+  date: { type: String, required: false },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User' 
