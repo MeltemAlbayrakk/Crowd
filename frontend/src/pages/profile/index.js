@@ -32,6 +32,7 @@ import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
 import { useParams } from 'react-router-dom';
 
+
 export default function Index() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -74,7 +75,7 @@ export default function Index() {
 
        
   const getProfile = async () => {
-    setProfile(await api.user.profile.get());
+    setProfile(await api.user.profile.get(id));
     setLoadloading(false);
   };
 
@@ -151,6 +152,7 @@ export default function Index() {
                     })`,
                   }}
                 >
+                  {/* <img src="../../../../backend/uploads/profilePhoto-1701075220944.png"></img> */}
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
                   

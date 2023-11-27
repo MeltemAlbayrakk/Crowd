@@ -158,14 +158,6 @@ export default function Profile(props) {
     try {
       
       const res = await api.user.profile.update("personal", form);
-
-
-      if (res.status === 201) {
-        console.log("200 döndü",res)
-      }
-      else if (res.status === 404){
-        console.log("200 dönmedi",res)
-      }
      
     } catch (error) {
       console.log("onblur hatası:",error.message)
@@ -226,13 +218,16 @@ export default function Profile(props) {
   const addAchievement = async () => {
     setLoading(true);
     setActiveAchievementErrors(null);
-    const res = await api.user.profile.achievement
+
+    try {
+      const res = await api.user.profile.achievement
       .add("personal", activeAchievement)
       .catch((err) => {
         setActiveAchievementErrors(err.response.data.errorMessage);
         setLoading(false);
       });
 
+      console.log("res ne ",res)
       if(res.status ===201){
         setActiveAchievement({
           ...activeAchievement,
@@ -242,12 +237,20 @@ export default function Profile(props) {
         setIsAchievementsCollapsed(true);
         props.getProfile();
       }
-      else if (res.status ===204){
+      else if (res.status ===404){
+        console.log("bbbbbbbbbbbb")
         alert("This field is required and can not be empty:!!")
+       
+
       }
       else{
+        console.log("aaaaaaaaaaa")
         alert("server error ")
       }
+    } catch (error) {
+      console.log("profil hatası")
+    }
+    
      
 
     setLoading(false);

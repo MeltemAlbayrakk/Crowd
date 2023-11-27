@@ -17,7 +17,7 @@ const port = 3001
 
 
 const storage = multer.diskStorage({
-  destination: 'uploads/',
+  destination: '../frontend/public/uploads',
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
@@ -63,7 +63,7 @@ conn()
 
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
-app.use('/uploads',express.static('src/uploads'));
+app.use('/uploads',express.static('uploads'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
