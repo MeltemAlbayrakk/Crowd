@@ -13,12 +13,26 @@ const UserSchema = new Schema({
   email: {type:String, required: true },
   password: { type: String, required: true },
   phone:  {type:String,required:true},
-  companyName:  {type:String,required:false},
   role: {type:String},
   isFreelancer:{type:Boolean,required:false},
   profilePhoto:{type:String,default:""},
-  jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   
+
+  companyName:  {type:String,required:false},
+  companyWebsite:{type:String,required:false},
+  companyYearOfFoundation:{type:String,required:false},
+  companySector:{type:[Object],required:false},
+  companyDescription:{type:String,required:false},
+  companyAddress:{type:String,required:false},
+  companyCountry:{type:String,required:false},
+  companyCity:{type:String,required:false},
+  companyFacebookUrl:{type:String,required:false},
+  companyTwitterUrl:{type:String,required:false},
+  companyGoogleUrl:{type:String,required:false},
+  companyLinkedinUrl:{type:String,required:false},
+
+
+  jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],
   projects:[{ type: Schema.Types.ObjectId, ref: 'Project' }],
   experiences:[{ type: Schema.Types.ObjectId, ref: 'Experience' }],

@@ -54,8 +54,8 @@ export default {
       return response.data;
     },
     profile: {
-      async get() {
-        const response = await instance.get("/user/profile");
+      async get(id) {
+        const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
@@ -66,9 +66,9 @@ export default {
           );
           return response.data;
         } else if (type === "company") {
-          const response = await instance.patch(
+          const response = await instance.post(
             "/user/company/update",
-            payload
+            payload,{withCredentials: true},
           );
           return response.data;
         }
@@ -76,8 +76,9 @@ export default {
       async updatePicture(payload) {
         const response = await instance({
           url: "/user/addProfilePicture",
-          method: "patch",
-          data: payload,
+          method: "post",
+          data: payload,withCredentials: true,
+          
           headers: {
             "Content-Type": "multipart/form-data",
           },

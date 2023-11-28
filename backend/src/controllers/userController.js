@@ -2,7 +2,7 @@ import UserModel from '../models/User.js'
 import bcrypt from 'bcrypt';
 import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
-
+import multer from 'multer';
 
 const registerCompanyUser=async (req,res)=>{
 
@@ -48,6 +48,7 @@ const registerCompanyUser=async (req,res)=>{
     firstName: registerData.firstName,
     lastName: registerData.lastName,
     email: registerData.email,
+    companyName:registerData.companyName,
     password: hashedPassword,
     phone: registerData.phone,
     role: userRoles.COMPANY,
@@ -154,11 +155,10 @@ function checkPasswordValidity(password) {
     if (passwordMatch) {
       
       req.session.userId = user._id
-      
-
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN, {
         expiresIn: '1h',
       });
+
       
       return res.status(201).json({ message: 'User login successfully', token });
     } else {
@@ -177,7 +177,6 @@ function checkPasswordValidity(password) {
 
   const logout = (req, res) => {
   try {
-    // Oturumu sonlandırma işlemi
     req.session.destroy((err) => {
       if (err) {
         return res.status(500).json({
@@ -185,7 +184,7 @@ function checkPasswordValidity(password) {
           error: 'Logout failed',
         });
       }
-      res.clearCookie('connect.sid'); // Opsiyonel: Oturum kimliğiyle ilişkili çerezin silinmesi
+      res.clearCookie('connect.sid'); 
       res.status(200).json({
         succeded: true,
         message: 'User logged out successfully',
@@ -203,30 +202,25 @@ function checkPasswordValidity(password) {
 const getProfile = async (req,res)=>{
 
 
-
-
- if(req.session.userId) {
+console.log(req.params.id,"backenddesin")
+ if(req.session.userId==req.params.id) {
   const user = await UserModel.findById(req.session.userId).populate('experiences achievements projects educations');
   
-
-
-
   if (!user) {
     res.status(404).json({message:"profile is not found "})
   }
   
-  //console.log('User Educations:', user.educations);
   return res.send(user);
+  
  }
  else {
-  console.log('session id empty')
+  const user2 = await UserModel.findById(req.params.id).populate('experiences achievements projects educations');
+  return res.send(user2);
+
  }
 
- //const userId = req.session.userId;
-//await UserModel.findById("6555c6cf398d0f47bcf2a304") 65546ac485bebbb16f78bbe9
-   //bu halde veri geliyor 
 
-   res.status(201).json({message:"session id empty "})
+   
 }
 
   const addPersonalDetail= async (req,res)=>{
@@ -268,21 +262,111 @@ const getProfile = async (req,res)=>{
 };
 
 
+const addCompanyDetail  = async (req,res)=>{
+  
+
+  try {
+
+    const {companyName,  firstName , lastName,companyWebsite, companyYearOfFoundation, companySector, 
+      companyDescription,
+      email, companyAddress, companyCountry, companyCity, companyFacebookUrl
+      ,companyTwitterUrl, companyGoogleUrl,companyLinkedinUrl,
+      phone
+    } = req.body;
+
+    if (req.session.userId) {
+      const  companyDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
+
+
+        
+        companyName:companyName,
+        companyWebsite:companyWebsite,
+        companyYearOfFoundation:companyYearOfFoundation,
+        companySector:companySector,
+        companyDescription:companyDescription,
+        firstName:firstName,
+        lastName: lastName,
+        email:email,
+        companyAddress:companyAddress,
+        companyCountry:companyCountry,
+        companyCity:companyCity,
+        companyFacebookUrl:companyFacebookUrl,
+        companyTwitterUrl:companyTwitterUrl,
+        companyGoogleUrl:companyGoogleUrl,
+        companyLinkedinUrl:companyLinkedinUrl,
+        phone:phone
+    
+
+    })
+    if (companyDetails) {
+      res.status(200).json({
+        message: 'Personal details has been updated successfully',})
+    } else {
+      res.status(404).json({
+        message: 'Personal details not found or not updated',
+      });
+  
+
+    }
+
+    }
+    
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'İç sunucu hatası' });
+  }
+}
+
 const checkUser=async(req,res)=>{
 
-  if(req.session.userId){
+const userId=req.session.userId
 
-    return res.json({loggedIn:true})
+
+    if(req.session.userId){
+
+      return res.json({loggedIn:true,userId})
+
+    }
+  else {
+
+    return res.json({loggedIn:false})
 
   }
-else {
-
-  return res.json({loggedIn:false})
-
-}
 
 } 
 
-   
- 
-    export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser}
+
+
+const addProfilePicture = async(req,res)=>{
+  try {
+    //const {profilePhoto}= req.body;
+    
+      const  userId  = req.session.userId; 
+     // Varsayalım ki kullanıcı kimliği bir önceki adımda middleware veya başka bir yerde ayarlanmıştır
+    
+      console.log("profil:",req.file.path)
+      const newPhotoPath =(req.file.path).replace(/\\+/g, '/').replace(/(\.\.\/frontend\/public)/, '');
+      console.log("yeni profil:",newPhotoPath)
+
+    console.log("id:",userId)
+      // Kullanıcıyı bul ve profil fotoğrafını güncelle
+      const user = await UserModel.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+      }
+    
+      user.profilePhoto = newPhotoPath;
+      await user.save();
+    
+      res.send(user)
+    } catch (error) {
+      
+      res.status(500).json({ error: 'Bir hata oluştu' });
+    }
+    
+}
+
+
+ export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture,addCompanyDetail}

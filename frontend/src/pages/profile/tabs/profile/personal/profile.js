@@ -6,6 +6,8 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../../../../styles/styles.scss"
+import { useParams } from 'react-router-dom';
+
 
 export default function Profile(props) {
   const languages = [
@@ -79,26 +81,33 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
-  const [defaultLanguages, setdefaultLanguages] = useState({});
+ 
+
   const [languagesOptions, setLanguagesOptions] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]); 
 
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
- 
+
+  const { id } = useParams();
+  const [userProfile, setUserProfile] = useState(null);
+
 
   const getProfile1 = async () => {
    
     try {
-      const res = await axios.get("http://localhost:3001/user/profile", {
+
+      console.log(id,"profildeki id")
+  
+
+      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
+
       });
+        //setUserProfile(res.data);
 
       setForm(res.data);
-      //console.log("get profildeki resdata:",res.data)
-      console.log("profile res data diller:",res.data.languages)
-
-      const languagesFromApi = res.data.languages|| [];
+      const languagesFromApi = res.data.languages || []; 
       const skillsFromApi = res.data.skills || []; 
 
       const formattedLanguages = languages.map((lang) => ({
@@ -124,11 +133,13 @@ export default function Profile(props) {
           label: skill,
           value: skill,
         }))
-      )
+      );
+
 
     } catch (error) {
 
     }
+    
     
     
   };
@@ -143,22 +154,11 @@ export default function Profile(props) {
 
   const onBlur = async (prop, value) => {
 
-    console.log("onblurdasın")
+    
     try {
-      console.log("try ıcı ")
+      
       const res = await api.user.profile.update("personal", form);
-
-      console.log("onchange diller:",form)
-
-      if (res.status === 201) {
-        console.log("200 döndü",res)
-      }
-      else if (res.status === 404){
-        console.log("200 dönmedi",res)
-      }
-      else{
-        console.log("hata ama ne oldugu bellı degıl")
-      }
+     
     } catch (error) {
       console.log("onblur hatası:",error.message)
     }
@@ -218,22 +218,40 @@ export default function Profile(props) {
   const addAchievement = async () => {
     setLoading(true);
     setActiveAchievementErrors(null);
-    const res = await api.user.profile.achievement
+
+    try {
+      const res = await api.user.profile.achievement
       .add("personal", activeAchievement)
       .catch((err) => {
         setActiveAchievementErrors(err.response.data.errorMessage);
         setLoading(false);
       });
 
-    if (res.id) {
-      setActiveAchievement({
-        ...activeAchievement,
-        headline: "",
-        description: "",
-      });
-      setIsAchievementsCollapsed(true);
-      props.getProfile();
+      console.log("res ne ",res)
+      if(res.status ===201){
+        setActiveAchievement({
+          ...activeAchievement,
+          headline: "",
+          description: "",
+        });
+        setIsAchievementsCollapsed(true);
+        props.getProfile();
+      }
+      else if (res.status ===404){
+        console.log("bbbbbbbbbbbb")
+        alert("This field is required and can not be empty:!!")
+       
+
+      }
+      else{
+        console.log("aaaaaaaaaaa")
+        alert("server error ")
+      }
+    } catch (error) {
+      console.log("profil hatası")
     }
+    
+     
 
     setLoading(false);
   };
@@ -332,7 +350,7 @@ export default function Profile(props) {
    <div className="wrapper">
    
     
-    <div className="">
+      <div class="">
 
       <div class="container">
       <div className=" cards">
@@ -384,44 +402,39 @@ export default function Profile(props) {
                 onChange={(e) => onChange("gender", e)}
                 onBlur={(e) => onBlur("gender", e)}
               />
-            </li>
+              </li>
             <li>
               <label>Languages</label>
               <Select
                 value={selectedLanguages}
-                getOptionLabel={(x) => x.label}
-                getOptionValue={(x) => x.value}
                 options={languagesOptions}
-                unstyled
                 isMulti
-                className="react-select-container"
+                unstyled
                 classNamePrefix="react-select"
+                className="react-select-container" 
                 onChange={(selectedOptions) => {
                   setSelectedLanguages(selectedOptions);
                   const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
                   onChange("languages", selectedLanguageValues);
-                  }}
-                  onBlur={() => onBlur("languages", selectedLanguages)}
+                }}
+                onBlur={() => onBlur("languages", selectedLanguages)}
               />
             </li>
             <li>
               <label>Skills</label>
               <Select
-                value={selectedSkills}
-                getOptionLabel={(x) => x.label}
-                getOptionValue={(x) => x.value}
-                options={skillsOptions}
-                unstyled
-                isMulti
-                className="react-select-container"
-                classNamePrefix="react-select"
-                onChange={(selectedOptions) => {
-                  setSelectedSkills(selectedOptions);
-                  const selectedSkillValues = selectedOptions.map(skill => skill.value);
-                  onChange("skills", selectedSkillValues);
-                }}
-                onBlur={() => onBlur("skills", selectedSkills)}
-                
+                 value={selectedSkills}
+                 options={skillsOptions}
+                 isMulti
+                 unstyled
+                 classNamePrefix="react-select"
+                 className="react-select-container" 
+                 onChange={(selectedOptions) => {
+                   setSelectedSkills(selectedOptions);
+                   const selectedSkillValues = selectedOptions.map((skill) => skill.value);
+                   onChange("skills", selectedSkillValues);
+                 }}
+                 onBlur={() => onBlur("skills", selectedSkills)}
               />
             </li>
             <li>
@@ -767,8 +780,9 @@ export default function Profile(props) {
       </div>
       </div>
       </div>
-   </div>
-      
+   
+      </div>
     </>
   );
 }
+
