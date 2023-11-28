@@ -45,8 +45,8 @@ export default {
     async beFreelancer(payload) {
       const response = await instance.post(
         "/user/personal/beFreelancer",
-        payload
-      );
+        payload,{withCredentials: true},
+          );
       return response.data;
     },
     async changePassword(payload) {

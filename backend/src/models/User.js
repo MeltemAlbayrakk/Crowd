@@ -18,11 +18,15 @@ const UserSchema = new Schema({
   isFreelancer:{type:Boolean,required:false},
   profilePhoto:{type:String,default:""},
   jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
-  
+  profession:{type:[Object],required:false},
+  description:{type:String,required:false},
+  speciality:{type:[Object],required:false},
+
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],
   projects:[{ type: Schema.Types.ObjectId, ref: 'Project' }],
   experiences:[{ type: Schema.Types.ObjectId, ref: 'Experience' }],
-  achievements:[{ type: Schema.Types.ObjectId, ref: 'Achievement' }]
+  achievements:[{ type: Schema.Types.ObjectId, ref: 'Achievement' }],
+  
 
 });
 

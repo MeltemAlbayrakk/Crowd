@@ -6,6 +6,7 @@ import * as userProject from '../controllers/userProject.js';
 import * as userExperience from '../controllers/userExperience.js';
 import checkAuth from '../middlewares/checkAuth.js';
 
+
 const router=express.Router()
 
 router.route("/login").post(userController.login)
@@ -32,5 +33,7 @@ router.route("/addProfilePicture").post(userController.addProfilePicture)
 router.route("/profile/:id").get(userController.getProfile)
 
 router.route("/check-session").get(userController.checkUser)
+ 
+router.route("/personal/beFreelancer").post(userController.beFreelancer)
 
 export default router   
