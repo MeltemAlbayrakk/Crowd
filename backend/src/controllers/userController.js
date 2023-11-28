@@ -346,6 +346,9 @@ const addProfilePicture = async(req,res)=>{
      // Varsayalım ki kullanıcı kimliği bir önceki adımda middleware veya başka bir yerde ayarlanmıştır
     
       console.log("profil:",req.file.path)
+      const newPhotoPath =(req.file.path).replace(/\\+/g, '/').replace(/(\.\.\/frontend\/public)/, '');
+      console.log("yeni profil:",newPhotoPath)
+
     console.log("id:",userId)
       // Kullanıcıyı bul ve profil fotoğrafını güncelle
       const user = await UserModel.findById(userId);
@@ -354,7 +357,7 @@ const addProfilePicture = async(req,res)=>{
         return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
       }
     
-      user.profilePhoto = req.file.path;
+      user.profilePhoto = newPhotoPath;
       await user.save();
     
       res.send(user)
