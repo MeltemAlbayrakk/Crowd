@@ -123,7 +123,7 @@ export default function BecomeFreelancer(props) {
 
   const [form, setForm] = useState({
     profession: "",
-    description: "",
+    freelanceDescription: "",
     speciality :""
   });
   
@@ -228,11 +228,11 @@ export default function BecomeFreelancer(props) {
     if (res.successMessage) {
       setForm({
         profession: "",
-       description: "",
+        freelanceDescription: "",
        speciality :""
       });
       props.getProfile();
-     // props.setActiveTab("profile");
+      props.setActiveTab("profile");
     }
 
     setLoading(false);
@@ -286,12 +286,12 @@ export default function BecomeFreelancer(props) {
               <label>Description</label>
               <textarea
                 required
-                type="text"
+                type="input"
                 value={form?.description}
                 onChange={(e) =>
-                  onChange("Description", e.currentTarget.value)
+                  onChange("description", e.currentTarget.value)
                 }
-                onBlur={(e) => onBlur("profileDescription", e.target.value)}
+                onBlur={(e) => onBlur("description", e.target.value)}
               />
             </li>
             <li>
