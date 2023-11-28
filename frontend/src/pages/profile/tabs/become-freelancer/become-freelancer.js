@@ -12,51 +12,51 @@ export default function BecomeFreelancer(props) {
   const profession = [
     {
       label: "Advisor",
-      value: "Advisor",
+      value: "Advisor"
     },
     {
       label: "Data Scientist",
-      value: "Data Scientist",
+      value: "Data Scientist"
     },
     {
       label: "Software specialist",
-      value: "Software specialist",
+      value: "Software specialist"
     },
     {
       label: "Designer",
-      value: "designer",
+      value: "designer"
     },
     {
       label: "Influencer",
-      value: "influencer",
+      value: "influencer"
     },
     {
       label: "Marketing expert",
-      value: "marketing expert",
+      value: "marketing expert"
     },
     {
       label: "Musician",
-      value: "musician",
+      value: "musician"
     },
     {
       label: "Translator",
-      value: "translator",
+      value: "translator"
     },
     {
       label: "Video/Production Specialist",
-      value: "video/Production Specialist",
+      value: "video/Production Specialist"
     },
     {
       label: "Virtual Assistant",
-      value: "virtual Assistant",
+      value: "virtual Assistant"
     },
     {
       label: "Your voiceover",
-      value: "Your voiceover",
+      value: "Your voiceover"
     },
     {
       label: "Writer",
-      value: "writer",
+      value: "writer"
     },
   ];
 
@@ -109,25 +109,24 @@ export default function BecomeFreelancer(props) {
     { label: "Adobe Indesign", value: "Adobe Indesign" },
   ];
 
-  const profileData = props.profile;
-
+  // const profileData = props.profile;
+  // const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState(profileData);
+  //const [form, setForm] = useState(profileData);
   const [professionOptions, setProfessionOptions] = useState([]);
-  const [SelectedProfession, setSelectedProfession] = useState([]); 
+  const [selectedProfession, setSelectedProfession] = useState([]); 
 
   const [specialityOptions, setSpecialityOptions] = useState([]);
   const [selectedSpeciality, setSelectedSpeciality] = useState([]);
 
   
 
-  // const [form, setForm] = useState({
-  //   specializationCategory: "",
-  //   specializationTitle: "",
-  //   specializationDescription: "",
-  //   specializationTools: "dummy",
-  // });
-  const [activeBecomeFreelancer, setActiveBecomeFreelancer] = useState({});
+  const [form, setForm] = useState({
+    profession: "",
+    description: "",
+    speciality :""
+  });
+  
   const [activeBecomeFreelancerErrors, setActiveBecomeFreelancerErrors] =
     useState(null);
 
@@ -155,12 +154,15 @@ export default function BecomeFreelancer(props) {
         value: Profession.value,
       }));
       setProfessionOptions(formattedProfession);
+   
       setSelectedProfession(
-        professionFromApi.map((prof) => ({
-          label: prof,
-          value: prof,
+        professionFromApi.map((Profession) => ({
+          label: Profession,
+          value: Profession,
+         
         }))
       );
+      console.log("Burası setselectProfession")
       setSpecialityOptions(
         speciality.map((Speciality) => ({
           label: Speciality.label,
@@ -230,7 +232,7 @@ export default function BecomeFreelancer(props) {
        speciality :""
       });
       props.getProfile();
-      props.setActiveTab("profile");
+     // props.setActiveTab("profile");
     }
 
     setLoading(false);
@@ -261,33 +263,33 @@ export default function BecomeFreelancer(props) {
                 you can talk about yourself later.
               </p>
             </li>
+            
             <li>
               <label>Profession</label>
               <Select
-              value={SelectedProfession}
+               value={selectedProfession}
                 options={professionOptions}
                 isMulti
                 unstyled
-                className="react-select-container"
                 classNamePrefix="react-select"
-                // defaultValue={form.profession}
-                // required
+                className="react-select-container" 
+               defaultValue={form.profession}
                 onChange={(selectedOptions) => {
                   setSelectedProfession(selectedOptions);
-                  const SelectedProfessionValues = selectedOptions.map((prof) => prof.value);
-                  onChange("Profession", SelectedProfessionValues);
+                  const selectedProfessionValues = selectedOptions.map((Profession) => Profession.value);
+                  onChange("profession", selectedProfessionValues);
                 }}
-                onBlur={() => onBlur("Profession", SelectedProfession)}
-              />
+                onBlur={() => onBlur("profession", selectedProfession)}
+             />
             </li>
             <li>
               <label>Description</label>
               <textarea
                 required
-                type="input"
+                type="text"
                 value={form?.description}
                 onChange={(e) =>
-                  onChange("specializationDescription", e.currentTarget.value)
+                  onChange("Description", e.currentTarget.value)
                 }
                 onBlur={(e) => onBlur("profileDescription", e.target.value)}
               />
@@ -301,7 +303,7 @@ export default function BecomeFreelancer(props) {
                 unstyled
                 classNamePrefix="react-select"
                 className="react-select-container" 
-               // defaultValue={form.speciality}
+               defaultValue={form.speciality}
                 onChange={(selectedOptions) => {
                   setSelectedSpeciality(selectedOptions);
                   const selectedSpecialityValues = selectedOptions.map((skill) => skill.value);
