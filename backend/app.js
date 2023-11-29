@@ -5,6 +5,7 @@ import UserModel from './src/models/User.js'
 import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
+import applicantRoute from './src/routes/applicantRoute.js'
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import multer from 'multer';
@@ -63,6 +64,7 @@ conn()
 
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
+app.use('/applicant',applicantRoute)
 app.use('/uploads',express.static('uploads'));
 
 app.listen(port, () => {

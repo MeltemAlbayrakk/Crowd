@@ -8,6 +8,7 @@ const ApplicantSchema = new Schema({
     JobOwnerId:{type:String,required:false},
     isAgreed:{type:Boolean,required:false},
     status:{type:String,required:false},
+    offer:{type:String,required:false}
 
 })
 

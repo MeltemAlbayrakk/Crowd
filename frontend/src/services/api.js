@@ -162,24 +162,41 @@ export default {
         },
       },
     },
+
+
+
+
   },
-  job: {
-    async add(type, payload) {
-      if (type === "company") {
-        const response = await instance.post("/job/", payload,{withCredentials: true});
+    job: {
+      async add(type, payload) {
+        if (type === "company") {
+          const response = await instance.post("/job/", payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+      async get(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("/job/", payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+      async search(title) {
+    
+        const response = await instance.post("/job/search", { title },{withCredentials: true});
         return response.data;
-      }
-    },
-    async get(type, payload) {
-      if (type === "company") {
-        const response = await instance.get("/job/", payload,{withCredentials: true});
-        return response.data;
-      }
-    },
-    async search(title) {
-   
-      const response = await instance.post("/job/search", { title },{withCredentials: true});
+      },
+      },
+applicant:{
+  async add(type, payload) {
+    if (type === "personal") {
+      const response = await instance.post(
+        "/applicant/",
+        payload,{withCredentials: true},
+      );
       return response.data;
-    },
-  },
+    }
+  }
+}
+
 };
+
