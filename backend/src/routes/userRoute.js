@@ -31,6 +31,7 @@ router.route("/personal/achievement/:id").get(userAchievement.deleteAchievement)
 router.route("/personal/experience").post(userExperience.addExperience)
 router.route("/personal/experience/:id").get(userExperience.deleteExperience)
 //
+router.route("/personal/beFreelancer").post(userController.beFreelancer)
 router.route("/addProfilePicture").post(userController.addProfilePicture)
 //
 router.route("/profile/:id").get(userController.getProfile)

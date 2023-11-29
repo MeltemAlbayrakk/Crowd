@@ -28,8 +28,6 @@ export default function Profile(props) {
 
   return (
     <>
-<div className="wrapper"> 
-
 
 <div class="container">
  <div className="cards">
@@ -218,7 +216,7 @@ export default function Profile(props) {
 
     </div>
      
-      </div>
+    
     </>
   );
 }

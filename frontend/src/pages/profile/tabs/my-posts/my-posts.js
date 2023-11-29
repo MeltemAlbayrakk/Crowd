@@ -12,7 +12,6 @@ export default function MyPosts(props) {
   const [deadline, setDeadline] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [subcategory, setSubcategory] = useState("");
   const [title, setTitle] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,7 @@ export default function MyPosts(props) {
     "Deadline",
     "Description",
     "Status",
-    "Sub Category",
+
     "Title",
     "Edit",
   ];
@@ -55,7 +54,7 @@ export default function MyPosts(props) {
         deadline: item.deadline,
         description: item.description,
         status: item.status,
-        subcategory: item.subCategory,
+        
         title: item.title,
         edit: editRow("Edit"),
       }));
@@ -79,7 +78,6 @@ export default function MyPosts(props) {
         deadline={setDeadline}
         description={setDescription}
         status={setStatus}
-        subcategory={setSubcategory}
         title={setTitle}
         loading={loading}
       />

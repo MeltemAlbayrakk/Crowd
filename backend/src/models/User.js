@@ -17,6 +17,10 @@ const UserSchema = new Schema({
   isFreelancer:{type:Boolean,required:false},
   profilePhoto:{type:String,default:""},
   
+  profession:{type:[Object],required:false},
+  description:{type:String,required:false},
+  speciality:{type:[Object],required:false},
+
 
   companyName:  {type:String,required:false},
   companyWebsite:{type:String,required:false},
