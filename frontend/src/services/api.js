@@ -46,7 +46,7 @@ export default {
       const response = await instance.post(
         "/user/personal/beFreelancer",
         payload,{withCredentials:true}
-        payload,{withCredentials:true}
+       
       );
       return response.data;
     },
@@ -68,7 +68,7 @@ export default {
           return response.data;
         } else if (type === "company") {
           const response = await instance.post(
-          const response = await instance.post(
+         
             "/user/company/update",
             payload,{withCredentials: true},
           );

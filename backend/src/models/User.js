@@ -35,11 +35,7 @@ const UserSchema = new Schema({
   companyGoogleUrl:{type:String,required:false},
   companyLinkedinUrl:{type:String,required:false},
 
-<<<<<<< HEAD
-
-=======
   applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
->>>>>>> dev
   jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],
   projects:[{ type: Schema.Types.ObjectId, ref: 'Project' }],

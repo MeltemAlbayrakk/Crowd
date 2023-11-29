@@ -8,11 +8,7 @@ const JobSchema = new Schema({
     category:{type:String,required:false},
     budget:{type:String,required:false},
     deadline:{type:String,required:false},
-<<<<<<< HEAD
-    status:{type:Boolean,required:false}
-=======
     status:{type:Boolean,required:false},
->>>>>>> dev
 
     applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
 
