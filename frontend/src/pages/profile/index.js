@@ -32,6 +32,7 @@ import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
 import { useParams } from 'react-router-dom';
 
+
 export default function Index() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -74,7 +75,7 @@ export default function Index() {
 
        
   const getProfile = async () => {
-    setProfile(await api.user.profile.get());
+    setProfile(await api.user.profile.get(id));
     setLoadloading(false);
   };
 
@@ -88,11 +89,10 @@ export default function Index() {
 
     const form = new FormData();
     form.append("profilePhoto", e.target.files[0]);
-    console.log("foto:",e.target.files[0])
+
     const response = await api.user.profile.updatePicture(form); 
-    console.log("geri donen user",response)
+
     setProfile(response)
-    console.log(profile, "profil")
     getProfile();
   };
 
@@ -105,8 +105,8 @@ export default function Index() {
         const resp = await api.user.profile.get(id);
         //console.log("bu respti",resp)
         setProfile(resp);
-        console.log("rolü bu :",resp.role)
 
+        
       };
       getData();
     }
@@ -126,6 +126,10 @@ export default function Index() {
       setIsLoggedIn(false);
     }
   };
+
+
+
+
   return (
     profile && (
 
@@ -140,7 +144,7 @@ export default function Index() {
                 <div
                   className={
                     loading ? "profile__avatar loading" : "profile__avatar"
-                  }  
+                  }
                   style={{
                     backgroundImage: `url(${
                       (profile && profile.profilePhoto) ||
@@ -148,10 +152,10 @@ export default function Index() {
                     })`,
                   }}
                 >
-                
-                  {/* <img src={profile.profilePhoto}></img> */}
+                  {/* <img src="../../../../backend/uploads/profilePhoto-1701075220944.png"></img> */}
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
+                  
                 <div className="profile__fullname">
                   {profile.firstName + " " + profile.lastName}
                 </div>

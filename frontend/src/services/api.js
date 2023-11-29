@@ -45,8 +45,8 @@ export default {
     async beFreelancer(payload) {
       const response = await instance.post(
         "/user/personal/beFreelancer",
-        payload,{withCredentials: true},
-          );
+        payload,{withCredentials:true}
+      );
       return response.data;
     },
     async changePassword(payload) {
@@ -55,7 +55,7 @@ export default {
     },
     profile: {
       async get(id) {
-        const response = await instance.get(`/user/profile/655c8cf2e66a2e23de917a83`,{withCredentials:true});
+        const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
         return response.data;
       },
       async update(type, payload) {
@@ -166,19 +166,19 @@ export default {
   job: {
     async add(type, payload) {
       if (type === "company") {
-        const response = await instance.post("/job/", payload);
+        const response = await instance.post("/job/", payload,{withCredentials: true});
         return response.data;
       }
     },
     async get(type, payload) {
       if (type === "company") {
-        const response = await instance.get("/job/", payload);
+        const response = await instance.get("/job/", payload,{withCredentials: true});
         return response.data;
       }
     },
     async search(title) {
    
-      const response = await instance.post("/job/search", { title });
+      const response = await instance.post("/job/search", { title },{withCredentials: true});
       return response.data;
     },
   },
