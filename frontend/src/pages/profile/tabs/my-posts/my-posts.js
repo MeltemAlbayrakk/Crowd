@@ -21,8 +21,7 @@ export default function MyPosts(props) {
     "Category",
     "Deadline",
     "Description",
-    "Status",
-
+    
     "Title",
     "Edit",
   ];
@@ -37,8 +36,8 @@ export default function MyPosts(props) {
       category: "",
       deadline: "",
       description: "",
-      status: "",
-      subcategory: "",
+ 
+   
       title: "",
       edit: editRow("Edit"),
     },
@@ -53,7 +52,7 @@ export default function MyPosts(props) {
         category: item.category,
         deadline: item.deadline,
         description: item.description,
-        status: item.status,
+ 
         
         title: item.title,
         edit: editRow("Edit"),
@@ -77,7 +76,7 @@ export default function MyPosts(props) {
         category={setCategory}
         deadline={setDeadline}
         description={setDescription}
-        status={setStatus}
+    
         title={setTitle}
         loading={loading}
       />

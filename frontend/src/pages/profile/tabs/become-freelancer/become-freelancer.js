@@ -10,56 +10,104 @@ import { useParams } from 'react-router-dom';
 
 export default function BecomeFreelancer(props) {
   const profession = [
+  const profession = [
     {
       label: "Advisor",
+      value: "Advisor"
       value: "Advisor"
     },
     {
       label: "Data Scientist",
       value: "Data Scientist"
+      value: "Data Scientist"
     },
     {
       label: "Software specialist",
+      value: "Software specialist"
       value: "Software specialist"
     },
     {
       label: "Designer",
       value: "designer"
+      value: "designer"
     },
     {
       label: "Influencer",
+      value: "influencer"
       value: "influencer"
     },
     {
       label: "Marketing expert",
       value: "marketing expert"
+      value: "marketing expert"
     },
     {
       label: "Musician",
+      value: "musician"
       value: "musician"
     },
     {
       label: "Translator",
       value: "translator"
+      value: "translator"
     },
     {
       label: "Video/Production Specialist",
+      value: "video/Production Specialist"
       value: "video/Production Specialist"
     },
     {
       label: "Virtual Assistant",
       value: "virtual Assistant"
+      value: "virtual Assistant"
     },
     {
       label: "Your voiceover",
+      value: "Your voiceover"
       value: "Your voiceover"
     },
     {
       label: "Writer",
       value: "writer"
+      value: "writer"
     },
   ];
 
+  const speciality = [
+      { label: "Grafik Tasarım Araçları", value: "Grafik Tasarım Araçları" },
+      { label: "Adobe Photoshop", value: "Adobe Photoshop" },
+      { label: "Adobe Illustrator", value: "Adobe Illustrator" },
+      { label: "CorelDRAW", value: "CorelDRAW" },
+    
+      { label: "Video Düzenleme Yazılımları", value: "Video Düzenleme Yazılımları" },
+      { label: "Adobe Premiere Pro", value: "Adobe Premiere Pro" },
+      { label: "Final Cut Pro X", value: "Final Cut Pro X" },
+      { label: "DaVinci Resolve", value: "DaVinci Resolve" },
+    
+      { label: "3D Modelleme ve Animasyon", value: "3D Modelleme ve Animasyon" },
+      { label: "Autodesk Maya", value: "Autodesk Maya" },
+      { label: "Blender", value: "Blender" },
+      { label: "Cinema 4D", value: "Cinema 4D" },
+    
+      { label: "Web Geliştirme Araçları", value: "Web Geliştirme Araçları" },
+      { label: "Visual Studio Code", value: "Visual Studio Code" },
+      { label: "Sublime Text", value: "Sublime Text" },
+      { label: "Chrome Developer Tools", value: "Chrome Developer Tools" },
+    
+      { label: "Veritabanı Yönetim Sistemleri", value: "Veritabanı Yönetim Sistemleri" },
+      { label: "MySQL", value: "MySQL" },
+      { label: "Microsoft SQL Server", value: "Microsoft SQL Server" },
+      { label: "MongoDB", value: "MongoDB" },
+    
+      { label: "Mobil Uygulama Geliştirme", value: "Mobil Uygulama Geliştirme" },
+      { label: "Android Studio", value: "Android Studio" },
+      { label: "Xcode", value: "Xcode" },
+      { label: "React Native", value: "React Native" },
+    
+      { label: "Proje Yönetimi Araçları", value: "Proje Yönetimi Araçları" },
+      { label: "Jira", value: "Jira" },
+      { label: "Trello", value: "Trello" },
+      { label: "Asana", value: "Asana" },
   const speciality = [
       { label: "Grafik Tasarım Araçları", value: "Grafik Tasarım Araçları" },
       { label: "Adobe Photoshop", value: "Adobe Photoshop" },
@@ -111,7 +159,18 @@ export default function BecomeFreelancer(props) {
 
   // const profileData = props.profile;
   // const [profile, setProfile] = useState(null);
+  // const profileData = props.profile;
+  // const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  //const [form, setForm] = useState(profileData);
+  const [professionOptions, setProfessionOptions] = useState([]);
+  const [selectedProfession, setSelectedProfession] = useState([]); 
+
+  const [specialityOptions, setSpecialityOptions] = useState([]);
+  const [selectedSpeciality, setSelectedSpeciality] = useState([]);
+
+  
+
   //const [form, setForm] = useState(profileData);
   const [professionOptions, setProfessionOptions] = useState([]);
   const [selectedProfession, setSelectedProfession] = useState([]); 
@@ -125,10 +184,69 @@ export default function BecomeFreelancer(props) {
     profession: "",
     freelanceDescription: "",
     speciality :""
+    profession: "",
+    freelanceDescription: "",
+    speciality :""
   });
+  
   
   const [activeBecomeFreelancerErrors, setActiveBecomeFreelancerErrors] =
     useState(null);
+
+    const { id } = useParams();
+
+  const getProfile1 = async () => {
+   
+    try {
+
+      console.log(id,"profildeki id")
+  
+
+      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
+        withCredentials: true,
+
+      });
+        //setUserProfile(res.data);
+
+      setForm(res.data);
+      const professionFromApi = res.data.profession || []; 
+      const specialityFromApi = res.data.speciality || []; 
+
+      const formattedProfession = profession.map((Profession) => ({
+        label: Profession.label,
+        value: Profession.value,
+      }));
+      setProfessionOptions(formattedProfession);
+   
+      setSelectedProfession(
+        professionFromApi.map((Profession) => ({
+          label: Profession,
+          value: Profession,
+         
+        }))
+      );
+      console.log("Burası setselectProfession")
+      setSpecialityOptions(
+        speciality.map((Speciality) => ({
+          label: Speciality.label,
+          value: Speciality.value,
+        }))
+      );
+
+      setSelectedSpeciality(
+        specialityFromApi.map((Speciality) => ({
+          label: Speciality,
+          value: Speciality,
+        }))
+      );
+
+
+    } catch (error) {
+
+    } 
+  };
+
+ 
 
     const { id } = useParams();
 
@@ -215,6 +333,32 @@ export default function BecomeFreelancer(props) {
     }
     
     
+    console.log("form",form)
+  };
+
+  const onBlur = async (prop, value) => {
+   
+    console.log("onblurdasın")
+    try {
+      console.log("try ıcı ")
+      const res = await api.user.profile.update("personal", form);
+
+      console.log("onchange diller:",form)
+
+      if (res.status === 201) {
+        console.log("200 döndü",res)
+      }
+      else if (res.status === 404){
+        console.log("200 dönmedi",res)
+      }
+      else{
+        console.log("hata ama ne oldugu bellı degıl")
+      }
+    } catch (error) {
+      console.log("onblur hatası:",error.message)
+    }
+    
+    
   };
 
   const becomeFreelancer = async () => {
@@ -227,6 +371,9 @@ export default function BecomeFreelancer(props) {
 
     if (res.successMessage) {
       setForm({
+        profession: "",
+        freelanceDescription: "",
+       speciality :""
         profession: "",
         freelanceDescription: "",
        speciality :""
@@ -243,7 +390,15 @@ export default function BecomeFreelancer(props) {
   }, []);
 
 
+  useEffect(() => {
+    getProfile1();
+  }, []);
+
+
   return (
+    
+
+    <div class="container">
     <div className="wrapper">
     <div class="">
 
@@ -257,6 +412,7 @@ export default function BecomeFreelancer(props) {
             <li>
               <h3>Speciality</h3>
               <p>
+             
                 SELAM ARKADAŞLAR BURASI HARİKA KSJHFJKSH
                 It is very important that you specify your specialization
                 category and your field of expertise. If you're a lazy person,
@@ -264,14 +420,26 @@ export default function BecomeFreelancer(props) {
               </p>
             </li>
             
+            
             <li>
               <label>Profession</label>
               <Select
                value={selectedProfession}
+               value={selectedProfession}
                 options={professionOptions}
+                isMulti
                 isMulti
                 unstyled
                 classNamePrefix="react-select"
+                className="react-select-container" 
+               defaultValue={form.profession}
+                onChange={(selectedOptions) => {
+                  setSelectedProfession(selectedOptions);
+                  const selectedProfessionValues = selectedOptions.map((Profession) => Profession.value);
+                  onChange("profession", selectedProfessionValues);
+                }}
+                onBlur={() => onBlur("profession", selectedProfession)}
+             />
                 className="react-select-container" 
                defaultValue={form.profession}
                 onChange={(selectedOptions) => {
@@ -288,9 +456,12 @@ export default function BecomeFreelancer(props) {
                 required
                 type="input"
                 value={form?.description}
+                value={form?.description}
                 onChange={(e) =>
                   onChange("description", e.currentTarget.value)
+                  onChange("description", e.currentTarget.value)
                 }
+                onBlur={(e) => onBlur("description", e.target.value)}
                 onBlur={(e) => onBlur("description", e.target.value)}
               />
             </li>
@@ -298,10 +469,21 @@ export default function BecomeFreelancer(props) {
               <label>Speciality</label>
               <Select
                value={selectedSpeciality}
+               value={selectedSpeciality}
                 options={specialityOptions}
+                isMulti
                 isMulti
                 unstyled
                 classNamePrefix="react-select"
+                className="react-select-container" 
+               defaultValue={form.speciality}
+                onChange={(selectedOptions) => {
+                  setSelectedSpeciality(selectedOptions);
+                  const selectedSpecialityValues = selectedOptions.map((skill) => skill.value);
+                  onChange("speciality", selectedSpecialityValues);
+                }}
+                onBlur={() => onBlur("speciality", selectedSpeciality)}
+             />
                 className="react-select-container" 
                defaultValue={form.speciality}
                 onChange={(selectedOptions) => {
@@ -329,6 +511,8 @@ export default function BecomeFreelancer(props) {
     </div>
     </div>
     </div>
+  
   );
+  
   
 }

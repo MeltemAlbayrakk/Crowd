@@ -46,6 +46,7 @@ export default {
       const response = await instance.post(
         "/user/personal/beFreelancer",
         payload,{withCredentials:true}
+        payload,{withCredentials:true}
       );
       return response.data;
     },
@@ -66,6 +67,7 @@ export default {
           );
           return response.data;
         } else if (type === "company") {
+          const response = await instance.post(
           const response = await instance.post(
             "/user/company/update",
             payload,{withCredentials: true},
@@ -162,24 +164,41 @@ export default {
         },
       },
     },
+
+
+
+
   },
-  job: {
-    async add(type, payload) {
-      if (type === "company") {
-        const response = await instance.post("/job/", payload,{withCredentials: true});
+    job: {
+      async add(type, payload) {
+        if (type === "company") {
+          const response = await instance.post("/job/", payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+      async get(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("/job/", payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+      async search(title) {
+    
+        const response = await instance.post("/job/search", { title },{withCredentials: true});
         return response.data;
-      }
-    },
-    async get(type, payload) {
-      if (type === "company") {
-        const response = await instance.get("/job/", payload,{withCredentials: true});
-        return response.data;
-      }
-    },
-    async search(title) {
-   
-      const response = await instance.post("/job/search", { title },{withCredentials: true});
+      },
+      },
+applicant:{
+  async add(type, payload) {
+    if (type === "personal") {
+      const response = await instance.post(
+        "/applicant/",
+        payload,{withCredentials: true},
+      );
       return response.data;
-    },
-  },
+    }
+  }
+}
+
 };
+

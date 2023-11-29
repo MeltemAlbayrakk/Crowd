@@ -25,7 +25,6 @@ const addProject = async (req,res)=>{
         await user.save();
 
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: 'server error ' });
     }
 }
@@ -47,7 +46,6 @@ const deleteProject = async (req,res)=>{
         return res.status(200).send('Project deleted successfully');
 
     } catch (error) {
-        console.log(error)
         return res.status(500).send('server error')
     }
 }

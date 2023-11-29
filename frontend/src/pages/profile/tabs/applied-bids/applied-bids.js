@@ -4,7 +4,6 @@ export default function AppliedBids(props) {
   const appliedBidsHeadlines = [
     "Name",
     "Category",
-    "Subcategory",
     "Estimated Time",
     "Freelancer Estimated Budget",
     "Status",
@@ -14,7 +13,7 @@ export default function AppliedBids(props) {
     {
       name: "Name",
       category: "Category",
-      subcategory: "Subcategory",
+      
       estimatedTime: "Estimated Time",
       freelancerEstimatedBudget: "Freelancer Estimated Budget",
       status: "Status",
@@ -22,7 +21,7 @@ export default function AppliedBids(props) {
     {
       name: "Name",
       category: "Category",
-      subcategory: "Subcategory",
+      
       estimatedTime: "Estimated Time",
       freelancerEstimatedBudget: "Freelancer Estimated Budget",
       status: "Status",
@@ -30,7 +29,7 @@ export default function AppliedBids(props) {
     {
       name: "Name",
       category: "Category",
-      subcategory: "Subcategory",
+      
       estimatedTime: "Estimated Time",
       freelancerEstimatedBudget: "Freelancer Estimated Budget",
       status: "Status",
@@ -38,7 +37,7 @@ export default function AppliedBids(props) {
     {
       name: "Name",
       category: "Category",
-      subcategory: "Subcategory",
+      
       estimatedTime: "Estimated Time",
       freelancerEstimatedBudget: "Freelancer Estimated Budget",
       status: "Status",
@@ -46,7 +45,7 @@ export default function AppliedBids(props) {
     {
       name: "Name",
       category: "Category",
-      subcategory: "Subcategory",
+      
       estimatedTime: "Estimated Time",
       freelancerEstimatedBudget: "Freelancer Estimated Budget",
       status: "Status",

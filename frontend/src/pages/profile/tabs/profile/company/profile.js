@@ -19,6 +19,7 @@ export default function Profile(props) {
       [prop]: value,
     });
     console.log("bu formdu:",form)
+    console.log("bu formdu:",form)
   };
 
   const onBlur = async (prop, value) => {
@@ -28,8 +29,6 @@ export default function Profile(props) {
 
   return (
     <>
-<div className="wrapper"> 
-
 
 <div class="container">
  <div className="cards">
@@ -218,7 +217,7 @@ export default function Profile(props) {
 
     </div>
      
-      </div>
+    
     </>
   );
 }

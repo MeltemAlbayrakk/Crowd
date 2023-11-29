@@ -154,22 +154,11 @@ export default function Profile(props) {
 
   const onBlur = async (prop, value) => {
 
-    console.log("onblurdasın")
+    
     try {
-      console.log("try ıcı ")
+      
       const res = await api.user.profile.update("personal", form);
-
-      console.log("onchange diller:",form)
-
-      if (res.status === 201) {
-        console.log("200 döndü",res)
-      }
-      else if (res.status === 404){
-        console.log("200 dönmedi",res)
-      }
-      else{
-        console.log("hata ama ne oldugu bellı degıl")
-      }
+     
     } catch (error) {
       console.log("onblur hatası:",error.message)
     }
@@ -229,22 +218,40 @@ export default function Profile(props) {
   const addAchievement = async () => {
     setLoading(true);
     setActiveAchievementErrors(null);
-    const res = await api.user.profile.achievement
+
+    try {
+      const res = await api.user.profile.achievement
       .add("personal", activeAchievement)
       .catch((err) => {
         setActiveAchievementErrors(err.response.data.errorMessage);
         setLoading(false);
       });
 
-    if (res.id) {
-      setActiveAchievement({
-        ...activeAchievement,
-        headline: "",
-        description: "",
-      });
-      setIsAchievementsCollapsed(true);
-      props.getProfile();
+      console.log("res ne ",res)
+      if(res.status ===201){
+        setActiveAchievement({
+          ...activeAchievement,
+          headline: "",
+          description: "",
+        });
+        setIsAchievementsCollapsed(true);
+        props.getProfile();
+      }
+      else if (res.status ===404){
+        console.log("bbbbbbbbbbbb")
+        alert("This field is required and can not be empty:!!")
+       
+
+      }
+      else{
+        console.log("aaaaaaaaaaa")
+        alert("server error ")
+      }
+    } catch (error) {
+      console.log("profil hatası")
     }
+    
+     
 
     setLoading(false);
   };
@@ -340,10 +347,7 @@ export default function Profile(props) {
 
   return (
     <>
-   <div className="wrapper">
    
-    
-      <div class="">
 
       <div class="container">
       <div className=" cards">
@@ -772,9 +776,7 @@ export default function Profile(props) {
 
       </div>
       </div>
-      </div>
-   
-      </div>
+      
     </>
   );
 }

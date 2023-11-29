@@ -5,24 +5,28 @@ import UserModel from "../models/User.js";
 const addAchievement = async (req,res) =>{
     try {
        
-        const {headline,description} = req.body;
+      const {headline,description} = req.body;
+      const userId = req.session.userId; 
 
-        const userId = req.session.userId; 
-        const achievement = await AchievementModel.create({
-          headline,
-          description,
-          userId 
-        });
-    
-        res.status(201).json({
-          message: 'Achievement information has been added successfully',
-        });
-    
-        const user = await UserModel.findById(userId);
-        user.achievements.push(achievement._id);
-        await user.save();
+
+      const achievement = await AchievementModel.create({
+        headline,
+        description,
+        userId 
+      })  
+      const user = await UserModel.findById(userId);
+      user.achievements.push(achievement._id);
+      await user.save();
+
+      res.status(201).json({
+        message: 'Achievement information has been added successfully',
+      });
+  
+   
+
+     
+
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: 'server error ' });
     }
    

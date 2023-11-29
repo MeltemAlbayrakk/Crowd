@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const EducationSchema = new Schema({
-  school: { type: String, required:false },
+  school: { type: String, required: false },
   section: { type: String, required: false },
   date: { type: String, required: false },
   userId: {
