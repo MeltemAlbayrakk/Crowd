@@ -368,5 +368,37 @@ const addProfilePicture = async(req,res)=>{
     
 }
 
+const beFreelancer= async (req,res)=>{
 
- export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture,addCompanyDetail}
+  try {
+
+    const {profession,description,speciality} = req.body;
+    if (req.session.userId) {
+      const becomeFreelancer = await UserModel.findByIdAndUpdate(req.session.userId,{
+
+          profession:profession,
+          description: description,
+          speciality:speciality,
+
+
+    })
+    if (becomeFreelancer) {
+      res.status(200).json({
+        message: 'becomeFreelancer has been updated successfully',})
+    } else {
+      res.status(404).json({
+        message: 'becomeFreelancernot found or not updated',
+      });
+    }
+
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'İç sunucu hatası' });
+  }
+};
+
+
+ export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,
+  getProfile,checkUser,addProfilePicture,addCompanyDetail,beFreelancer}

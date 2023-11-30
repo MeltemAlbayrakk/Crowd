@@ -16,7 +16,11 @@ const UserSchema = new Schema({
   role: {type:String},
   isFreelancer:{type:Boolean,required:false},
   profilePhoto:{type:String,default:""},
-  
+
+  profession:{type:[Object],required:false},
+  description:{type:String,required:false},
+  speciality:{type:[Object],required:false},
+
 
   companyName:  {type:String,required:false},
   companyWebsite:{type:String,required:false},
@@ -31,7 +35,7 @@ const UserSchema = new Schema({
   companyGoogleUrl:{type:String,required:false},
   companyLinkedinUrl:{type:String,required:false},
 
-
+  applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
   jobs:[{ type: Schema.Types.ObjectId, ref: 'Job' }],
   educations: [{type: Schema.Types.ObjectId,ref: 'Education'}],
   projects:[{ type: Schema.Types.ObjectId, ref: 'Project' }],

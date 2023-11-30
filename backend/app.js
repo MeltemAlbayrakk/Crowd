@@ -9,6 +9,7 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import multer from 'multer';
 import path from 'path';
+import applicantRoute from './src/routes/applicantRoute.js'
 dotenv.config()
 
 const app = express()
@@ -61,6 +62,7 @@ app.use(express.json())
 
 conn()
 
+app.use('/applicant',applicantRoute)
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
 app.use('/uploads',express.static('uploads'));

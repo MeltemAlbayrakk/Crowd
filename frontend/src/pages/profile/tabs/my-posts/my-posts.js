@@ -2,6 +2,7 @@ import Table from "../../../../components/layout/table/table";
 import api from "../../../../services/api";
 import { useState, useEffect } from "react";
 
+import { useParams } from 'react-router-dom';
 import EditBox from "./modals/edit";
 
 export default function MyPosts(props) {
@@ -12,20 +13,18 @@ export default function MyPosts(props) {
   const [deadline, setDeadline] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [subcategory, setSubcategory] = useState("");
   const [title, setTitle] = useState("");
-
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
 
   const appliedMyPostsHeadlines = [
-    "Budget",
-    "Category",
-    "Deadline",
-    "Description",
-    "Status",
-    "Sub Category",
     "Title",
+    "Category",
+    "Description",
+    "Deadline",
+    "Budget",
     "Edit",
+   
   ];
 
   const editRow = (event) => {
@@ -34,29 +33,36 @@ export default function MyPosts(props) {
 
   const [myPosts, setMyPosts] = useState([
     {
-      budget: "",
-      category: "",
-      deadline: "",
-      description: "",
-      status: "",
-      subcategory: "",
       title: "",
+      category: "",
+      description: "",
+      deadline: "",
+      budget: "",
       edit: editRow("Edit"),
     },
   ]);
 
   useEffect(() => {
     const getData = async () => {
-      const resp = await api.job.get("company");
+      const user = await api.user.profile.get(id);
+      const apiResponse = await api.job.get("company");
+      console.log("USERI ID:",user._id)
+      console.log("API Yanıtı:", apiResponse);      
+      const resp = (await api.job.get("company")).filter(job => {
+        console.log("İş sahibi:", job.jobOwnerId);
+        
+        return job.jobOwnerId === user._id;
+    });
+    console.log("Filtrelenmiş İş Verisi:", resp);
+     
 
       const data = resp.map((item) => ({
-        budget: item.budget,
-        category: item.category,
-        deadline: item.deadline,
-        description: item.description,
-        status: item.status,
-        subcategory: item.subCategory,
         title: item.title,
+        category: item.category,
+        description: item.description,
+        deadline: item.deadline,
+        budget: item.budget,
+     
         edit: editRow("Edit"),
       }));
 
@@ -74,15 +80,16 @@ export default function MyPosts(props) {
         edit={"Edit"}
         editBoxVisibility={editBoxVisibility}
         setEditBoxVisibility={setEditBoxVisibility}
+        title={setTitle}
         budget={setBudget}
         category={setCategory}
         deadline={setDeadline}
         description={setDescription}
-        status={setStatus}
-        subcategory={setSubcategory}
-        title={setTitle}
+    
+        
         loading={loading}
       />
+    
     </div>
   );
 }
