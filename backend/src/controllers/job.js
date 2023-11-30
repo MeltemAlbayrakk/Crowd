@@ -5,6 +5,7 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
+        const userId= req.session.userId;
         const {title,description,budget,deadline,category,} = req.body;
 
 
@@ -14,7 +15,8 @@ const add= async (req,res)=>{
         description:description,
         category:category,
         budget:budget,
-        deadline:deadline
+        deadline:deadline,
+        jobOwnerId:userId
         });
 
     if (addJobDetail) {

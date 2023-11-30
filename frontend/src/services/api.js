@@ -195,6 +195,15 @@ applicant:{
       );
       return response.data;
     }
+  },
+  async delete(type, id) {
+    if (type === "company") {
+      const response = await instance.post(
+        "/applicant/delete/"+ id,
+        {withCredentials: true},
+      );
+      return response.data;
+    }
   }
 }
 
