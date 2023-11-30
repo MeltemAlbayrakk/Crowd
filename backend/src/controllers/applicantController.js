@@ -2,7 +2,7 @@ import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
 
 
-const add= async(req,res)=>{
+const addApplicant= async(req,res)=>{
 try {
      const {selectedJob,offer}= req.body;
     const userId= req.session.userId;
@@ -32,4 +32,24 @@ try {
    
 }
 
-export{add}
+
+const deleteApplicant= async (req,res)=>{
+    try {
+         const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);
+        
+        const user = await UserModel.findById(req.session.userId)
+        if(user){
+        user.applicants = user.applicants.filter(AppId=>AppId.toString() !== req.params.id)
+        await user.save();
+        }
+    
+    if(!deletedApplicant){
+        return res.status(204).send("no data to delete was found");
+    }
+    return res.status(200).send("Applicant information deleted successfully");
+    } catch (error) {
+        return res.status(500).send("Server error")
+    }
+       
+    }
+    export{addApplicant,deleteApplicant}

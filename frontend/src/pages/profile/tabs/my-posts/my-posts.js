@@ -1,11 +1,18 @@
 import Table from "../../../../components/layout/table/table";
 import api from "../../../../services/api";
 import { useState, useEffect } from "react";
+import JobPosting from "../job-posting/job-posting";
 
 import EditBox from "./modals/edit";
+import DetailBox from "./modals/detail";
 
 export default function MyPosts(props) {
   const [editBoxVisibility, setEditBoxVisibility] = useState(false);
+  const [detailBoxVisibility , setDetailBoxVisibility]=useState(false);
+
+  const [firstName,setFirstName]= useState("");
+    const [lastName,setlastName]= useState("");
+
 
   const [budget, setBudget] = useState("");
   const [category, setCategory] = useState("");
@@ -27,8 +34,13 @@ export default function MyPosts(props) {
   ];
 
   const editRow = (event) => {
-    return <button onClick={() => setEditBoxVisibility(true)}>Edit</button>;
+    return <button onClick={() => setEditBoxVisibility(true)}>Delete</button>;
   };
+  const detailRow = (event) => {
+    return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
+  };
+
+ 
 
   const [myPosts, setMyPosts] = useState([
     {
@@ -40,6 +52,7 @@ export default function MyPosts(props) {
    
       title: "",
       edit: editRow("Edit"),
+      detail:detailRow("Detail")
     },
   ]);
 
@@ -56,6 +69,7 @@ export default function MyPosts(props) {
         
         title: item.title,
         edit: editRow("Edit"),
+        detail:detailRow("Detail"),
       }));
 
       setMyPosts(data);
@@ -64,22 +78,48 @@ export default function MyPosts(props) {
     getData();
   }, []);
 
+  const deleteApplicant = async (id) => {
+    setLoading(true);
+    await api.user.profile.applicant.delete("company", id);
+    props.getProfile();
+    setLoading(false);
+  };
+
+  
   return (
+   
     <div className="my__posts">
       <div className="title">My Posts</div>
       {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
+      <div className="wrapper">
+       <div class="container">
+        <div class= "profile__right">
+          
+          
       <EditBox
-        edit={"Edit"}
+        edit={"Delete"}
         editBoxVisibility={editBoxVisibility}
-        setEditBoxVisibility={setEditBoxVisibility}
-        budget={setBudget}
-        category={setCategory}
-        deadline={setDeadline}
-        description={setDescription}
+        setEdittBoxVisibility={setEditBoxVisibility}
+
+        
+      
+        />
+       
+<DetailBox
+        detail={"Detail"}
+        detailBoxVisibility={detailBoxVisibility}
+        setDetailBoxVisibility={setDetailBoxVisibility}
+        firstName={setFirstName}
+        lastName={setlastName}
+      
     
-        title={setTitle}
         loading={loading}
       />
+    </div>
+    </div>
+    </div>
+
+
     </div>
   );
 }

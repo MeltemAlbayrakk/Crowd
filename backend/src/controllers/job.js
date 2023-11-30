@@ -63,6 +63,8 @@ const search = async (req,res)=>{
       throw new Error('Job search error: ' + error.message);
     }
 
-}
+
+
+};
 
 export {add,get,search}

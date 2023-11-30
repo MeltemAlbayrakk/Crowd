@@ -310,9 +310,6 @@ export default function Profile(props) {
   };
 
  
-
-  
- 
   useEffect(() => {
     getProfile1();
   }, []);
