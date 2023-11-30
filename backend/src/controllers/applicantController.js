@@ -6,6 +6,7 @@ const addApplicant= async(req,res)=>{
 try {
      const {selectedJob,offer}= req.body;
     const userId= req.session.userId;
+    console.log(selectedJob)
     const user= await UserModel.findById(userId);
 
    
@@ -16,6 +17,7 @@ try {
         user:userId,
         job:selectedJob,
         offer:offer,
+        
         
     })
     
@@ -32,15 +34,22 @@ try {
    
 }
 
-
+//buna ihtiyac yok reddetme kısmında silme işlemi yapılcak
 const deleteApplicant= async (req,res)=>{
     try {
+        console.log("paraa:",req.params.id)
          const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);
-        
+         console.log("denemee2",deletedApplicant)
+
         const user = await UserModel.findById(req.session.userId)
+        console.log("denemee3:")
+
         if(user){
         user.applicants = user.applicants.filter(AppId=>AppId.toString() !== req.params.id)
+        console.log("denemee4",user.applicants)
         await user.save();
+        console.log("denemee5")
+
         }
     
     if(!deletedApplicant){

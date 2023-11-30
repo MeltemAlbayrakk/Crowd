@@ -65,10 +65,8 @@ export default function MyPosts(props) {
         category: item.category,
         deadline: item.deadline,
         description: item.description,
- 
-        
         title: item.title,
-        edit: editRow("Edit"),
+        edit: deleteRow(item._id),
         detail:detailRow("Detail"),
       }));
 
@@ -78,12 +76,16 @@ export default function MyPosts(props) {
     getData();
   }, []);
 
-  const deleteApplicant = async (id) => {
+  const deleteJob = async (id) => {
     setLoading(true);
-    await api.user.profile.applicant.delete("company", id);
-    props.getProfile();
-    setLoading(false);
+    console.log("id degeri:",id)
+    await api.job.delete("company", id);
+/*     props.getProfile();
+ */    setLoading(false);
   };
+  const deleteRow = (id) => {
+    return <button onClick={() => deleteJob(id)}>Delete</button>;
+};
 
   
   return (

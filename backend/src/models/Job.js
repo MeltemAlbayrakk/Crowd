@@ -9,6 +9,8 @@ const JobSchema = new Schema({
     budget:{type:String,required:false},
     deadline:{type:String,required:false},
     status:{type:Boolean,required:false},
+    jobOwnerId:{type:String,required:false},
+
 
     applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
 

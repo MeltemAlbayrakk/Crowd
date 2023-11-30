@@ -36,7 +36,6 @@ const deleteAchievement = async (req, res) => {
     try {
       
       const deletedAchievement = await AchievementModel.findByIdAndDelete(req.params.id);
-  
       const user = await UserModel.findById(req.session.userId)
       if(user){
         user.achievements = user.achievements.filter(AchId => AchId.toString() !== req.params.id);
