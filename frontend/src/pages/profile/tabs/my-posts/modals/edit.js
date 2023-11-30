@@ -1,4 +1,8 @@
 import { useState } from "react";
+import Table from "../../../../../components/layout/table/table";
+import React, { useEffect } from 'react';
+
+import api from "../../../../../services/api";
 
 export default function EditBox(props) {
   const {
@@ -21,21 +25,77 @@ export default function EditBox(props) {
     setTitle,
   } = props;
 
+
+  const appliedMyPostsHeadlines = [
+    "Budget",
+    "Category",
+    "Deadline",
+    "Description",
+    
+    "Title",
+  
+  ];
+  const editRow = (event) => {
+    return <button onClick={() => setEditBoxVisibility(true)}>Edit</button>;
+  };
+  const [myPosts, setMyPosts] = useState([
+    {
+      budget: "",
+      category: "",
+      deadline: "",
+      description: "",
+ 
+   
+      title: "",
+  
+     
+    },
+  ]);
+  useEffect(() => {
+    const getData = async () => {
+      const resp = await api.job.get("company");
+
+      const data = resp.map((item) => ({
+        budget: item.budget,
+        category: item.category,
+        deadline: item.deadline,
+        description: item.description,
+ 
+        
+        title: item.title,
+       
+       
+      }));
+
+      setMyPosts(data);
+    };
+
+    getData();
+  }, []);
+
   return (
+   
+    
+    <div class= "profile__right">
+  <div className="container">
     <div
       className={editBoxVisibility ? "modal editBox active" : "editBox modal"}
       id="editBox"
     >
-      <div className="container">
-        <a
+      <div className="wrapper">
+      <div className="my__posts">
+      <div className="title">Edit sayfasÄ±</div>
+      <a
           className="close"
+
           onClick={() => {
             setEditBoxVisibility(false);
           }}
         >
           X
         </a>
-        <a className="logo">Edit</a>
+        {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
+        {/* <a className="logo">Edit</a>
         <form onSubmit={edit}></form>
         <div>
           <label>Budget</label>
@@ -92,8 +152,13 @@ export default function EditBox(props) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-        </div>
-      </div>
+        </div>*/}
+      </div> 
     </div>
+    </div>
+    </div>
+    </div>
+   
+    
   );
 }

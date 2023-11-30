@@ -2,7 +2,12 @@ import Select from "react-select";
 import api from "../../../../services/api";
 import { useState } from "react";
 
+import { useParams } from 'react-router-dom';
+
 export default function JobPosting(props) {
+
+  const { id } = useParams();
+
 
   const categoryOptions = [
     {
@@ -40,21 +45,25 @@ export default function JobPosting(props) {
     category: "",
     budget: "",
     deadline: "",
+    jobOwnerId:""
   });
 
   const [activeJobPostingErrors, setActivejobPostingErrors] = useState(null);
 
-  const onChange = async (prop, value) => {
-    setForm({
-      ...form,
-      [prop]: value,
-    });
-  };
+ 
 
   const jobPosting = async () => {
     setLoading(true);
     setActivejobPostingErrors(null);
    
+    const user = await api.user.profile.get(id)
+    console.log("user",user._id)
+    
+    setForm({
+      jobOwnerId:user._id
+    }
+    )
+    console.log("bu formdur:",form.jobOwnerId)
     const res = await api.job.add("company", form).catch((err) => {
       setActivejobPostingErrors(err.response.data.errorMessage);
       setLoading(false);
@@ -67,11 +76,24 @@ export default function JobPosting(props) {
         category: "",
         budget: "",
         deadline: "",
+      
       });
     }
     setLoading(false);
   };
 
+  const onChange = async (prop, value) => {
+
+  
+    setForm({
+      ...form,
+      
+      [prop]: value,
+
+    });
+    
+
+  };
   return (
     <div className="job__posting">
       <div className="job__posting__header title">Job Posting</div>

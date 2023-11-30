@@ -5,8 +5,7 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const userId= req.session.userId;
-        const {title,description,budget,deadline,category,} = req.body;
+        const {title,description,budget,deadline,category,jobOwnerId} = req.body;
 
 
         if (req.session.userId) {
@@ -16,7 +15,7 @@ const add= async (req,res)=>{
         category:category,
         budget:budget,
         deadline:deadline,
-        jobOwnerId:userId
+        jobOwnerId:jobOwnerId
         });
 
     if (addJobDetail) {
@@ -65,6 +64,28 @@ const search = async (req,res)=>{
       throw new Error('Job search error: ' + error.message);
     }
 
+
+
+};
+
+const deleteJob = async (req,res)=>{
+  try {
+    console.log("paraa:",req.params.id)
+    const deletedJob = await JobModel.findByIdAndDelete(req.params.id);
+    console.log("denemee2",deletedJob)
+
+   const user = await UserModel.findById(req.session.userId)
+   console.log("denemee3:")
+
+   if(user){
+   user.jobs = user.jobs.filter(JobId=>JobId.toString() !== req.params.id)
+   console.log("denemee4",user.jobs)
+   await user.save();
+
+   }
+  } catch (error) {
+    
+  }
 }
 
-export {add,get,search}
+export {add,get,search,deleteJob}
