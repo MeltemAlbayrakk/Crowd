@@ -12,5 +12,4 @@ router.route("/delete/:id").get(job.deleteJob);
 
 
 
-
 export default router

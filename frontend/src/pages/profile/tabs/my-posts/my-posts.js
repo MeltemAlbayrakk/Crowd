@@ -2,9 +2,9 @@ import Table from "../../../../components/layout/table/table";
 import api from "../../../../services/api";
 import { useState, useEffect } from "react";
 import JobPosting from "../job-posting/job-posting";
-
-import EditBox from "./modals/edit";
-import DetailBox from "./modals/detail";
+import { useParams } from 'react-router-dom';
+import EditBox from "./modals/edit.js";
+import DetailBox from "./modals/detail.js";
 
 export default function MyPosts(props) {
   const [editBoxVisibility, setEditBoxVisibility] = useState(false);
@@ -20,16 +20,19 @@ export default function MyPosts(props) {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [title, setTitle] = useState("");
-
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
 
   const appliedMyPostsHeadlines = [
-    "Budget",
-    "Category",
-    "Deadline",
-    "Description",
-    
     "Title",
+    "Category",
+    "Description",
+   
+
+    "Deadline",
+
+    "Budget",
+ 
     "Edit",
   ];
 
@@ -43,14 +46,16 @@ export default function MyPosts(props) {
  
 
   const [myPosts, setMyPosts] = useState([
-    {
-      budget: "",
-      category: "",
+    {  title: "",
+    category: "",
+    description: "",
+    
+      
       deadline: "",
-      description: "",
- 
+     
+      budget: "",
    
-      title: "",
+    
       edit: editRow("Edit"),
       detail:detailRow("Detail")
     },
@@ -58,14 +63,24 @@ export default function MyPosts(props) {
 
   useEffect(() => {
     const getData = async () => {
-      const resp = await api.job.get("company");
+
+      // const user = await api.user.profile.get(id);
+      const resp = (await api.job.get("company"))
+      // .filter(job => {
+      //   console.log("owner id",job.jobOwnerId)
+      //   return job.jobOwnerId === user._id;
+   
+   
 
       const data = resp.map((item) => ({
-        budget: item.budget,
-        category: item.category,
-        deadline: item.deadline,
-        description: item.description,
         title: item.title,
+        category: item.category,
+        description: item.description,
+        
+        
+        deadline: item.deadline,
+        budget: item.budget,
+       
         edit: deleteRow(item._id),
         detail:detailRow("Detail"),
       }));
@@ -93,8 +108,7 @@ export default function MyPosts(props) {
     <div className="my__posts">
       <div className="title">My Posts</div>
       {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
-      <div className="wrapper">
-       <div class="container">
+      
         <div class= "profile__right">
           
           
@@ -119,9 +133,9 @@ export default function MyPosts(props) {
       />
     </div>
     </div>
-    </div>
+   
 
 
-    </div>
+
   );
 }

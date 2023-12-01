@@ -196,9 +196,7 @@ export default {
           return response.data;
         }
       }
-     
-    },
-     
+      },
 applicant:{
   async add(type, payload) {
     if (type === "personal") {
@@ -211,7 +209,7 @@ applicant:{
   },
   async delete(type, id) {
     if (type === "company") {
-      const response = await instance.get(
+      const response = await instance.post(
         "/applicant/delete/"+ id,
         {withCredentials: true},
       );

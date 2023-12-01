@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import Table from "../../../../../components/layout/table/table";
 import React, { useEffect } from 'react';

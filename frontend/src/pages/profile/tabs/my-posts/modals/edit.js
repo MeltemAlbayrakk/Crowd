@@ -84,7 +84,7 @@ export default function EditBox(props) {
     >
       <div className="wrapper">
       <div className="my__posts">
-      <div className="title">Edit sayfası</div>
+      <div className="title">Edit sayfasÄ±</div>
       <a
           className="close"
 

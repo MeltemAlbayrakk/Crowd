@@ -60,8 +60,8 @@ export default function JobPosting(props) {
     console.log("user",user._id)
     
     setForm({
-      jobOwnerId:user._id,}
-      
+      jobOwnerId:user._id
+    }
     )
     console.log("bu formdur:",form.jobOwnerId)
     const res = await api.job.add("company", form).catch((err) => {

@@ -10,8 +10,6 @@ const JobSchema = new Schema({
     deadline:{type:String,required:false},
     status:{type:Boolean,required:false},
     jobOwnerId:{type:String,required:false},
-
-
     applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
 
 
@@ -19,5 +17,5 @@ const JobSchema = new Schema({
  
 
 
-const JobModel = mongoose.model('job', JobSchema);
+const JobModel = mongoose.model('Job', JobSchema);
 export default JobModel;

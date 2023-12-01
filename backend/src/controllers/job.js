@@ -81,7 +81,6 @@ const deleteJob = async (req,res)=>{
    user.jobs = user.jobs.filter(JobId=>JobId.toString() !== req.params.id)
    console.log("denemee4",user.jobs)
    await user.save();
-   console.log("denemee5")
 
    }
   } catch (error) {

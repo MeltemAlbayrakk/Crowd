@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import DetailBox from "./modals/detail";
 
 export default function MyPostDetail(props) {
-  
+
   const [detailBoxVisibility , setDetailBoxVisibility]=useState(false);
 
   const [firstName,setFirstName]= useState("");
@@ -18,11 +18,11 @@ export default function MyPostDetail(props) {
   const appliedMyPostDetailsHeadlines = [
     "FirstName",
     "LastName",
-   
+
     "Detail",
   ];
 
-  
+
   const detailRow = (event) => {
     return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
   };
@@ -33,7 +33,7 @@ export default function MyPostDetail(props) {
     {
       firstName: "",
       lastName: "",
-    
+
       detail:detailRow("Detail")
     },
   ]);
@@ -45,7 +45,7 @@ export default function MyPostDetail(props) {
       const data = resp.map((item) => ({
         firstName: item.firstName,
         lastName: item.lastName,
-        
+
         detail:detailRow("Detail"),
       }));
 
@@ -56,14 +56,14 @@ export default function MyPostDetail(props) {
   }, []);
 
   return (
-   
+
     <div className="myPostDetail">
       <div className="title">My Post Detail</div>
-    
+
       <div className="wrapper">
        <div class="container">
         <div class= "profile__right">
-          
+
 
 <DetailBox
         detail={"Detail"}
@@ -72,8 +72,8 @@ export default function MyPostDetail(props) {
        Table= {<Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />}
         firstName={setFirstName}
         lastName={setlastName}
-      
-    
+
+
         loading={loading}
       />
     </div>
