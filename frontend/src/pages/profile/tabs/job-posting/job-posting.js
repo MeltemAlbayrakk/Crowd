@@ -45,7 +45,6 @@ export default function JobPosting(props) {
     category: "",
     budget: "",
     deadline: "",
-    jobOwnerId:""
   });
 
   const [activeJobPostingErrors, setActivejobPostingErrors] = useState(null);
@@ -56,12 +55,12 @@ export default function JobPosting(props) {
     setLoading(true);
     setActivejobPostingErrors(null);
    
-    const user = await api.user.profile.get(id)
+    //const user = await api.user.profile.get(id)
     
-    setForm({
-      jobOwnerId:user._id
-    }
-    )
+    // setForm({
+    //   jobOwnerId:user._id
+    // }
+    // )
     const res = await api.job.add("company", form).catch((err) => {
       setActivejobPostingErrors(err.response.data.errorMessage);
       setLoading(false);
@@ -74,7 +73,6 @@ export default function JobPosting(props) {
         category: "",
         budget: "",
         deadline: "",
-      
       });
     }
     setLoading(false);
