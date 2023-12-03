@@ -31,7 +31,21 @@ const addApplicant= async(req,res)=>{
     
    
 }
+const get = async (req,res)=>{
+    try {
+        const applicant = await ApplicantModel.find()
+      if(applicant){
+        res.status(200).json(applicant)
+      }else{
+        res.status(404).json("işleri alırken hata çıktı")
+      }
+       
+      } catch (error) {
+        throw new Error('Error fetching jobs: ' + error.message);
+      }
+    
 
+    }
 const deleteApplicant= async (req,res)=>{
 try {
      const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);
@@ -51,4 +65,4 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant}
+export{addApplicant,get,deleteApplicant}

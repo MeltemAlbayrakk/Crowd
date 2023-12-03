@@ -182,6 +182,12 @@ export default {
           return response.data;
         }
       },
+      // async get(id) {
+      //   if (type === "company") {
+      //     const response = await instance.get("/job/${id}", payload,{withCredentials: true});
+      //     return response.data;
+      //   }
+      // },
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -204,6 +210,12 @@ applicant:{
         "/applicant/",
         payload,{withCredentials: true},
       );
+      return response.data;
+    }
+  },
+  async get(type, payload) {
+    if (type === "company") {
+      const response = await instance.get("/applicant/", payload,{withCredentials: true});
       return response.data;
     }
   },

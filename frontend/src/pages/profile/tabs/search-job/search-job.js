@@ -75,7 +75,7 @@ export default function SearchJob(props) {
                   <span>{job?.description}</span>
                 </div>
 
-              <input type="text" />
+              <input type="text" placeholder="Teklifte bulun :  "/>
               <button className={loading ? "loading" : undefined}>
                 APPLY
               </button>

@@ -4,22 +4,44 @@ import React, { useEffect } from 'react';
 
 import api from "../../../../../services/api";
 
-export default function DetailBox(props) {
+export function CrowdIsDetay() {
+  const [offer, setOffer] = useState('');
+  const [job, setJob] = useState({});
+
+  useEffect(() => {
+      async function get(id){
+          const data = await api.job.get(id);
+          setJob(data.data);
+      }
+      get();
+  }, []);
+}
+
+
+export default function  DetailBox(props) {
   const {
     detail,
     detailBoxVisibility,
     setDetailBoxVisibility,
     firstName,
     setFirstName,
-   lastName,
-    setLastName
+    lastName,
+    setLastName,
+    title,
+    setTitle,
+    category,
+    setCategory
     
   
   } = props;
 
   const appliedMyPostDetailsHeadlines = [
+    "Title",
+    "Category",
     "FirstName",
     "LastName",
+
+    
    
   
   ];
@@ -30,6 +52,8 @@ export default function DetailBox(props) {
 
   const [myPostDetail, setMyPostDetail] = useState([
     {
+      title:"",
+      category:"",
       firstName: "",
       lastName: "",
     
@@ -37,11 +61,15 @@ export default function DetailBox(props) {
     },
   ]);
 
+  
+
   useEffect(() => {
     const getData = async () => {
       const resp = await api.job.get("company");
 
       const data = resp.map((item) => ({
+        title: item.title,
+        category:item.category,
         firstName: item.firstName,
         lastName: item.lastName,
         
@@ -54,18 +82,25 @@ export default function DetailBox(props) {
     getData();
   }, []);
 
+  const selectedJobDetail = myPostDetail.find((item) => item.title === title);
   return (
    
-    <div class= "profile__right">
-  <div className="container">
+  
    
     <div
       className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
       id="detailBox"
     >
-      <div className="wrapper">
+      
+      <div class="wrapper">
+    <div class="content">
+      <div class="container-profile">
+    <div class= "profile__right">
+  <div class="container">
+  <div class="content-profile"></div>
+  
       <div className="my__posts">
-    <div className="title">My Post Detay</div>
+      <div className="title">{selectedJobDetail?.title}</div>
         <a
           className="close"
 
@@ -102,7 +137,8 @@ export default function DetailBox(props) {
     </div>
     </div>
     </div>
-   
+    </div>
+    </div>
    
     
   );
