@@ -17,9 +17,9 @@ export default function SearchJob(props) {
       let searchData = null;
 
       if (searchString === "") {
-        searchData = await api.job.get("company");
+        searchData = await api.job.getall("company");
       } else {
-        searchData = await api.job.get("company");
+        searchData = await api.job.getall("company");
         searchData = searchData.filter((job) =>
           job.title.toLowerCase().includes(searchString)
         );

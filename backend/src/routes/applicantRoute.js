@@ -5,5 +5,7 @@ const router= express.Router();
 
 router.route("/").post(applicantController.addApplicant);
 router.route("/delete/:id").post(applicantController.deleteApplicant)
+router.route("/details/:id").get(applicantController.details);
+
 
 export default router

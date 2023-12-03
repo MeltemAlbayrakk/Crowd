@@ -51,6 +51,24 @@ const get = async (req,res)=>{
     
 
 }
+
+const getall = async (req,res)=>{
+  
+  try {
+        const job = await JobModel.find({})
+      if(job){
+        res.status(200).json(job)
+      }else{
+        res.status(404).json("işleri alırken hata çıktı")
+      }
+       
+      } catch (error) {
+        throw new Error('Error fetching jobs: ' + error.message);
+      }
+    
+
+}
+
 const search = async (req,res)=>{
   try {
     const title=req.body
@@ -72,6 +90,9 @@ const search = async (req,res)=>{
 
 };
 
+
+
+
 const deleteJob = async (req,res)=>{
   try {
     console.log("paraa:",req.params.id)
@@ -92,4 +113,4 @@ const deleteJob = async (req,res)=>{
   }
 }
 
-export {add,get,search,deleteJob}
+export {add,get,search,deleteJob,getall}

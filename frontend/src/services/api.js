@@ -180,6 +180,15 @@ export default {
           return response.data;
         }
       },
+      async getall(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+
+
+
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -193,8 +202,21 @@ export default {
           );
           return response.data;
         }
-      }
       },
+      async jobdetails(type, id) {
+        if (type === "company") {
+          const response = await instance.get(
+            "/applicant/details/"+ id,
+            {withCredentials: true},
+          );
+          return response.data;
+        }
+      }
+
+      },
+
+
+
 applicant:{
   async add(type, payload) {
     if (type === "personal") {

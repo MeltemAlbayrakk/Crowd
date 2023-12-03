@@ -20,7 +20,8 @@ export default function DetailBox(props) {
   const appliedMyPostDetailsHeadlines = [
     "FirstName",
     "LastName",
-   
+    "budget",
+    
   
   ];
   const detailRow = (event) => {

@@ -18,7 +18,7 @@ export default function MyPostDetail(props) {
   const appliedMyPostDetailsHeadlines = [
     "FirstName",
     "LastName",
-
+    "budget",
     "Detail",
   ];
 
@@ -33,7 +33,7 @@ export default function MyPostDetail(props) {
     {
       firstName: "",
       lastName: "",
-
+      offer:"",
       detail:detailRow("Detail")
     },
   ]);
@@ -45,7 +45,7 @@ export default function MyPostDetail(props) {
       const data = resp.map((item) => ({
         firstName: item.firstName,
         lastName: item.lastName,
-
+        offer:item.offer,
         detail:detailRow("Detail"),
       }));
 
@@ -70,8 +70,8 @@ export default function MyPostDetail(props) {
         detailBoxVisibility={detailBoxVisibility}
         setDetailBoxVisibility={setDetailBoxVisibility}
        Table= {<Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />}
-        firstName={setFirstName}
-        lastName={setlastName}
+        //firstName={setFirstName}
+        //lastName={setlastName}
 
 
         loading={loading}

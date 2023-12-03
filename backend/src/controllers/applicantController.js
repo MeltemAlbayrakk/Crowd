@@ -51,4 +51,38 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant}
+
+const details = async (req,res)=>{
+    try {
+
+        console.log(req.params.id+" detailsss")
+      const applicant = await ApplicantModel.findOne({job:req.params.id});
+      console.log(applicant.user+"deneme")
+      
+      const user=await UserModel.findOne({_id:applicant.user})
+
+      console.log(user.firstName)
+      
+      
+      
+      if(user){
+        res.status(200).json(user)
+      }else {
+        res.status(404).json({
+          message: 'Job details not found or not updated',
+        });
+      }
+  
+      } catch (error) {
+        throw new Error('Job search error: ' + error.message);
+      }
+  
+  
+  
+  };
+  
+
+
+
+
+export{addApplicant,deleteApplicant,details}
