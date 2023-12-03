@@ -3,8 +3,8 @@ import api from "../../../../services/api";
 import { useState, useEffect } from "react";
 import JobPosting from "../job-posting/job-posting";
 import { useParams } from 'react-router-dom';
-import EditBox from "./modals/edit.js";
-import DetailBox from "./modals/detail.js";
+import EditBox from "./modals/edit";
+import DetailBox from "./modals/detail";
 
 export default function MyPosts(props) {
   const [editBoxVisibility, setEditBoxVisibility] = useState(false);

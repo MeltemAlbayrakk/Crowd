@@ -5,9 +5,10 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const {title,description,budget,deadline,category,jobOwnerId} = req.body;
+        const {title,description,budget,deadline,category} = req.body;
 
 
+console.log
         if (req.session.userId) {
         const addJobDetail = await JobModel.create({
         title:title,
@@ -15,7 +16,7 @@ const add= async (req,res)=>{
         category:category,
         budget:budget,
         deadline:deadline,
-        jobOwnerId:jobOwnerId
+        jobOwnerId:req.session.userId
         });
 
     if (addJobDetail) {
@@ -33,8 +34,11 @@ const add= async (req,res)=>{
   }
 }
 const get = async (req,res)=>{
-    try {
-        const job = await JobModel.find()
+  const jobOwnerId=req.session.userId 
+  
+  console.log("job get  : " + jobOwnerId)
+  try {
+        const job = await JobModel.find({jobOwnerId:jobOwnerId})
       if(job){
         res.status(200).json(job)
       }else{
@@ -50,7 +54,7 @@ const get = async (req,res)=>{
 const search = async (req,res)=>{
   try {
     const title=req.body
-    const job = await JobModel.find({title:title.title});
+    const job = await JobModel.findOne({title:title.title});
     console.log(job)
     if(job){
       res.status(200).json(job)
