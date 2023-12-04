@@ -23,6 +23,9 @@
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
 
+    const [selectedJobId, setSelectedJobId] = useState(null); // Seçilen işin kimliği
+
+
     const appliedMyPostsHeadlines = [
       "Title",
       "Category",
@@ -114,6 +117,7 @@
     return (
       <button
         onClick={() => {
+          setSelectedJobId(id)
           detailJob(id);
           setDetailBoxVisibility(true);
         }}
@@ -150,6 +154,8 @@
         
       
           loading={loading}
+          jobId={selectedJobId} // Seçilen işin kimliğini detay kutusuna aktar
+
         />
       </div>
       </div>
