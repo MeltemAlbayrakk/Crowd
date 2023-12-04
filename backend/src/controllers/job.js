@@ -6,7 +6,7 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const {title,description,budget,deadline,category,jobOwnerId} = req.body;
+        const {title,description,budget,deadline,category} = req.body;
 
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
@@ -18,7 +18,7 @@ const add= async (req,res)=>{
         category:category,
         budget:budget,
         deadline:deadline,
-        jobOwnerId:jobOwnerId
+        jobOwnerId:req.session.userId
         });
 
         user.jobs.push(addJobDetail._id);

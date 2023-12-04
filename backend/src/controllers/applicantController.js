@@ -1,5 +1,6 @@
 import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
+import JobModel from "../models/Job.js";
 
 
 const addApplicant= async(req,res)=>{
@@ -7,7 +8,8 @@ const addApplicant= async(req,res)=>{
         const {selectedJob,offer}= req.body;
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
-
+        const job = await JobModel.findById(selectedJob._id)
+       
     
         console.log("yazılımcı teklifi",offer,"bide iş:",selectedJob)
 
@@ -20,8 +22,10 @@ const addApplicant= async(req,res)=>{
         })
         
         user.applicants.push(applicant._id);
+        job.applicants.push(applicant._id);
         await applicant.save();
         await user.save();
+        await job.save();
         res.status(200).json({message:'applicant successfully'})
 
     } catch (error) {
