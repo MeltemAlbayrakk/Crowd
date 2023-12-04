@@ -56,13 +56,17 @@ export default function DetailBox(props) {
 
   return (
    
-    <div class= "profile__right">
-  <div className="container">
-   
+    <div class="content"> 
     <div
       className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
       id="detailBox"
     >
+       
+    
+    <div class="container profile">
+    {/* <div class= "profile__right">
+  <div className="container">
+  <div class="content-profile"> */}
       <div className="wrapper">
       <div className="my__posts">
     <div className="title">My Post Detay</div>
