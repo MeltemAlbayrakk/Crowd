@@ -1,15 +1,15 @@
 import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
-
+import JobModel from "../models/Job.js";
 
 const addApplicant= async(req,res)=>{
     try {
         const {selectedJob,offer}= req.body;
         const userId= req.session.userId;
-        const user= await UserModel.findById(userId);
+        //const user= await UserModel.findById(userId);
 
-    
-        console.log("yazılımcı teklifi",offer,"bide iş:",selectedJob)
+    console.log("addaplicant userid : "+ userId)
+        //console.log("yazılımcı teklifi "+offer,"bide iş: "+ selectedJob)
 
 
         const applicant = await ApplicantModel.create({
@@ -18,11 +18,24 @@ const addApplicant= async(req,res)=>{
             offer:offer,
             
         })
-        
-        user.applicants.push(applicant._id);
-        await applicant.save();
+
+
+        res.status(201).json({
+          message: 'applicant has been added successfully',
+        });
+        //await applicant.save();
+        const user = await UserModel.findById(userId);
+
+        await user.applicants.push(applicant._id);
+
+
         await user.save();
-        res.status(200).json({message:'applicant successfully'})
+
+        const job=await JobModel.findById(applicant.job)
+        await job.applicants.push(applicant._id);
+        await job.save();
+
+
 
     } catch (error) {
         console.error(error);
