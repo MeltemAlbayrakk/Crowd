@@ -206,6 +206,9 @@ applicant:{
       return response.data;
     }
   },
+  async get(type,id){
+
+  },
   async delete(type, id) {
     if (type === "company") {
       const response = await instance.post(
