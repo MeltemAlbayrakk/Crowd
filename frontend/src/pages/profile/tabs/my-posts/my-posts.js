@@ -39,7 +39,7 @@ export default function MyPosts(props) {
   const editRow = (event) => {
     return <button onClick={() => setEditBoxVisibility(true)}>Delete</button>;
   };
-  const detailRow = (event) => {
+  const detailrow = (event) => {
     return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
   };
 
@@ -57,7 +57,7 @@ export default function MyPosts(props) {
    
     
       edit: editRow("Edit"),
-      detail:detailRow("Detail")
+      detail:detailrow("Detail")
     },
   ]);
 
@@ -82,7 +82,7 @@ export default function MyPosts(props) {
         budget: item.budget,
        
         edit: deleteRow(item._id),
-        detail:detailRow("Detail"),
+        detail:detailRow(item.id),
       }));
 
       setMyPosts(data);
@@ -98,9 +98,32 @@ export default function MyPosts(props) {
 /*     props.getProfile();
  */    setLoading(false);
   };
+
+  const detailJob = async (id) => {
+    setLoading(true);
+    console.log("id  details degeri:",id)
+    await api.job.jobdetails("company", id);
+/*     props.getProfile();
+ */    setLoading(false);
+  };
   const deleteRow = (id) => {
     return <button onClick={() => deleteJob(id)}>Delete</button>;
 };
+const detailRow = (id) => {
+  return (
+    <button
+      onClick={() => {
+        detailJob(id);
+        setDetailBoxVisibility(true);
+      }}
+    >
+      detail
+    </button>
+  );
+};
+
+
+
 
   
   return (
@@ -125,7 +148,7 @@ export default function MyPosts(props) {
         detail={"Detail"}
         detailBoxVisibility={detailBoxVisibility}
         setDetailBoxVisibility={setDetailBoxVisibility}
-        firstName={setFirstName}
+       firstName={setFirstName}
         lastName={setlastName}
       
     
