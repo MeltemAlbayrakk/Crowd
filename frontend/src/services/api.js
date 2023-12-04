@@ -235,7 +235,26 @@ applicant:{
       );
       return response.data;
     }
+  },
+  async setStatus(type, id, status) {
+    if (type === "company") {
+      try {
+        const response = await instance.post(
+          `/applicant/setstatus/${id}`,
+          { status },
+          { withCredentials: true }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error setting status:", error);
+        throw error;
+      }
+    }
   }
+  
+
+
+
 }
 
 };

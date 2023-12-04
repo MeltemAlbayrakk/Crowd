@@ -65,35 +65,44 @@ return res.status(200).send("Applicant information deleted successfully");
    
 }
 
+const setActions = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const applicant = await ApplicantModel.findByIdAndUpdate(req.params.id, { status });
+    res.status(200).json({ message: "Status updated successfully", applicant });
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ message: "Failed to update status" });
+  }
+};
+
+
 const details = async (req, res) => {
   try {
     console.log(req.params.id + " detailsss");
 
-    // Belirli bir iş için yapılan tüm başvuruları bul
     const applicants = await ApplicantModel.find({ job: req.params.id });
 
     const usersData = [];
 
-    // Her başvuru için kullanıcı isimlerini al ve kullanıcı bilgilerini oluştur
     for (let i = 0; i < applicants.length; i++) {
       const applicant = applicants[i];
       console.log("Applicant ID:", applicant.user);
 
       const user = await UserModel.findOne({ _id: applicant.user });
 
-      // Kullanıcı bilgilerini oluştur
       const userData = {
+        _id:applicant._id,
         userId: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
+        email:user.email,
         offer:applicant.offer
-        // İhtiyaca göre diğer kullanıcı bilgilerini burada ekleyebilirsiniz
       };
 
       usersData.push(userData);
     }
 
-    // İstemciye gönderilecek olan kullanıcı bilgilerini JSON yanıtı olarak dön
     res.status(200).json(usersData);
 
   } catch (error) {
@@ -106,4 +115,4 @@ const details = async (req, res) => {
   
 
 
-export{addApplicant,deleteApplicant,details}
+export{addApplicant,deleteApplicant,details,setActions}

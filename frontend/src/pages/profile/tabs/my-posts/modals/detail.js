@@ -13,7 +13,8 @@ export default function DetailBox(props) {
     "FirstName",
     "LastName",
     "E-mail",
-    "Offer"
+    "Offer",
+    "Actions" 
   ];
 
   const [myPostDetail, setMyPostDetail] = useState([]);
@@ -24,23 +25,47 @@ export default function DetailBox(props) {
         if (jobId) {
           console.log(jobId + " jobidddddddd");
           const resp = await api.job.jobdetails("company", jobId);
-  
+
           const data = resp.map((item) => ({
             firstName: item.firstName,
             lastName: item.lastName,
             email: item.email,
-            offer: item.offer
+            offer: item.offer,
+            actions: renderActions(item._id) 
           }));
-  
+
           setMyPostDetail(data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     getData();
-  }, [jobId]); 
+  }, [jobId]);
+
+  const renderActions = (applicantId) => {
+    return (
+      <div>
+        <button onClick={() => handleAccept(applicantId)}>Accept</button>
+        <button onClick={() => handleReject(applicantId)}>Reject</button>
+      </div>
+    );
+  };
+
+  const handleAccept = async (applicantId) => {
+    
+      const resp = await api.applicant.setStatus("company", applicantId,"Accepted" );
+      console.log("Accept button clicked for applicant ID:", applicantId);
+    
+  };
+  
+
+  const handleReject = async (applicantId) => {
+    const resp = await api.applicant.setStatus("company", applicantId,"Rejected" );
+    console.log("Accept button clicked for applicant ID:", applicantId);
+  };
+
   return (
     <div className="profile__right">
       <div className="container">
@@ -60,24 +85,6 @@ export default function DetailBox(props) {
                 X
               </a>
               <Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />
-              {/* <a className="logo">Detail</a>
-              <form onSubmit={detail}></form>
-              <div>
-                <label>FirstName</label>
-                <input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-              </div>
-              <div>
-                <label>LastName</label>
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </div> */}
             </div>
           </div>
         </div>
