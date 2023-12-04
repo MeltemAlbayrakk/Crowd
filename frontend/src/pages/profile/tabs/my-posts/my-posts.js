@@ -82,7 +82,8 @@ export default function MyPosts(props) {
         budget: item.budget,
        
         edit: deleteRow(item._id),
-        detail:detailRow(item._id),
+        detail:detailRow(item._id)  ,
+        
       }));
 
       setMyPosts(data);

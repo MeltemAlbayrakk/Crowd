@@ -65,37 +65,45 @@ return res.status(200).send("Applicant information deleted successfully");
    
 }
 
-const details = async (req,res)=>{
-    try {
+const details = async (req, res) => {
+  try {
+    console.log(req.params.id + " detailsss");
 
-        console.log(req.params.id+" detailsss")
-      const applicant = await ApplicantModel.findOne({job:req.params.id});
-      console.log(applicant.user+"deneme")
-      
-      const user=await UserModel.findOne({_id:applicant.user})
+    // Belirli bir iş için yapılan tüm başvuruları bul
+    const applicants = await ApplicantModel.find({ job: req.params.id });
 
-      console.log(user.firstName)
-      
-      
-      
-      if(user){
-        res.status(200).json(user)
-      }else {
-        res.status(404).json({
-          message: 'Job details not found or not updated',
-        });
-      }
-  
-      } catch (error) {
-        throw new Error('Job search error: ' + error.message);
-      }
-  
-  
-  
-  };
-  
+    const usersData = [];
+
+    // Her başvuru için kullanıcı isimlerini al ve kullanıcı bilgilerini oluştur
+    for (let i = 0; i < applicants.length; i++) {
+      const applicant = applicants[i];
+      console.log("Applicant ID:", applicant.user);
+
+      const user = await UserModel.findOne({ _id: applicant.user });
+
+      // Kullanıcı bilgilerini oluştur
+      const userData = {
+        userId: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        offer:applicant.offer
+        // İhtiyaca göre diğer kullanıcı bilgilerini burada ekleyebilirsiniz
+      };
+
+      usersData.push(userData);
+    }
+
+    // İstemciye gönderilecek olan kullanıcı bilgilerini JSON yanıtı olarak dön
+    res.status(200).json(usersData);
+
+  } catch (error) {
+    throw new Error('Job search error: ' + error.message);
+  }
+};
 
 
+
+  
 
 
 export{addApplicant,deleteApplicant,details}
