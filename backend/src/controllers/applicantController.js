@@ -35,6 +35,26 @@ const addApplicant= async(req,res)=>{
     
    
 }
+const getApplicant = async(req,res)=>{
+    try{
+        console.log("getapplicant içindesin")
+        const userId= req.session.userId;
+        
+        const user=await UserModel.findById(userId)
+        
+        const app1=user.applicants[15]
+        const applicant = await ApplicantModel.findById(app1)
+        console.log(applicant.offer) 
+        //offer tamam 
+        console.log("app job:",applicant.job)
+        const job = await JobModel.findById(applicant.job)
+        console.log("jobın verileri:",job.title)
+        console.log("applicant yazdırıyom:",app1)
+    }catch(err){
+
+    }
+
+}
 
 const deleteApplicant= async (req,res)=>{
 try {
@@ -55,4 +75,4 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant}
+export{addApplicant,deleteApplicant,getApplicant}
