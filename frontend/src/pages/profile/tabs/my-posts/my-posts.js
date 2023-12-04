@@ -39,7 +39,7 @@ export default function MyPosts(props) {
   const editRow = (event) => {
     return <button onClick={() => setEditBoxVisibility(true)}>Delete</button>;
   };
-  const detailrow = (event) => {
+  const detailRow = (event) => {
     return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
   };
 
@@ -57,19 +57,19 @@ export default function MyPosts(props) {
    
     
       edit: editRow("Edit"),
-      detail:detailrow("Detail")
+      detail:detailRow("Detail")
     },
   ]);
 
   useEffect(() => {
     const getData = async () => {
 
-      // const user = await api.user.profile.get(id);
+      const user = await api.user.profile.get(id);
       const resp = (await api.job.get("company"))
-      // .filter(job => {
-      //   console.log("owner id",job.jobOwnerId)
-      //   return job.jobOwnerId === user._id;
-   
+      .filter(job => {
+    
+        return job.jobOwnerId === user._id;
+    }  )
    
 
       const data = resp.map((item) => ({
@@ -82,8 +82,7 @@ export default function MyPosts(props) {
         budget: item.budget,
        
         edit: deleteRow(item._id),
-        detail:detailRow(item._id)  ,
-        
+        detail:detailRow("Detail"),
       }));
 
       setMyPosts(data);
@@ -99,28 +98,8 @@ export default function MyPosts(props) {
 /*     props.getProfile();
  */    setLoading(false);
   };
-
-  const detailJob = async (id) => {
-    setLoading(true);
-    console.log("id  details degeri:",id)
-    await api.job.jobdetails("company", id);
-/*     props.getProfile();
- */    setLoading(false);
-  };
   const deleteRow = (id) => {
     return <button onClick={() => deleteJob(id)}>Delete</button>;
-};
-const detailRow = (id) => {
-  return (
-    <button
-      onClick={() => {
-        detailJob(id);
-        setDetailBoxVisibility(true);
-      }}
-    >
-      detail
-    </button>
-  );
 };
 
   
