@@ -18,10 +18,13 @@ export default function SearchJob(props) {
 
       if (searchString === "") {
         searchData = await api.job.get("company");
+        console.log("iş geliyor mu 111::",searchData)
+
       } else {
         searchData = await api.job.get("company");
+        console.log("iş geliyor mu 222 ::",searchData)
         searchData = searchData.filter((job) =>
-          job.title.toLowerCase().includes(searchString)
+        job && job.title && job.title.toLowerCase().includes(searchString)
         );
       }
 
@@ -46,12 +49,17 @@ export default function SearchJob(props) {
     getJobs("", 0.1);
   }, []);
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setForm((prevForm) => ({
+  //     ...prevForm,
+  //     [name]: value,
+  //   }));
+  // };
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
+    const inputValue = e.currentTarget.value;
+    setSearchValue(inputValue);
+    setTimeout(() => getJobs(inputValue), 350);
   };
 
   return (

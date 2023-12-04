@@ -1,14 +1,16 @@
 import JobModel from "../models/Job.js";
+import UserModel from "../models/User.js";
 
 
 const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const {title,description,budget,deadline,category} = req.body;
+        const {title,description,budget,deadline,category,jobOwnerId} = req.body;
 
+        const userId= req.session.userId;
+        const user= await UserModel.findById(userId);
 
-console.log
         if (req.session.userId) {
         const addJobDetail = await JobModel.create({
         title:title,
@@ -16,9 +18,12 @@ console.log
         category:category,
         budget:budget,
         deadline:deadline,
-        jobOwnerId:req.session.userId
+        jobOwnerId:jobOwnerId
         });
 
+        user.jobs.push(addJobDetail._id);
+        await addJobDetail.save();
+        await user.save();
     if (addJobDetail) {
       res.status(200).json({
         message: 'Job details has been updated successfully',})
@@ -34,11 +39,9 @@ console.log
   }
 }
 const get = async (req,res)=>{
-  const jobOwnerId=req.session.userId 
-  
-  console.log("job get  : " + jobOwnerId)
   try {
-        const job = await JobModel.find({jobOwnerId:jobOwnerId})
+        const job = await JobModel.find()
+
       if(job){
         res.status(200).json(job)
       }else{
@@ -54,7 +57,7 @@ const get = async (req,res)=>{
 const search = async (req,res)=>{
   try {
     const title=req.body
-    const job = await JobModel.findOne({title:title.title});
+    const job = await JobModel.find({title:title.title});
     console.log(job)
     if(job){
       res.status(200).json(job)

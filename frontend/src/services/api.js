@@ -176,10 +176,11 @@ export default {
       },
       async get(type, payload) {
         if (type === "company") {
-          const response = await instance.get("http://localhost:3001/job",{withCredentials: true});
+          const response = await instance.get("/job/", payload,{withCredentials: true});
           return response.data;
         }
       },
+	
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
