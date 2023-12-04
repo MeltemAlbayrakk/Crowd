@@ -17,7 +17,7 @@ export default function SearchJob(props) {
       } else {
         searchData = await api.job.get("company");
         searchData = searchData.filter((job) =>
-          job.title.toLowerCase().includes(searchString)
+        job && job.title && job.title.toLowerCase().includes(searchString)
         );
       }
 
