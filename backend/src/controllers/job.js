@@ -1,5 +1,4 @@
 import JobModel from "../models/Job.js";
-import UserModel from "../models/User.js";
 
 
 const add= async (req,res)=>{
@@ -8,9 +7,8 @@ const add= async (req,res)=>{
         console.log("bu session:",req.session.userId)
         const {title,description,budget,deadline,category} = req.body;
 
-        const userId= req.session.userId;
-        const user= await UserModel.findById(userId);
 
+console.log
         if (req.session.userId) {
         const addJobDetail = await JobModel.create({
         title:title,
@@ -21,9 +19,6 @@ const add= async (req,res)=>{
         jobOwnerId:req.session.userId
         });
 
-        user.jobs.push(addJobDetail._id);
-        await addJobDetail.save();
-        await user.save();
     if (addJobDetail) {
       res.status(200).json({
         message: 'Job details has been updated successfully',})
@@ -39,9 +34,11 @@ const add= async (req,res)=>{
   }
 }
 const get = async (req,res)=>{
+  const jobOwnerId=req.session.userId 
+  
+  console.log("job get  : " + jobOwnerId)
   try {
-        const job = await JobModel.find()
-
+        const job = await JobModel.find({jobOwnerId:jobOwnerId})
       if(job){
         res.status(200).json(job)
       }else{
@@ -54,10 +51,28 @@ const get = async (req,res)=>{
     
 
 }
+
+const getall = async (req,res)=>{
+  
+  try {
+        const job = await JobModel.find({})
+      if(job){
+        res.status(200).json(job)
+      }else{
+        res.status(404).json("işleri alırken hata çıktı")
+      }
+       
+      } catch (error) {
+        throw new Error('Error fetching jobs: ' + error.message);
+      }
+    
+
+}
+
 const search = async (req,res)=>{
   try {
     const title=req.body
-    const job = await JobModel.find({title:title.title});
+    const job = await JobModel.findOne({title:title.title});
     console.log(job)
     if(job){
       res.status(200).json(job)
@@ -74,6 +89,9 @@ const search = async (req,res)=>{
 
 
 };
+
+
+
 
 const deleteJob = async (req,res)=>{
   try {
@@ -95,4 +113,4 @@ const deleteJob = async (req,res)=>{
   }
 }
 
-export {add,get,search,deleteJob}
+export {add,get,search,deleteJob,getall}

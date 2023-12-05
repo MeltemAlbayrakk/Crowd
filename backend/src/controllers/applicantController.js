@@ -2,16 +2,14 @@ import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
 import JobModel from "../models/Job.js";
 
-
 const addApplicant= async(req,res)=>{
     try {
         const {selectedJob,offer}= req.body;
         const userId= req.session.userId;
-        const user= await UserModel.findById(userId);
-        const job = await JobModel.findById(selectedJob._id)
-       
-    
-        console.log("yazılımcı teklifi",offer,"bide iş:",selectedJob)
+        //const user= await UserModel.findById(userId);
+
+    console.log("addaplicant userid : "+ userId)
+        //console.log("yazılımcı teklifi "+offer,"bide iş: "+ selectedJob)
 
 
         const applicant = await ApplicantModel.create({
@@ -20,13 +18,24 @@ const addApplicant= async(req,res)=>{
             offer:offer,
             
         })
-        
-        user.applicants.push(applicant._id);
-        job.applicants.push(applicant._id);
-        await applicant.save();
+
+
+        res.status(201).json({
+          message: 'applicant has been added successfully',
+        });
+        //await applicant.save();
+        const user = await UserModel.findById(userId);
+
+        await user.applicants.push(applicant._id);
+
+
         await user.save();
+
+        const job=await JobModel.findById(applicant.job)
+        await job.applicants.push(applicant._id);
         await job.save();
-        res.status(200).json({message:'applicant successfully'})
+
+
 
     } catch (error) {
         console.error(error);
@@ -55,4 +64,55 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant}
+
+const setActions = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const applicant = await ApplicantModel.findByIdAndUpdate(req.params.id, { status });
+    res.status(200).json({ message: "Status updated successfully", applicant });
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ message: "Failed to update status" });
+  }
+};
+
+
+const details = async (req, res) => {
+  try {
+    console.log(req.params.id + " detailsss");
+
+    const applicants = await ApplicantModel.find({ job: req.params.id });
+
+    const usersData = [];
+
+    for (let i = 0; i < applicants.length; i++) {
+      const applicant = applicants[i];
+      console.log("Applicant ID:", applicant.user);
+
+      const user = await UserModel.findOne({ _id: applicant.user });
+
+      const userData = {
+        _id:applicant._id,
+        userId: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email:user.email,
+        offer:applicant.offer
+      };
+
+      usersData.push(userData);
+    }
+
+    res.status(200).json(usersData);
+
+  } catch (error) {
+    throw new Error('Job search error: ' + error.message);
+  }
+};
+
+
+
+  
+
+
+export{addApplicant,deleteApplicant,details,setActions}

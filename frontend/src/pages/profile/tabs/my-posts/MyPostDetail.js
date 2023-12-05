@@ -1,86 +1,62 @@
-import Table from "../../../../components/layout/table/table";
-import api from "../../../../services/api";
 import { useState, useEffect } from "react";
-
-
-import DetailBox from "./modals/detail";
-
-export default function MyPostDetail(props) {
-
-  const [detailBoxVisibility , setDetailBoxVisibility]=useState(false);
-
-  const [firstName,setFirstName]= useState("");
-    const [lastName,setlastName]= useState("");
-
-
-  const [loading, setLoading] = useState(false);
+import Table from "../../../../../components/layout/table/table";
+import api from "../../../../services/api";
+export default function DetailBox(props) {
+  const {
+    detailBoxVisibility,
+    setDetailBoxVisibility,
+    jobId // Job ID from MyPosts component
+  } = props;
 
   const appliedMyPostDetailsHeadlines = [
     "FirstName",
     "LastName",
-
-    "Detail",
+    "E-mail",
+    "Offer"
   ];
 
-
-  const detailRow = (event) => {
-    return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
-  };
-
- 
-
-  const [myPostDetail, setMyPostDetail] = useState([
-    {
-      firstName: "",
-      lastName: "",
-
-      detail:detailRow("Detail")
-    },
-  ]);
+  const [jobDetails, setJobDetails] = useState({
+    firstName: "",
+    lastName: "",
+    //email: "",
+    offer: ""
+  });
 
   useEffect(() => {
-    const getData = async () => {
-      const resp = await api.job.get("company");
-
-      const data = resp.map((item) => ({
-        firstName: item.firstName,
-        lastName: item.lastName,
-
-        detail:detailRow("Detail"),
-      }));
-
-      setMyPostDetail(data);
+    const fetchData = async () => {
+      try {
+        console.log(jobId);
+        const response = await api.job.jobdetails("company", jobId);
+        console.log(response); 
+        setJobDetails({
+          firstName: response.firstName || "",
+          lastName: response.lastName || "",
+          offer: response.offer || ""
+        });
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
     };
-
-    getData();
-  }, []);
-
+  
+    if (detailBoxVisibility) {
+      fetchData();
+    }
+  }, [detailBoxVisibility, jobId]);
   return (
-
-    <div className="myPostDetail">
-      <div className="title">My Post Detail</div>
-
+    <div className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"} id="detailBox">
       <div className="wrapper">
-       <div class="container">
-        <div class= "profile__right">
-
-
-<DetailBox
-        detail={"Detail"}
-        detailBoxVisibility={detailBoxVisibility}
-        setDetailBoxVisibility={setDetailBoxVisibility}
-       Table= {<Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />}
-        firstName={setFirstName}
-        lastName={setlastName}
-
-
-        loading={loading}
-      />
-    </div>
-    </div>
-    </div>
-
-
+        <div className="my__posts">
+          <div className="title">Job Details</div>
+          <a className="close" onClick={() => setDetailBoxVisibility(false)}>X</a>
+          <Table headline={appliedMyPostDetailsHeadlines} data={[jobDetails]} />
+          {/* Or use the jobDetails object to display data */}
+          {/* For example: */}
+          {/* <p>First Name: {jobDetails.firstName}</p> */}
+          {/* <p>Last Name: {jobDetails.lastName}</p> */}
+          {/* <p>E-mail: {jobDetails.email}</p> */}
+          {/* <p>Offer: {jobDetails.offer}</p> */}
+        </div>
+      </div>
     </div>
   );
 }

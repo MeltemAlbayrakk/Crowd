@@ -17,12 +17,11 @@ export default function SearchJob(props) {
       let searchData = null;
 
       if (searchString === "") {
-        searchData = await api.job.get("company");
-
+        searchData = await api.job.getall("company");
       } else {
-        searchData = await api.job.get("company");
+        searchData = await api.job.getall("company");
         searchData = searchData.filter((job) =>
-        job && job.title && job.title.toLowerCase().includes(searchString)
+          job.title.toLowerCase().includes(searchString)
         );
       }
 
@@ -47,17 +46,12 @@ export default function SearchJob(props) {
     getJobs("", 0.1);
   }, []);
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setForm((prevForm) => ({
-  //     ...prevForm,
-  //     [name]: value,
-  //   }));
-  // };
   const handleInputChange = (e) => {
-    const inputValue = e.currentTarget.value;
-    setSearchValue(inputValue);
-    setTimeout(() => getJobs(inputValue), 350);
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
 
   return (

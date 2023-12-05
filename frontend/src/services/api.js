@@ -46,7 +46,6 @@ export default {
       const response = await instance.post(
         "/user/personal/beFreelancer",
         payload,{withCredentials:true}
-       
       );
       return response.data;
     },
@@ -68,7 +67,6 @@ export default {
           return response.data;
         } else if (type === "company") {
           const response = await instance.post(
-         
             "/user/company/update",
             payload,{withCredentials: true},
           );
@@ -178,10 +176,19 @@ export default {
       },
       async get(type, payload) {
         if (type === "company") {
-          const response = await instance.get("/job/", payload,{withCredentials: true});
+          const response = await instance.get("http://localhost:3001/job",{withCredentials: true});
           return response.data;
         }
       },
+      async getall(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+
+
+
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -195,8 +202,21 @@ export default {
           );
           return response.data;
         }
-      }
       },
+      async jobdetails(type, id) {
+        if (type === "company") {
+          const response = await instance.get(
+            "/applicant/details/"+ id,
+            {withCredentials: true},
+          );
+          return response.data;
+        }
+      }
+
+      },
+
+
+
 applicant:{
   async add(type, payload) {
     if (type === "personal") {
@@ -215,7 +235,26 @@ applicant:{
       );
       return response.data;
     }
+  },
+  async setStatus(type, id, status) {
+    if (type === "company") {
+      try {
+        const response = await instance.post(
+          `/applicant/setstatus/${id}`,
+          { status },
+          { withCredentials: true }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error setting status:", error);
+        throw error;
+      }
+    }
   }
+  
+
+
+
 }
 
 };
