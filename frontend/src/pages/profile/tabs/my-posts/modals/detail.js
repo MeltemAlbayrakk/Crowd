@@ -19,13 +19,18 @@ export default function DetailBox(props) {
 
   const [myPostDetail, setMyPostDetail] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [resp, setResp] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
         if (jobId) {
           console.log(jobId + " jobidddddddd");
-          const resp = (await api.job.jobdetails("company",jobId,{status:"Pending"}));
+          const resp = (await api.job.jobdetails("company",jobId)).filter(job=>job.status==="Pending");
+          if(resp.length==0){
+           
+            setResp(false);
+          }
           console.log("BU RESPPP:",resp)
 
           const data = resp.map((item) => ({
@@ -71,6 +76,7 @@ export default function DetailBox(props) {
   };
 
   return (
+    
     <div class= "profile__right">
     <div className="container">
       
@@ -91,9 +97,10 @@ export default function DetailBox(props) {
               >
                 X
               </a>
-              <Table 
+              
+              {resp?<Table 
               loading={loading}
-              headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />
+              headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />:<div className="nodata">No data found!</div>}
               
             </div>
           </div>
