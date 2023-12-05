@@ -11,7 +11,7 @@ const addApplicant= async(req,res)=>{
         const job = await JobModel.findById(selectedJob._id)
        
     
-        console.log("yazılımcı teklifi",offer,"bide iş:",selectedJob)
+        
 
 
         const applicant = await ApplicantModel.create({
@@ -54,7 +54,7 @@ const getApplicant = async(req,res)=>{
                 category: job?.category,
                 offer: applicant?.offer,
                 deadline:job?.deadline,
-                status:job?.status
+                status:applicant?.status
             };
 
             responseArray.push(responseObject);
@@ -88,4 +88,48 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant,getApplicant}
+const setActions = async (req, res) => {
+    try {
+      const { status } = req.body;
+      const applicant = await ApplicantModel.findByIdAndUpdate(req.params.id, { status });
+      res.status(200).json({ message: "Status updated successfully", applicant });
+    } catch (error) {
+      console.error("Error updating status:", error);
+      res.status(500).json({ message: "Failed to update status" });
+    }
+  };
+  
+  
+  const details = async (req, res) => {
+    try {
+      console.log(req.params.id + " detailsss");
+  
+      const applicants = await ApplicantModel.find({ job: req.params.id });
+  
+      const usersData = [];
+  
+      for (let i = 0; i < applicants.length; i++) {
+        const applicant = applicants[i];
+        console.log("Applicant ID:", applicant.user);
+  
+        const user = await UserModel.findOne({ _id: applicant.user });
+  
+        const userData = {
+          _id:applicant._id,
+          userId: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email:user.email,
+          offer:applicant.offer
+        };
+  
+        usersData.push(userData);
+      }
+  
+      res.status(200).json(usersData);
+  
+    } catch (error) {
+      throw new Error('Job search error: ' + error.message);
+    }
+  };
+export{addApplicant,deleteApplicant,getApplicant,details,setActions}
