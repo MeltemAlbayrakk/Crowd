@@ -206,9 +206,9 @@ export default {
         return response.data;
       }
     },
-    async get(type) {
+    async get(type,id) {
       if (type === "personal") {
-        const response = await instance.get("/applicant/", 
+        const response = await instance.get("/applicant/",
        
         {withCredentials: true});
         return response.data;
