@@ -25,10 +25,12 @@ export default function DetailBox(props) {
       try {
         if (jobId) {
           console.log(jobId + " jobidddddddd");
-          const resp = await api.job.jobdetails("company", jobId);
+          const resp = (await api.job.jobdetails("company",jobId,{status:"Pending"}));
+          console.log("BU RESPPP:",resp)
 
           const data = resp.map((item) => ({
             firstName: item.firstName,
+            
             lastName: item.lastName,
             email: item.email,
             offer: item.offer,
@@ -58,7 +60,7 @@ export default function DetailBox(props) {
     setLoading(true)
       const resp = await api.applicant.setStatus("company", applicantId,"Accepted" );
       console.log("Accept button clicked for applicant ID:", applicantId);
-      
+
     setLoading(false)
   };
   

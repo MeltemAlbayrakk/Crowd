@@ -36,7 +36,7 @@ export default function MyPosts(props) {
 
     "Budget",
 
-    "Edit",
+  
   ];
 
   const editRow = (event) => {

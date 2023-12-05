@@ -120,7 +120,8 @@ const setActions = async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           email:user.email,
-          offer:applicant.offer
+          offer:applicant.offer,
+          status:applicant.status
         };
   
         usersData.push(userData);
