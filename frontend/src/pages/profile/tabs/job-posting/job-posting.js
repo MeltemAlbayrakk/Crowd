@@ -56,14 +56,8 @@ export default function JobPosting(props) {
     setLoading(true);
     setActivejobPostingErrors(null);
    
-    const user = await api.user.profile.get(id)
-    console.log("user",user._id)
     
-    setForm({
-      jobOwnerId:user._id
-    }
-    )
-    console.log("bu formdur:",form.jobOwnerId)
+    
     const res = await api.job.add("company", form).catch((err) => {
       setActivejobPostingErrors(err.response.data.errorMessage);
       setLoading(false);
@@ -76,7 +70,7 @@ export default function JobPosting(props) {
         category: "",
         budget: "",
         deadline: "",
-      
+        jobOwnerId:"",
       });
     }
     setLoading(false);

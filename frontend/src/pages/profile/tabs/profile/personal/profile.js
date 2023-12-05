@@ -238,13 +238,13 @@ export default function Profile(props) {
         props.getProfile();
       }
       else if (res.status ===404){
-        console.log("bbbbbbbbbbbb")
+      
         alert("This field is required and can not be empty:!!")
        
 
       }
       else{
-        console.log("aaaaaaaaaaa")
+  
         alert("server error ")
       }
     } catch (error) {

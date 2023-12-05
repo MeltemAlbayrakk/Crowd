@@ -180,6 +180,7 @@ export default {
           return response.data;
         }
       },
+	
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -195,26 +196,34 @@ export default {
         }
       }
       },
-applicant:{
-  async add(type, payload) {
-    if (type === "personal") {
-      const response = await instance.post(
-        "/applicant/",
-        payload,{withCredentials: true},
-      );
-      return response.data;
-    }
-  },
-  async delete(type, id) {
-    if (type === "company") {
-      const response = await instance.post(
-        "/applicant/delete/"+ id,
-        {withCredentials: true},
-      );
-      return response.data;
+  applicant:{
+    async add(type, payload) {
+      if (type === "personal") {
+        const response = await instance.post(
+          "/applicant/",
+          payload,{withCredentials: true},
+        );
+        return response.data;
+      }
+    },
+    async get(type,id) {
+      if (type === "personal") {
+        const response = await instance.get("/applicant/",
+       
+        {withCredentials: true});
+        return response.data;
+      }
+    },
+    async delete(type, id) {
+      if (type === "company") {
+        const response = await instance.post(
+          "/applicant/delete/"+ id,
+          {withCredentials: true},
+        );
+        return response.data;
+      }
     }
   }
-}
 
 };
 

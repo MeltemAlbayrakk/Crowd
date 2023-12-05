@@ -49,7 +49,7 @@ const PasswordValidation = ({ password, setRegisterData }) => {
             ) : (
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red',opacity:1, marginRight: '5px' }} />
             )}
-            En az 8 karakter
+            AT LEAST 8 CHARACTERS
           </li>
           <li style={{ fontSize: '10px', marginBottom: '10px',opacity:1 }}>
             {hasUpperCase ? (
@@ -57,7 +57,7 @@ const PasswordValidation = ({ password, setRegisterData }) => {
             ) : (
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red', marginRight: '5px' }} />
             )}
-            Bir büyük harf
+            one uppercase letter
           </li>
           <li style={{ fontSize: '10px',opacity:1}}>
             {hasLowerCase ? (
@@ -65,7 +65,7 @@ const PasswordValidation = ({ password, setRegisterData }) => {
             ) : (
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red', marginRight: '5px' }} />
             )}
-            Bir küçük harf
+            one lowercase letter
           </li>
           <li style={{ fontSize: '10px',opacity:1}}>
             {hasDigit ? (
@@ -73,7 +73,7 @@ const PasswordValidation = ({ password, setRegisterData }) => {
             ) : (
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red', marginRight: '5px' }} />
             )}
-            Bir rakam
+            One digit
           </li>
           <li style={{ fontSize: '10px',opacity:1 }}>
             {hasSpecialChar ? (
@@ -81,7 +81,7 @@ const PasswordValidation = ({ password, setRegisterData }) => {
             ) : (
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red', marginRight: '5px' }} />
             )}
-            Bir özel karakter
+            One special character
           </li>
         </ul>
       </div>

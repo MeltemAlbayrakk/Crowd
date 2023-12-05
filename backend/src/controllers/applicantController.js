@@ -1,5 +1,6 @@
 import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
+import JobModel from "../models/Job.js";
 
 
 const addApplicant= async(req,res)=>{
@@ -7,7 +8,8 @@ const addApplicant= async(req,res)=>{
         const {selectedJob,offer}= req.body;
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
-
+        const job = await JobModel.findById(selectedJob._id)
+       
     
         console.log("yazılımcı teklifi",offer,"bide iş:",selectedJob)
 
@@ -20,8 +22,10 @@ const addApplicant= async(req,res)=>{
         })
         
         user.applicants.push(applicant._id);
+        job.applicants.push(applicant._id);
         await applicant.save();
         await user.save();
+        await job.save();
         res.status(200).json({message:'applicant successfully'})
 
     } catch (error) {
@@ -31,7 +35,40 @@ const addApplicant= async(req,res)=>{
     
    
 }
+const getApplicant = async(req,res)=>{
+    try{
+        console.log("getapplicant içindesin")
+        const userId= req.session.userId;
 
+        const user=await UserModel.findById(userId)
+        // console.log("bu benim:",user)
+        const responseArray = [];
+
+        for (let i = 0; i < user.applicants.length; i++) {
+            const app1 = user.applicants[i];
+            const applicant = await ApplicantModel.findById(app1);
+            const job = await JobModel.findById(applicant.job);
+
+            const responseObject = {
+                title: job?.title,
+                category: job?.category,
+                offer: applicant?.offer,
+                deadline:job?.deadline,
+                status:job?.status
+            };
+
+            responseArray.push(responseObject);
+        }
+
+        res.status(200).json(responseArray);
+
+        res.status(500).json({message:"servo hata"})
+
+    }catch(err){
+        console.log("hata mesajı:",err.message)
+    }
+
+}
 const deleteApplicant= async (req,res)=>{
 try {
      const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);
@@ -51,4 +88,4 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-export{addApplicant,deleteApplicant}
+export{addApplicant,deleteApplicant,getApplicant}
