@@ -47,8 +47,8 @@ export default function DetailBox(props) {
   const renderActions = (applicantId) => {
     return (
       <div>
-        <button onClick={() => handleAccept(applicantId)}>Accept</button>
-        <button onClick={() => handleReject(applicantId)}>Reject</button>
+        <button id="accept" onClick={() => handleAccept(applicantId)}>Accept</button>
+        <button id="reject"  onClick={() => handleReject(applicantId)}>Reject</button>
       </div>
     );
   };
@@ -67,13 +67,14 @@ export default function DetailBox(props) {
   };
 
   return (
-    <div className="profile__right">
-      <div className="container">
-        <div
+       
+    <div className="wrapper">
+    <div
           className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
           id="detailBox"
         >
-          <div className="wrapper">
+
+         
             <div className="my__posts">
               <div className="title">My Post Detay</div>
               <a
@@ -87,8 +88,9 @@ export default function DetailBox(props) {
               <Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+          </div>
+      
+   
+  
   );
 }

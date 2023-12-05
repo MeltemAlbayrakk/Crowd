@@ -111,11 +111,11 @@ export default function MyPosts(props) {
 */    setLoading(false);
   };
   const deleteRow = (id) => {
-    return <button onClick={() => deleteJob(id)}>Delete</button>;
+    return <button id="reject" onClick={() => deleteJob(id)}>Delete</button>;
 };
 const detailRow = (id) => {
   return (
-    <button
+    <button 
       onClick={() => {
         setSelectedJobId(id)
         detailJob(id);
