@@ -45,6 +45,41 @@ const addApplicant= async(req,res)=>{
    
 }
 
+const getApplicant = async(req,res)=>{
+  try{
+      console.log("getapplicant içindesin")
+      const userId= req.session.userId;
+
+      const user=await UserModel.findById(userId)
+      // console.log("bu benim:",user)
+      const responseArray = [];
+
+      for (let i = 0; i < user.applicants.length; i++) {
+          const app1 = user.applicants[i];
+          const applicant = await ApplicantModel.findById(app1);
+          const job = await JobModel.findById(applicant.job);
+
+          const responseObject = {
+              title: job?.title,
+              category: job?.category,
+              offer: applicant?.offer,
+              deadline:job?.deadline,
+              status:job?.status
+          };
+
+          responseArray.push(responseObject);
+      }
+
+      res.status(200).json(responseArray);
+
+      res.status(500).json({message:"servo hata"})
+
+  }catch(err){
+      console.log("hata mesajı:",err.message)
+  }
+
+}
+
 const deleteApplicant= async (req,res)=>{
 try {
      const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);
@@ -115,4 +150,4 @@ const details = async (req, res) => {
   
 
 
-export{addApplicant,deleteApplicant,details,setActions}
+export{addApplicant,getApplicant,deleteApplicant,details,setActions}
