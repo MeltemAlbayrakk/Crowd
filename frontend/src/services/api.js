@@ -180,6 +180,12 @@ export default {
           return response.data;
         }
       },
+      async getall(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
+          return response.data;
+        }
+      },
 	
       async search(title) {
     
@@ -190,6 +196,15 @@ export default {
         if (type === "company") {
           const response = await instance.get(
             "/job/delete/"+ id,
+            {withCredentials: true},
+          );
+          return response.data;
+        }
+      },
+      async jobdetails(type, id) {
+        if (type === "company") {
+          const response = await instance.get(
+            "/applicant/details/"+ id,
             {withCredentials: true},
           );
           return response.data;
@@ -221,6 +236,21 @@ export default {
           {withCredentials: true},
         );
         return response.data;
+      }
+    },
+    async setStatus(type, id, status) {
+      if (type === "company") {
+        try {
+          const response = await instance.post(
+            `/applicant/setstatus/${id}`,
+            { status },
+            { withCredentials: true }
+          );
+          return response.data;
+        } catch (error) {
+          console.error("Error setting status:", error);
+          throw error;
+        }
       }
     }
   }

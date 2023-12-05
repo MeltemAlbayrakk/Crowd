@@ -7,7 +7,7 @@ const ApplicantSchema = new Schema({
     job:{type:String,required:false,ref:'Job'},
     JobOwnerId:{type:String,required:false},
     isAgreed:{type:Boolean,required:false},
-    status:{type:String,required:false},
+    status:{type:String,required:false,default:"Pending"},
     offer:{type:String,required:false}
 
 })
