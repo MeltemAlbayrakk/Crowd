@@ -1286,36 +1286,15 @@ select {
 }
 
 .my__posts {
-  width: 80%;
-  height: 80%;
-  
+  width: 100%;
 }
 
-
-.my__posts .modal{
-
-  background-color:#14163f;
-
-}
-#accept{
-  margin-left: 10px;
-  margin-right:15px;
-}
 #accept:hover{
   background-color:rgb(32, 63, 32);
-}
-#reject{
-  
-  justify-content: center;
-  align-items: center;
 }
 #reject:hover{
   background-color:rgb(93, 4, 4);
 }
-#detail:hover{
-  background-color:rgb(25, 57, 105)
-}
-
 .freelancers {
   width: 100%;
 

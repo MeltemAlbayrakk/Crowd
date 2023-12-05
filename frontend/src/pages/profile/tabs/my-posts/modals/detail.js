@@ -67,18 +67,21 @@ export default function DetailBox(props) {
   };
 
   return (
-       
-    <div className="wrapper">
-    <div
-          className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
-          id="detailBox"
-        >
+   
+    <div class= "profile__right">
+    <div className="container">
+    
+   <div
+     className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
+     id="detailBox"
+   >
+     <div className="wrapper">
+     <div class= "profile__right">
+     <div className="my__posts">
+   <div className="title">My Post Details</div>
+       <a
+         className="close"
 
-         
-            <div className="my__posts">
-              <div className="title">My Post Detay</div>
-              <a
-                className="close"
                 onClick={() => {
                   setDetailBoxVisibility(false);
                 }}
@@ -89,8 +92,16 @@ export default function DetailBox(props) {
             </div>
           </div>
           </div>
-      
-   
+          </div>
+          </div>
+          </div>
+         
+         
+        
+         
+         
+         
+          
   
   );
 }
