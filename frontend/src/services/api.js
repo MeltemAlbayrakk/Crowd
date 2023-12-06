@@ -253,7 +253,18 @@ export default {
         }
       }
     }
-  }
+  },
 
+  freelancer:{
+    async get(type) {
+      if (type === "personal") {
+        const response = await instance.get(
+          "/freelancer/",
+         {withCredentials: true},
+        );
+        return response.data;
+      }
+    },
+  }
 };
 

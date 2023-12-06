@@ -11,8 +11,7 @@ const JobSchema = new Schema({
     status:{type:Boolean,required:false},
     jobOwnerId:{type:String,required:false},
     applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
-
-
+    users:[{type:String,required:false,ref:'User'}],
 })
  
 

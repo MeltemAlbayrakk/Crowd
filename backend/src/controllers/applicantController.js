@@ -90,8 +90,16 @@ return res.status(200).send("Applicant information deleted successfully");
 }
 const setActions = async (req, res) => {
     try {
-      const { status } = req.body;
+
+      const { status  } = req.body;
       const applicant = await ApplicantModel.findByIdAndUpdate(req.params.id, { status });
+
+      const applicantOld = await ApplicantModel.findById(req.params.id)
+      const user= await UserModel.findById(applicantOld.user)
+      const job = await JobModel.findById(applicant.job)
+
+       job.users.push(user._id);
+       await job.save();
       res.status(200).json({ message: "Status updated successfully", applicant });
     } catch (error) {
       console.error("Error updating status:", error);
