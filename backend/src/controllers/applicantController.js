@@ -35,23 +35,6 @@ const addApplicant= async(req,res)=>{
     
    
 }
-<<<<<<< HEAD
-const get = async (req,res)=>{
-    try {
-        const applicant = await ApplicantModel.find()
-      if(applicant){
-        res.status(200).json(applicant)
-      }else{
-        res.status(404).json("işleri alırken hata çıktı")
-      }
-       
-      } catch (error) {
-        throw new Error('Error fetching jobs: ' + error.message);
-      }
-    
-
-    }
-=======
 const getApplicant = async(req,res)=>{
     try{
         console.log("getapplicant içindesin")
@@ -86,7 +69,6 @@ const getApplicant = async(req,res)=>{
     }
 
 }
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
 const deleteApplicant= async (req,res)=>{
 try {
      const deletedApplicant = await ApplicantModel.findByIdAndDelete(req.params.id);

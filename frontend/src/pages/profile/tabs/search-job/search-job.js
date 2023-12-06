@@ -97,12 +97,6 @@ export default function SearchJob(props) {
                   <span>{job?.description}</span>
                 </div>
 
-<<<<<<< HEAD
-              <input type="text" placeholder="Teklifte bulun :  "/>
-              <button className={loading ? "loading" : undefined}>
-                APPLY
-              </button>
-=======
                 <input
                 type="text"
                 placeholder="MAKE AN OFFER"
@@ -122,7 +116,6 @@ export default function SearchJob(props) {
                   >
                     APPLY
                 </button>
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
             </li>
           ))
         ) : (

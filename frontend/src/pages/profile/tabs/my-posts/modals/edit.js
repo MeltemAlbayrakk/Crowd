@@ -74,20 +74,17 @@ export default function EditBox(props) {
   }, []);
 
   return (
+   
     
+    <div class= "profile__right">
+  <div className="container">
     <div
       className={editBoxVisibility ? "modal editBox active" : "editBox modal"}
       id="editBox"
     >
-      <div class="wrapper">
-    <div class="content">
-      <div class="container-profile">
-    <div class= "profile__right">
-  <div class="container">
-  <div class="content-profile">
-     
-      <div class="my__posts">
-      <div className="title">Edit sayfasi</div>
+      <div className="wrapper">
+      <div className="my__posts">
+      <div className="title">Edit sayfasÄ±</div>
       <a
           className="close"
 
@@ -157,9 +154,6 @@ export default function EditBox(props) {
           />
         </div>*/}
       </div> 
-    </div>
-    </div>
-    </div>
     </div>
     </div>
     </div>

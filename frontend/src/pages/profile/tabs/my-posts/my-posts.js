@@ -12,7 +12,7 @@ export default function MyPosts(props) {
 
   const [firstName,setFirstName]= useState("");
     const [lastName,setlastName]= useState("");
-    
+
 
   const [budget, setBudget] = useState("");
   const [category, setCategory] = useState("");
@@ -94,8 +94,6 @@ export default function MyPosts(props) {
 
     getData();
   }, []);
-
-  
 
   const deleteJob = async (id) => {
     setLoading(true);

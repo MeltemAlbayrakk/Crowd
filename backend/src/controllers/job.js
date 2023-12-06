@@ -11,7 +11,6 @@ const add= async (req,res)=>{
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
 
-console.log
         if (req.session.userId) {
         const addJobDetail = await JobModel.create({
         title:title,
@@ -92,9 +91,6 @@ const search = async (req,res)=>{
 
 
 };
-
-
-
 
 const deleteJob = async (req,res)=>{
   try {
