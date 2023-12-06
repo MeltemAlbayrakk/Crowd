@@ -20,20 +20,7 @@ export default function  DetailBox(props) {
   const {
     detailBoxVisibility,
     setDetailBoxVisibility,
-<<<<<<< HEAD
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    title,
-    setTitle,
-    category,
-    setCategory
-    
-  
-=======
     jobId
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
   } = props;
 
   const appliedMyPostDetailsHeadlines = [
@@ -41,36 +28,14 @@ export default function  DetailBox(props) {
     "Category",
     "FirstName",
     "LastName",
-<<<<<<< HEAD
-
-    
-   
-  
-=======
     "E-mail",
     "Offer",
     "Actions" 
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
   ];
 
-<<<<<<< HEAD
-  const [myPostDetail, setMyPostDetail] = useState([
-    {
-      title:"",
-      category:"",
-      firstName: "",
-      lastName: "",
-    
-    
-    },
-  ]);
-=======
   const [myPostDetail, setMyPostDetail] = useState([]);
   const [loading, setLoading] = useState(false);
   const [resp, setResp] = useState(true);
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
-
-  
 
   useEffect(() => {
     const getData = async () => {
@@ -84,16 +49,6 @@ export default function  DetailBox(props) {
           }
           console.log("BU RESPPP:",resp)
 
-<<<<<<< HEAD
-      const data = resp.map((item) => ({
-        title: item.title,
-        category:item.category,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        
-      
-      }));
-=======
           const data = resp.map((item) => ({
             firstName: item.firstName,
             
@@ -102,7 +57,6 @@ export default function  DetailBox(props) {
             offer: item.offer,
             actions: renderActions(item._id) 
           }));
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
 
           setMyPostDetail(data);
         }
@@ -137,34 +91,35 @@ export default function  DetailBox(props) {
     console.log("Accept button clicked for applicant ID:", applicantId);
   };
 
+  const renderActions = (applicantId) => {
+    return (
+      <div>
+        <button id="accept"onClick={() => handleAccept(applicantId)}>Accept</button>
+        <button id="reject"onClick={() => handleReject(applicantId)}>Reject</button>
+      </div>
+    );
+  };
+
+  const handleAccept = async (applicantId) => {
+    setLoading(true)
+      const resp = await api.applicant.setStatus("company", applicantId,"Accepted" );
+      console.log("Accept button clicked for applicant ID:", applicantId);
+
+    setLoading(false)
+  };
+  
+
+  const handleReject = async (applicantId) => {
+    const resp = await api.applicant.setStatus("company", applicantId,"Rejected" );
+    console.log("Accept button clicked for applicant ID:", applicantId);
+  };
+
   const selectedJobDetail = myPostDetail.find((item) => item.title === title);
   return (
-<<<<<<< HEAD
-   
-  
-   
-    <div
-      className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
-      id="detailBox"
-    >
-      
-      <div class="wrapper">
-    <div class="content">
-      <div class="container-profile">
-    <div class= "profile__right">
-  <div class="container">
-  <div class="content-profile"></div>
-  
-      <div className="my__posts">
-      <div className="title">{selectedJobDetail?.title}</div>
-        <a
-          className="close"
-=======
     
     <div class= "profile__right">
     <div className="container">
       
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
 
    <div
      className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
@@ -193,14 +148,5 @@ export default function  DetailBox(props) {
       </div>
     </div>
     </div>
-<<<<<<< HEAD
-    </div>
-    </div>
-    </div>
-    </div>
-   
-    
-=======
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
   );
 }

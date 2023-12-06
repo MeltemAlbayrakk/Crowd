@@ -180,14 +180,6 @@ export default {
           return response.data;
         }
       },
-<<<<<<< HEAD
-      // async get(id) {
-      //   if (type === "company") {
-      //     const response = await instance.get("/job/${id}", payload,{withCredentials: true});
-      //     return response.data;
-      //   }
-      // },
-=======
       async getall(type, payload) {
         if (type === "company") {
           const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
@@ -195,7 +187,6 @@ export default {
         }
       },
 	
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -220,31 +211,6 @@ export default {
         }
       }
       },
-<<<<<<< HEAD
-applicant:{
-  async add(type, payload) {
-    if (type === "personal") {
-      const response = await instance.post(
-        "/applicant/",
-        payload,{withCredentials: true},
-      );
-      return response.data;
-    }
-  },
-  async get(type, payload) {
-    if (type === "company") {
-      const response = await instance.get("/applicant/", payload,{withCredentials: true});
-      return response.data;
-    }
-  },
-  async delete(type, id) {
-    if (type === "company") {
-      const response = await instance.post(
-        "/applicant/delete/"+ id,
-        {withCredentials: true},
-      );
-      return response.data;
-=======
   applicant:{
     async add(type, payload) {
       if (type === "personal") {
@@ -286,7 +252,6 @@ applicant:{
           throw error;
         }
       }
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
     }
   }
 

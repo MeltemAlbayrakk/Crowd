@@ -106,9 +106,6 @@ return res.status(200).send("Applicant information deleted successfully");
 }
    
 }
-<<<<<<< HEAD
-export{addApplicant,get,deleteApplicant}
-=======
 const setActions = async (req, res) => {
     try {
       const { status } = req.body;
@@ -155,4 +152,3 @@ const setActions = async (req, res) => {
     }
   };
 export{addApplicant,deleteApplicant,getApplicant,details,setActions}
->>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
