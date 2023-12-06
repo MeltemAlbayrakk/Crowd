@@ -10,10 +10,6 @@ export default function SearchJob(props) {
     offer: '',
     selectedJob: null,
   });
-  const [form,setForm]=useState({
-    offer: '',
-    selectedJob: null,
-  });
   const getJobs = async (param, timeout) => {
     setLoading(true);
     try {
@@ -24,7 +20,7 @@ export default function SearchJob(props) {
         searchData = await api.job.get("company");
 
       } else {
-        searchData = await api.job.getall("company");
+        searchData = await api.job.get("company");
         searchData = searchData.filter((job) =>
         job && job.title && job.title.toLowerCase().includes(searchString)
         );
@@ -37,15 +33,6 @@ export default function SearchJob(props) {
       setLoading(false);
     }
   };
-  const addApplicant= async(req,res)=>{
-    setLoading(true)
-
-
-    const response= await api.applicant.add("personal",form)
-    console.log("bu search job içindeki cevap:",response)
-    setForm({ offer: ' ', selectedJob: null });
-    setLoading(false)
-  }
   const addApplicant= async(req,res)=>{
     setLoading(true)
 
@@ -68,11 +55,9 @@ export default function SearchJob(props) {
   //   }));
   // };
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }));
+    const inputValue = e.currentTarget.value;
+    setSearchValue(inputValue);
+    setTimeout(() => getJobs(inputValue), 350);
   };
 
   return (
@@ -84,7 +69,6 @@ export default function SearchJob(props) {
           placeholder="Search..."
           value={searchValue}
           onChange={handleInputChange}
-          
           
         />
       </div>
@@ -113,25 +97,6 @@ export default function SearchJob(props) {
                   <span>{job?.description}</span>
                 </div>
 
-                <input
-                type="text"
-                placeholder="MAKE AN OFFER"
-                onChange={(e) =>
-                  setForm({
-
-                    offer: e.target.value,
-                  })
-                }
-                  />
-              <button
-                  name="offer"
-                  className={loading ? "loading" : undefined}
-                  onFocus={() => setForm((prevForm) => ({ ...prevForm, selectedJob: job }))}
-                  onChange={handleInputChange}
-                  onClick={addApplicant}
-                  >
-                    APPLY
-                </button>
                 <input
                 type="text"
                 placeholder="MAKE AN OFFER"
