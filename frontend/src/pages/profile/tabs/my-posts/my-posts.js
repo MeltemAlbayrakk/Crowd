@@ -67,13 +67,13 @@ export default function MyPosts(props) {
   useEffect(() => {
     const getData = async () => {
 
-      // const user = await api.user.profile.get(id);
+      const user = await api.user.profile.get(id);
       const resp = (await api.job.get("company"))
-      // .filter(job => {
-      //   console.log("owner id",job.jobOwnerId)
-      //   return job.jobOwnerId === user._id;
-  
-  
+      .filter(job => {
+    
+        return job.jobOwnerId === user._id;
+    }  )
+   
 
       const data = resp.map((item) => ({
         title: item.title,

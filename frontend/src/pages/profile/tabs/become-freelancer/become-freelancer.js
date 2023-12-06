@@ -162,7 +162,7 @@ export default function BecomeFreelancer(props) {
          
         }))
       );
-      console.log("Burası setselectProfession")
+     
       setSpecialityOptions(
         speciality.map((Speciality) => ({
           label: Speciality.label,
