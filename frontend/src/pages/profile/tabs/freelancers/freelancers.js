@@ -1,84 +1,34 @@
+import React, { useState, useEffect } from "react";
+import api from "../../../../services/api";
+
 export default function Freelancers() {
-  const freelancers = [
-    {
-      freelancer: {
-        id: "161c5548-996e-47bc-b311-a5e673acee27",
-        firstName: "Erkan",
-        lastName: "Yeter",
-        userTitle: "asd",
-        skills: [
-          {
-            label: "Angular",
-            value: "angular",
-          },
-          {
-            label: "Graphic Design",
-            value: "design",
-          },
-          {
-            label: "Information Architecture",
-            value: "ia",
-          },
-        ],
-      },
-      job: {
-        title: "sefsdfds",
-        description: "sdfsdfdsf",
-      },
-    },
-    {
-      freelancer: {
-        id: "161c5548-996e-47bc-b311-a5e673acee27",
-        firstName: "Erkan",
-        lastName: "Yeter",
-        userTitle: null,
-        skills: [
-          {
-            label: "Angular",
-            value: "angular",
-          },
-          {
-            label: "Graphic Design",
-            value: "design",
-          },
-          {
-            label: "Information Architecture",
-            value: "ia",
-          },
-        ],
-      },
-      job: {
-        title: "sefsdfds",
-        description: "sdfsdfdsf",
-      },
-    },
-    {
-      freelancer: {
-        id: "161c5548-996e-47bc-b311-a5e673acee27",
-        firstName: "Erkan",
-        lastName: "Yeter",
-        userTitle: null,
-        skills: [
-          {
-            label: "Angular",
-            value: "angular",
-          },
-          {
-            label: "Graphic Design",
-            value: "design",
-          },
-          {
-            label: "Information Architecture",
-            value: "ia",
-          },
-        ],
-      },
-      job: {
-        title: "sefsdfds",
-        description: "sdfsdfdsf",
-      },
-    },
-  ];
+  const [freelancers, setFreelancers] = useState([]);
+  const [skills, setSkills] = useState([]);
+
+  const getFreelancers = async () => {
+    try {
+      const res = await api.freelancer.get("personal");
+      let allSkills = [];
+
+      res.forEach((element) => {
+        element.skills.forEach((aaa) => {
+          console.log(aaa);
+          allSkills.push(aaa);
+        });
+      });
+
+      console.log("Skills:",allSkills)
+      setFreelancers(res);
+      setSkills(allSkills);
+      
+    } catch (error) {
+      console.error("Error fetching freelancers:", error);
+    }
+  };
+
+  useEffect(() => {
+    getFreelancers();
+  }, []); 
 
   return (
     <div className="freelancers">
@@ -86,21 +36,16 @@ export default function Freelancers() {
 
       <ul className="freelancers__list">
         {freelancers.map((freelancer) => (
-          <li className="freelancers__list__item">
+          <li className="freelancers__list__item" key={freelancer.id}>
             <div className="freelancers__list__name">
-              {freelancer.freelancer.firstName +
-                " " +
-                freelancer.freelancer.lastName}
+              {freelancer.firstName + " " + freelancer.lastName}
             </div>
 
             <ul className="freelancers__list__skills">
-              {freelancer.freelancer.skills.map((free, index) => (
-                <li>
-                  {free.label}{" "}
-                  {freelancer.freelancer.skills.length != index + 1 && <i>,</i>}
-                </li>
-              ))}
-            </ul>
+      {freelancer.skills.map((skill, index) => (
+        <li key={index}>{skill}</li>
+      ))}
+    </ul>
           </li>
         ))}
       </ul>
