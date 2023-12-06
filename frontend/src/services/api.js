@@ -46,7 +46,6 @@ export default {
       const response = await instance.post(
         "/user/personal/beFreelancer",
         payload,{withCredentials:true}
-       
       );
       return response.data;
     },
@@ -68,7 +67,6 @@ export default {
           return response.data;
         } else if (type === "company") {
           const response = await instance.post(
-         
             "/user/company/update",
             payload,{withCredentials: true},
           );
@@ -182,12 +180,22 @@ export default {
           return response.data;
         }
       },
+<<<<<<< HEAD
       // async get(id) {
       //   if (type === "company") {
       //     const response = await instance.get("/job/${id}", payload,{withCredentials: true});
       //     return response.data;
       //   }
       // },
+=======
+      async getall(type, payload) {
+        if (type === "company") {
+          const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
+          return response.data;
+        }
+      },
+	
+>>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
       async search(title) {
     
         const response = await instance.post("/job/search", { title },{withCredentials: true});
@@ -201,8 +209,18 @@ export default {
           );
           return response.data;
         }
+      },
+      async jobdetails(type, id) {
+        if (type === "company") {
+          const response = await instance.get(
+            "/applicant/details/"+ id,
+            {withCredentials: true},
+          );
+          return response.data;
+        }
       }
       },
+<<<<<<< HEAD
 applicant:{
   async add(type, payload) {
     if (type === "personal") {
@@ -226,9 +244,51 @@ applicant:{
         {withCredentials: true},
       );
       return response.data;
+=======
+  applicant:{
+    async add(type, payload) {
+      if (type === "personal") {
+        const response = await instance.post(
+          "/applicant/",
+          payload,{withCredentials: true},
+        );
+        return response.data;
+      }
+    },
+    async get(type,id) {
+      if (type === "personal") {
+        const response = await instance.get("/applicant/",
+       
+        {withCredentials: true});
+        return response.data;
+      }
+    },
+    async delete(type, id) {
+      if (type === "company") {
+        const response = await instance.post(
+          "/applicant/delete/"+ id,
+          {withCredentials: true},
+        );
+        return response.data;
+      }
+    },
+    async setStatus(type, id, status) {
+      if (type === "company") {
+        try {
+          const response = await instance.post(
+            `/applicant/setstatus/${id}`,
+            { status },
+            { withCredentials: true }
+          );
+          return response.data;
+        } catch (error) {
+          console.error("Error setting status:", error);
+          throw error;
+        }
+      }
+>>>>>>> 36fe13b9ef5f24c31138b17362ced551e144f12a
     }
   }
-}
 
 };
 

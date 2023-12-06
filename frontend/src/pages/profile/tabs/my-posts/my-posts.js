@@ -23,27 +23,30 @@ export default function MyPosts(props) {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
 
+  const [selectedJobId, setSelectedJobId] = useState(null); // Seçilen işin kimliği
+
+
   const appliedMyPostsHeadlines = [
     "Title",
     "Category",
     "Description",
-   
+  
 
     "Deadline",
 
     "Budget",
- 
-    "Edit",
+
+  
   ];
 
   const editRow = (event) => {
     return <button onClick={() => setEditBoxVisibility(true)}>Delete</button>;
   };
-  const detailRow = (event) => {
+  const detailrow = (event) => {
     return <button onClick={() => setDetailBoxVisibility(true)}>Detail</button>;
   };
 
- 
+
 
   const [myPosts, setMyPosts] = useState([
     {  title: "",
@@ -52,25 +55,25 @@ export default function MyPosts(props) {
     
       
       deadline: "",
-     
+    
       budget: "",
-   
+  
     
       edit: editRow("Edit"),
-      detail:detailRow("Detail")
+      detail:detailrow("Detail")
     },
   ]);
 
   useEffect(() => {
     const getData = async () => {
 
-      // const user = await api.user.profile.get(id);
+      const user = await api.user.profile.get(id);
       const resp = (await api.job.get("company"))
-      // .filter(job => {
-      //   console.log("owner id",job.jobOwnerId)
-      //   return job.jobOwnerId === user._id;
-   
-   
+      .filter(job => {
+        console.log("owner id",job.jobOwnerId)
+        return job.jobOwnerId === user._id;})
+  
+  
 
       const data = resp.map((item) => ({
         title: item.title,
@@ -80,9 +83,10 @@ export default function MyPosts(props) {
         
         deadline: item.deadline,
         budget: item.budget,
-       
+      
         edit: deleteRow(item._id),
-        detail:detailRow("Detail"),
+        detail:detailRow(item._id)  ,
+        
       }));
 
       setMyPosts(data);
@@ -98,31 +102,51 @@ export default function MyPosts(props) {
     console.log("id degeri:",id)
     await api.job.delete("company", id);
 /*     props.getProfile();
- */    setLoading(false);
+*/    setLoading(false);
+  };
+
+  const detailJob = async (id) => {
+    setLoading(true);
+    console.log("id  details degeri:",id)
+    await api.job.jobdetails("company", id);
+/*     props.getProfile();
+*/    setLoading(false);
   };
   const deleteRow = (id) => {
     return <button onClick={() => deleteJob(id)}>Delete</button>;
 };
-
-  
+const detailRow = (id) => {
   return (
-   
-    <div className="my__posts">
-      <div className="title">My Posts</div>
-      {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
-      
-        <div class= "profile__right">
-          
-          
-      <EditBox
-        edit={"Delete"}
-        editBoxVisibility={editBoxVisibility}
-        setEdittBoxVisibility={setEditBoxVisibility}
+    <button
+    
+      onClick={() => {
+        setSelectedJobId(id)
+        detailJob(id);
+        setDetailBoxVisibility(true);
+      }}
+    >
+      detail
+    </button>
+  );
+};
+  
+return (
 
+  <div className="myposts">
+    <div className="title">My Posts</div>
+    {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
+
+      <div class= "profileright">
+
+
+    <EditBox
+      edit={"Delete"}
+      editBoxVisibility={editBoxVisibility}
+      setEdittBoxVisibility={setEditBoxVisibility}
         
       
         />
-       
+      
 <DetailBox
         detail={"Detail"}
         detailBoxVisibility={detailBoxVisibility}
@@ -132,10 +156,12 @@ export default function MyPosts(props) {
       
     
         loading={loading}
+        jobId={selectedJobId} // Seçilen işin kimliğini detay kutusuna aktar
+
       />
     </div>
     </div>
-   
+  
 
 
 

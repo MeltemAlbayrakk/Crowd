@@ -1289,6 +1289,12 @@ select {
   width: 100%;
 }
 
+#accept:hover{
+  background-color:rgb(32, 63, 32);
+}
+#reject:hover{
+  background-color:rgb(93, 4, 4);
+}
 .freelancers {
   width: 100%;
 
