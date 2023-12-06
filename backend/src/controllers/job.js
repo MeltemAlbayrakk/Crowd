@@ -40,8 +40,9 @@ console.log
   }
 }
 const get = async (req,res)=>{
-    try {
+  try {
         const job = await JobModel.find()
+
       if(job){
         res.status(200).json(job)
       }else{
@@ -55,10 +56,26 @@ const get = async (req,res)=>{
 
 }
 
+const getall = async (req,res)=>{
+  
+  try {
+        const job = await JobModel.find({})
+      if(job){
+        res.status(200).json(job)
+      }else{
+        res.status(404).json("işleri alırken hata çıktı")
+      }
+       
+      } catch (error) {
+        throw new Error('Error fetching jobs: ' + error.message);
+      }
+    
+
+}
 const search = async (req,res)=>{
   try {
     const title=req.body
-    const job = await JobModel.findOne({title:title.title});
+    const job = await JobModel.find({title:title.title});
     console.log(job)
     if(job){
       res.status(200).json(job)

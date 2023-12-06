@@ -45,6 +45,7 @@ export default function JobPosting(props) {
     category: "",
     budget: "",
     deadline: "",
+    jobOwnerId:""
   });
 
   const [activeJobPostingErrors, setActivejobPostingErrors] = useState(null);

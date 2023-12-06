@@ -43,22 +43,12 @@ export default function DetailBox(props) {
     }
   }, [detailBoxVisibility, jobId]);
   return (
-    
-   
-    // <div class="content">
-    //   <div class="container profile">
-    // <div class="profile__right">
-    // <div class="container">
-    //   <div class="content-profile">
-    
     <div className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"} id="detailBox">
-        <div className="wrapper">
+      <div className="wrapper">
         <div className="my__posts">
           <div className="title">Job Details</div>
           <a className="close" onClick={() => setDetailBoxVisibility(false)}>X</a>
-          
           <Table headline={appliedMyPostDetailsHeadlines} data={[jobDetails]} />
-          
           {/* Or use the jobDetails object to display data */}
           {/* For example: */}
           {/* <p>First Name: {jobDetails.firstName}</p> */}
@@ -68,10 +58,5 @@ export default function DetailBox(props) {
         </div>
       </div>
     </div>
-   
-   
-    
-
-   
   );
 }

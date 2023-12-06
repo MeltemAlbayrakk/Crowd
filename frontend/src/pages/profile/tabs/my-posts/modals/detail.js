@@ -18,16 +18,24 @@ export default function DetailBox(props) {
   ];
 
   const [myPostDetail, setMyPostDetail] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [resp, setResp] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
         if (jobId) {
           console.log(jobId + " jobidddddddd");
-          const resp = await api.job.jobdetails("company", jobId);
+          const resp = (await api.job.jobdetails("company",jobId)).filter(job=>job.status==="Pending");
+          if(resp.length==0){
+           
+            setResp(false);
+          }
+          console.log("BU RESPPP:",resp)
 
           const data = resp.map((item) => ({
             firstName: item.firstName,
+            
             lastName: item.lastName,
             email: item.email,
             offer: item.offer,
@@ -47,17 +55,18 @@ export default function DetailBox(props) {
   const renderActions = (applicantId) => {
     return (
       <div>
-        <button id="accept" onClick={() => handleAccept(applicantId)}>Accept</button>
-        <button id="reject"  onClick={() => handleReject(applicantId)}>Reject</button>
+        <button id="accept"onClick={() => handleAccept(applicantId)}>Accept</button>
+        <button id="reject"onClick={() => handleReject(applicantId)}>Reject</button>
       </div>
     );
   };
 
   const handleAccept = async (applicantId) => {
-    
+    setLoading(true)
       const resp = await api.applicant.setStatus("company", applicantId,"Accepted" );
       console.log("Accept button clicked for applicant ID:", applicantId);
-    
+
+    setLoading(false)
   };
   
 
@@ -67,10 +76,11 @@ export default function DetailBox(props) {
   };
 
   return (
-   
+    
     <div class= "profile__right">
     <div className="container">
-    
+      
+
    <div
      className={detailBoxVisibility ? "modal detailBox active" : "detailBox modal"}
      id="detailBox"
@@ -79,29 +89,24 @@ export default function DetailBox(props) {
      <div class= "profile__right">
      <div className="my__posts">
    <div className="title">My Post Details</div>
-       <a
-         className="close"
-
+              <a
+                className="close"
                 onClick={() => {
                   setDetailBoxVisibility(false);
                 }}
               >
                 X
               </a>
-              <Table headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />
+              
+              {resp?<Table 
+              loading={loading}
+              headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />:<div className="nodata">No data found!</div>}
+              
             </div>
           </div>
-          </div>
-          </div>
-          </div>
-          </div>
-         
-         
-        
-         
-         
-         
-          
-  
+        </div>
+      </div>
+    </div>
+    </div>
   );
 }

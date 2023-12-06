@@ -3,8 +3,8 @@ import api from "../../../../services/api";
 import { useState, useEffect } from "react";
 import JobPosting from "../job-posting/job-posting";
 import { useParams } from 'react-router-dom';
-import EditBox from "./modals/edit";
-import DetailBox from "./modals/detail";
+import EditBox from "./modals/edit.js";
+import DetailBox from "./modals/detail.js";
 
 export default function MyPosts(props) {
   const [editBoxVisibility, setEditBoxVisibility] = useState(false);
@@ -36,7 +36,7 @@ export default function MyPosts(props) {
 
     "Budget",
 
-    "Edit",
+  
   ];
 
   const editRow = (event) => {
@@ -70,10 +70,10 @@ export default function MyPosts(props) {
       const user = await api.user.profile.get(id);
       const resp = (await api.job.get("company"))
       .filter(job => {
-    
-        return job.jobOwnerId === user._id;
-    }  )
-   
+        console.log("owner id",job.jobOwnerId)
+        return job.jobOwnerId === user._id;})
+  
+  
 
       const data = resp.map((item) => ({
         title: item.title,
@@ -111,11 +111,12 @@ export default function MyPosts(props) {
 */    setLoading(false);
   };
   const deleteRow = (id) => {
-    return <button id="reject" onClick={() => deleteJob(id)}>Delete</button>;
+    return <button onClick={() => deleteJob(id)}>Delete</button>;
 };
 const detailRow = (id) => {
   return (
-    <button 
+    <button
+    
       onClick={() => {
         setSelectedJobId(id)
         detailJob(id);
@@ -127,20 +128,19 @@ const detailRow = (id) => {
   );
 };
   
-  return (
-  
-    <div className="my__posts">
-      <div className="title">My Posts</div>
-      {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
-      
-        <div class= "profile__right">
-          
-          
-      <EditBox
-        edit={"Delete"}
-        editBoxVisibility={editBoxVisibility}
-        setEdittBoxVisibility={setEditBoxVisibility}
+return (
 
+  <div className="myposts">
+    <div className="title">My Posts</div>
+    {<Table headline={appliedMyPostsHeadlines} data={myPosts} />}
+
+      <div class= "profileright">
+
+
+    <EditBox
+      edit={"Delete"}
+      editBoxVisibility={editBoxVisibility}
+      setEdittBoxVisibility={setEditBoxVisibility}
         
       
         />
