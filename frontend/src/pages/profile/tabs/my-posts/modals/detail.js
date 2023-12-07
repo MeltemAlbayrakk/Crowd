@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Table from "../../../../../components/layout/table/table";
 import api from "../../../../../services/api";
+import { useNavigate } from 'react-router-dom';
+
 
 export default function DetailBox(props) {
   const {
@@ -20,6 +22,10 @@ export default function DetailBox(props) {
   const [myPostDetail, setMyPostDetail] = useState([]);
   const [loading, setLoading] = useState(false);
   const [resp, setResp] = useState(true);
+  const [Profile, setProfile] = useState([]);
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const getData = async () => {
@@ -41,7 +47,6 @@ export default function DetailBox(props) {
             offer: item.offer,
             actions: renderActions(item._id) 
           }));
-
           setMyPostDetail(data);
         }
       } catch (error) {
@@ -52,9 +57,16 @@ export default function DetailBox(props) {
     getData();
   }, [jobId]);
 
+  const showProfile = async ()=>{
+  /*   const Profile = await api.user.profile.get("65590d6087e8c71e81e39160");
+    console.log("Profil value:",Profile.lastName) */
+    navigate('/showProfile', { state: { Profile} });
+   }
+
   const renderActions = (applicantId) => {
     return (
       <div>
+        <button onClick={() => showProfile()} >Show Profile</button>
         <button id="accept"onClick={() => handleAccept(applicantId)}>Accept</button>
         <button id="reject"onClick={() => handleReject(applicantId)}>Reject</button>
       </div>
@@ -110,3 +122,4 @@ export default function DetailBox(props) {
     </div>
   );
 }
+ 
