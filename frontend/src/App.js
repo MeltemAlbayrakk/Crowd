@@ -11,6 +11,7 @@ import Homepage from './pages/homepage/homepage';
 import Profile from './pages/profile/index';
 import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
+ import Showprofile from './pages/profile/tabs/profile/personal/showProfile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
