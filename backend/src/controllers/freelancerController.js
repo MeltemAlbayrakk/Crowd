@@ -2,57 +2,35 @@ import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
 import JobModel from "../models/Job.js";
 
-const getFreelancers = async(req,res)=>{
-    try{
-        const userId= req.session.userId;
-        const user=await UserModel.findById(userId)
-        const job=await JobModel.find({jobOwnerId:req.session.userId});
-        console.log("job 0ım:",job[0].users)
-        
-        const responseArray = [];
+const getFreelancers = async (req, res) => {
+  try {
+      const job = await JobModel.find({ jobOwnerId: req.session.userId });
+      
+      const jobIds = job.map(job => job._id); // iş ID'lerini alın
 
-            
-        await Promise.all(
-            job.map(async (element) => {
-              const userId = element.users;
-              for (let i = 0; i < userId.length; i++) {
-                const userId_ = userId[i];
-                const freelancer = await UserModel.findById(userId_);
-                const responseObject = {
-                  firstName: freelancer?.firstName,
-                  lastName: freelancer?.lastName,
-                  skills: freelancer?.skills,
-                };
-                responseArray.push(responseObject);
-                console.log(responseArray);
-              }         
-            })
-          );
+      // Başvuruları bulmak için tek bir sorgu yapın ve Accepted başvuruları alın
+      const acceptedApplicants = await ApplicantModel.find({ job: { $in: jobIds }, status: "Accepted" });
 
-        /* for (let i = 0; i < job.length; i++) {
-        
-            const userId=job[i].users
-            const freelancer= await UserModel.findById(userId)
-            const responseObject = {
-                firstName: freelancer?.firstName,
-                lastName: freelancer?.lastName,
-                skills:freelancer?.skills
-            };
+      const responseArray = [];
 
-            responseArray.push(responseObject);
-            console.log(responseArray)
+      for (const applicant of acceptedApplicants) {
+          const freelancer = await UserModel.findById(applicant.user); // Başvuran kullanıcıyı alın
 
-        } */
+          const responseObject = {
+              firstName: freelancer?.firstName,
+              lastName: freelancer?.lastName,
+              skills: freelancer?.skills,
+          };
 
-        res.status(200).json(responseArray);
+          responseArray.push(responseObject);
+      }
 
-        res.status(500).json({message:"servo hata"})
-
-    }catch(err){
-        console.log("hata mesajı:",err.message)
-    }
-
-}
+      res.status(200).json(responseArray);
+  } catch (err) {
+      console.error("Hata mesajı:", err.message);
+      res.status(500).json({ message: "Servis hatası" });
+  }
+};
 
   
 /*   
