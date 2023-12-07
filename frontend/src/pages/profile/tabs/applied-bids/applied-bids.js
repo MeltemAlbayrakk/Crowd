@@ -27,7 +27,7 @@ export default function AppliedBids(props) {
 
       setAppliedBidsData(newData);
     } catch (error) {
-      console.error("Hata detayları:", error.response.data);
+      console.error("Hata detayları:", error.response);
     } finally {
       setLoading(false);
     }

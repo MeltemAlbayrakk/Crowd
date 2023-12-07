@@ -6,14 +6,15 @@ const getFreelancers = async (req, res) => {
   try {
       const job = await JobModel.find({ jobOwnerId: req.session.userId });
       
-      const jobIds = job.map(job => job._id); 
+      const jobIds = job.map(job => job._id); // iş ID'lerini alın
 
+      // Başvuruları bulmak için tek bir sorgu yapın ve Accepted başvuruları alın
       const acceptedApplicants = await ApplicantModel.find({ job: { $in: jobIds }, status: "Accepted" });
 
       const responseArray = [];
 
       for (const applicant of acceptedApplicants) {
-          const freelancer = await UserModel.findById(applicant.user); 
+          const freelancer = await UserModel.findById(applicant.user); // Başvuran kullanıcıyı alın
 
           const responseObject = {
               firstName: freelancer?.firstName,
