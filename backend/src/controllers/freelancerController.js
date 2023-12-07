@@ -2,91 +2,55 @@ import UserModel from "../models/User.js";
 import ApplicantModel from "../models/applicant.js";
 import JobModel from "../models/Job.js";
 
-const getFreelancers = async(req,res)=>{
-    try{
-        const userId= req.session.userId;
-        const user=await UserModel.findById(userId)
-        const job=await JobModel.find({jobOwnerId:req.session.userId});
-        console.log("job 0ım:",job[0].users)
+const getFreelancers = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const user = await UserModel.findById(userId);
+    const jobs = await JobModel.find({ jobOwnerId: req.session.userId });
+
+    
+    const responseArray = [];
+
+
+    for (let i = 0; i < jobs.length; i++) {
+      for (let j = 0; j < jobs[i].applicants.length; j++) {
+        const applicantId = jobs[i].applicants[j];
+        const bas = await ApplicantModel.findById(applicantId);
+       
+console.log("basvurular",bas)
+        if (!bas || bas.status !== "Accepted") {
+         // console.log(`Applicant not found or status not accepted for ID: ${applicantId}`);
+          
+        }else{
+           //console.log("basvuru", bas);
+        }
+
         
-        const responseArray = [];
 
-            
-        await Promise.all(
-            job.map(async (element) => {
-              const userId = element.users;
-              for (let i = 0; i < userId.length; i++) {
-                const userId_ = userId[i];
-                const freelancer = await UserModel.findById(userId_);
-                const responseObject = {
-                  firstName: freelancer?.firstName,
-                  lastName: freelancer?.lastName,
-                  skills: freelancer?.skills,
-                };
-                responseArray.push(responseObject);
-                console.log(responseArray);
-              }         
-            })
-          );
-
-        /* for (let i = 0; i < job.length; i++) {
-        
-            const userId=job[i].users
-            const freelancer= await UserModel.findById(userId)
-            const responseObject = {
-                firstName: freelancer?.firstName,
-                lastName: freelancer?.lastName,
-                skills:freelancer?.skills
-            };
-
-            responseArray.push(responseObject);
-            console.log(responseArray)
-
-        } */
-
-        res.status(200).json(responseArray);
-
-        res.status(500).json({message:"servo hata"})
-
-    }catch(err){
-        console.log("hata mesajı:",err.message)
-    }
-
-}
-
-  
-/*   
-  const details = async (req, res) => {
-    try {
-      console.log(req.params.id + " detailsss");
-  
-      const applicants = await ApplicantModel.find({ job: req.params.id });
-  
-      const usersData = [];
-  
-      for (let i = 0; i < applicants.length; i++) {
-        const applicant = applicants[i];
-        console.log("Applicant ID:", applicant.user);
-  
-        const user = await UserModel.findOne({ _id: applicant.user });
-  
-        const userData = {
-          _id:applicant._id,
-          userId: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email:user.email,
-          offer:applicant.offer,
-          status:applicant.status
-        };
-  
-        usersData.push(userData);
+        //const userIds = jobs[i].users;
+       // console.log("userlar ama hangileri:",userIds)
+        // await Promise.all(
+        //   userIds.map(async (userId) => {
+        //     const freelancer = await UserModel.findById(userId);
+        //     const responseObject = {
+        //       firstName: freelancer?.firstName,
+        //       lastName: freelancer?.lastName,
+        //       skills: freelancer?.skills,
+        //     };
+        //      responseArray.push(responseObject);
+        //   })
+        // );
       }
-  
-      res.status(200).json(usersData);
-  
-    } catch (error) {
-      throw new Error('Job search error: ' + error.message);
+      
     }
-  }; */
-export{getFreelancers}
+   
+   
+   
+    res.status(200).json();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export  {getFreelancers};
