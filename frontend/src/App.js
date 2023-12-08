@@ -11,7 +11,9 @@ import Homepage from './pages/homepage/homepage';
 import Profile from './pages/profile/index';
 import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
-
+import ShowProfile from './pages/profile/tabs/profile/personal/showProfile';
+/* import DetailBox from './pages/profile/tabs/my-posts/modals/detail';
+ */
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null); // Kullanıcının ID'sini saklamak için
@@ -58,6 +60,7 @@ function App() {
       />
       <Route path="/loading/profile" element={<LoadingProfile />} />
       <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/showProfile" element={<ShowProfile />} />
     </Routes>
   );
 }
