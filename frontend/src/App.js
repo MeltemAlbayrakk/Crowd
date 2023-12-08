@@ -59,6 +59,8 @@ function App() {
       />
       <Route path="/loading/profile" element={<LoadingProfile />} />
       <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/showProfile" element={<Showprofile />} />
+
     </Routes>
   );
 }

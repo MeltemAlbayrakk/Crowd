@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../../../../styles/styles.scss"
 import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 export default function Profile(props) {
-
-
-const {userId}=props
+  const location = useLocation();
+  const { userId } = location.state;
 
   const languages = [
     { label: "Turkish", value: "Turkish" },
