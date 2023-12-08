@@ -73,10 +73,9 @@ export default function Profile(props) {
 
   const [languagesOptions, setLanguagesOptions] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]); 
-
+  
   const [skillsOptions, setSkillsOptions] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-
+  const [selectedSkills, setSelectedSkills] = useState([]); 
   
 
   const { id } = useParams();
@@ -102,8 +101,14 @@ export default function Profile(props) {
 
   useEffect(() => {
     getProfile1();
-  }, []);
 
+    if (form?.languages) {
+      setSelectedLanguages(form.languages.map((lang) => ({ label: lang, value: lang })));
+    }
+    if (form?.skills) {
+      setSelectedSkills(form.skills.map((skill) => ({ label: skill, value: skill })));
+    }
+  }, [form]);
  
 
   const formattedEducations = form?.educations.map((education) => ({
@@ -187,17 +192,15 @@ export default function Profile(props) {
          
               />
               </li>
-            <li>
+              <li>
               <label>Languages</label>
               <Select
                 value={selectedLanguages}
-                options={languagesOptions}
                 isMulti
                 unstyled
                 readOnly
                 classNamePrefix="react-select"
                 className="react-select-container" 
-               
               />
             </li>
             <li>
