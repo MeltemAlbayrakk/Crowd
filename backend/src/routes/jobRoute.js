@@ -11,6 +11,6 @@ router.route("/jobs").get(job.getall);
 router.route("/search").post(job.search);
 router.route("/delete/:id").get(job.deleteJob);
 
-
+router.route("/ai").post(job.aiAnalysis)
 
 export default router

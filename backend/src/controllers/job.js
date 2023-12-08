@@ -112,4 +112,68 @@ const deleteJob = async (req,res)=>{
   }
 }
 
-export {add,get,search,deleteJob,getall}
+
+import Bard from "bard-ai";
+
+const getAlljobs = async (req, res) => {
+  const jobs = await JobModel.find({});
+
+  res.status(201).json(jobs);
+};
+
+async function ai(content) {
+  let myBard = new Bard(
+    "eAimDWrwKbKM8yXB3CJA_4v-NkqdX6GR2vpcXVN1uFoVvk6WJgMclMh490krqqCe3YQeAg.",
+    {
+      verbose: true,
+      fetch: fetch,
+    }
+  );
+
+  try {
+    const aicontent = await myBard.ask(`${content}`);
+    // Bu kısımda aicontent değişkeniyle yapmak istediğiniz işlemleri gerçekleştirebilirsiniz
+
+    console.log(aicontent);
+    return aicontent;
+  } catch (error) {
+    // Hata yönetimi burada yapılabilir
+    console.error(error);
+    throw error;
+  }
+}
+
+const aiAnalysis = async (req, res) => {
+  try {
+    const {title ,past, future } = req.body;
+
+    const jobs = await JobModel.find({});
+
+    const reactJobs = jobs.filter((job) => job.title === title);
+    const numberOfReactJobs = reactJobs.length;
+
+    let question = "90\n75\n30 " +
+     "yukardaki geçmiş "+ past +
+      " aylık veriye bakarak" +
+      " gelecek " +
+      future +
+      " ay içinde ne yönlü bir gelişme olabilir tahmin yapabilir misin ?"
+       +("Bu bir sitede bir programlama diline olan talep sayısıdır."
+       +"Gelecek aylar içinde ay ay sayı vererek tahmin yap.Dilin adı :  ")+title;
+
+    const data = await ai(question);
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "ai cookie patladı" });
+  }
+};
+
+
+
+
+
+
+
+
+export {add,get,search,deleteJob,getall,aiAnalysis}
