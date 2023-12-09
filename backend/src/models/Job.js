@@ -12,8 +12,9 @@ const JobSchema = new Schema({
     jobOwnerId:{type:String,required:false},
     applicants:[{ type: Schema.Types.ObjectId, ref: 'Applicant' }],
     users:[{type:String,required:false,ref:'User'}],
+    date:{type:Date,default:Date.now}                                                                                                                                                                        
 })
- 
+                                        
 
 
 const JobModel = mongoose.model('Job', JobSchema);

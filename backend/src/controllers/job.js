@@ -123,7 +123,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAimDWrwKbKM8yXB3CJA_4v-NkqdX6GR2vpcXVN1uFoVvk6WJgMclMh490krqqCe3YQeAg.",
+    "eAimDXF7AgQ5XojSDBU3FlEeG_SKs019Zb87vFM6aDQ_iHn5P20AsVEsLMWi66EKm5YRWA.",
     {
       verbose: true,
       fetch: fetch,
@@ -132,35 +132,56 @@ async function ai(content) {
 
   try {
     const aicontent = await myBard.ask(`${content}`);
-    // Bu kısımda aicontent değişkeniyle yapmak istediğiniz işlemleri gerçekleştirebilirsiniz
-
+    
     console.log(aicontent);
     return aicontent;
   } catch (error) {
-    // Hata yönetimi burada yapılabilir
-    console.error(error);
+console.error(error);
     throw error;
   }
 }
 
 const aiAnalysis = async (req, res) => {
   try {
-    const {title ,past, future } = req.body;
+    const { previousMonth, nextMonth, jobTitle } = req.body;
 
-    const jobs = await JobModel.find({});
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; 
+    const startMonth = currentMonth - previousMonth; 
+    const endMonth = currentMonth - 1; 
 
-    const reactJobs = jobs.filter((job) => job.title === title);
-    const numberOfReactJobs = reactJobs.length;
+    const year = today.getFullYear();
 
-    let question = "90\n75\n30 " +
-     "yukardaki geçmiş "+ past +
-      " aylık veriye bakarak" +
-      " gelecek " +
-      future +
-      " ay içinde ne yönlü bir gelişme olabilir tahmin yapabilir misin ?"
-       +("Bu bir sitede bir programlama diline olan talep sayısıdır."
-       +"Gelecek aylar içinde ay ay sayı vererek tahmin yap.Dilin adı :  ")+title;
+    
+    const startYear = startMonth > 0 ? year : year - 1;
+    const endYear = endMonth > 0 ? year : year - 1;
 
+    const startDate = new Date(startYear, startMonth > 0 ? startMonth - 1 : 11, 1); 
+    const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
+    const jobs = await JobModel.find({
+      title: jobTitle,
+      date: { $gte: startDate, $lte: endDate }
+    });
+
+    const numberOfJobsByMonth = {};
+
+    
+    for (let i = startMonth; i <= endMonth; i++) {
+      numberOfJobsByMonth[i] = jobs.filter(job => {
+        const jobMonth = job.date.getMonth() + 1;
+        const jobYear = job.date.getFullYear();
+        return jobMonth === i && jobYear === (i === 12 ? endYear : startYear);
+      }).length;
+    }
+
+    let question = Object.values(numberOfJobsByMonth).join("\n") +
+      "\nGeçmiş aylardaki " + previousMonth +
+      " aylık veriye bakarak gelecek " +
+      nextMonth + " ay içinde ne yönlü bir gelişme olabilir tahmin yapabilir misin?" +
+      "Bu bir sitede bir programlama diline olan talep sayısıdır." +
+      "Gelecek aylar içinde ay ay sayı vererek tahmin yap.Dilin adı :  " + jobTitle;
+
+  
     const data = await ai(question);
     res.status(200).json(data);
   } catch (error) {
@@ -168,11 +189,6 @@ const aiAnalysis = async (req, res) => {
     res.status(500).json({ error: "ai cookie patladı" });
   }
 };
-
-
-
-
-
 
 
 
