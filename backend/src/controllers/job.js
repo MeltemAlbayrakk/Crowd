@@ -6,7 +6,7 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const {title,description,budget,deadline,category} = req.body;
+        const {title,description,budget,deadline,category,subCategory} = req.body;
 
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
@@ -16,6 +16,7 @@ const add= async (req,res)=>{
         title:title,
         description:description,
         category:category,
+        subcategory:subCategory,
         budget:budget,
         deadline:deadline,
         jobOwnerId:req.session.userId
@@ -145,6 +146,8 @@ const aiAnalysis = async (req, res) => {
   try {
     const { previousMonth, nextMonth, jobTitle } = req.body;
 
+    const [jobCategory, jobSubCategory] = jobTitle.split(" - ");
+
     const today = new Date();
     const currentMonth = today.getMonth() + 1; 
     const startMonth = currentMonth - previousMonth; 
@@ -159,7 +162,7 @@ const aiAnalysis = async (req, res) => {
     const startDate = new Date(startYear, startMonth > 0 ? startMonth - 1 : 11, 1); 
     const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
     const jobs = await JobModel.find({
-      title: jobTitle,
+      subcategory: jobSubCategory,
       date: { $gte: startDate, $lte: endDate }
     });
 
