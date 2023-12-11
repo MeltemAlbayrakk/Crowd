@@ -163,14 +163,14 @@ const aiAnalysis = async (req, res) => {
     const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
 
     let jobs;
-    
 
-    if (jobSubCategory != null && jobSubCategory !== '') {
+
+    if (jobSubCategory !== '') {
       jobs = await JobModel.find({
         subcategory: jobSubCategory,
         date: { $gte: startDate, $lte: endDate }
       });
-    } else if (jobCategory != null && jobCategory !== '') {
+    } else if (jobCategory !== '') {
       jobs = await JobModel.find({
         category: jobCategory,
         date: { $gte: startDate, $lte: endDate }
