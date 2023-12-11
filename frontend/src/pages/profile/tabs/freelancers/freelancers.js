@@ -10,19 +10,17 @@ export default function Freelancers() {
       const res = await api.freelancer.get("personal");
       let allSkills = [];
 
-      
       res.forEach((element) => {
         element.skills.forEach((aaa) => {
-          //console.log(aaa);
+          console.log(aaa);
           allSkills.push(aaa);
         });
       });
 
-      //console.log("Skills:",allSkills)
+      console.log("Skills:",allSkills)
       setFreelancers(res);
       setSkills(allSkills);
-
-
+      
     } catch (error) {
       console.error("Error fetching freelancers:", error);
     }
@@ -34,16 +32,16 @@ export default function Freelancers() {
 
   return (
     <div className="freelancers">
-      <div className="freelancersheader title">Freelancers</div>
+      <div className="freelancers__header title">Freelancers</div>
 
-      <ul className="freelancerslist">
+      <ul className="freelancers__list">
         {freelancers.map((freelancer) => (
-          <li className="freelancerslistitem" key={freelancer.id}>
-            <div className="freelancerslistname">
+          <li className="freelancers__list__item" key={freelancer.id}>
+            <div className="freelancers__list__name">
               {freelancer.firstName + " " + freelancer.lastName}
             </div>
 
-            <ul className="freelancerslistskills">
+            <ul className="freelancers__list__skills">
       {freelancer.skills.map((skill, index) => (
         <li key={index}>{skill}</li>
       ))}

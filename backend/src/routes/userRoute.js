@@ -35,6 +35,7 @@ router.route("/personal/beFreelancer").post(userController.beFreelancer)
 router.route("/addProfilePicture").post(userController.addProfilePicture)
 //
 router.route("/profile/:id").get(userController.getProfile)
+router.route("/showProfile/:id").post(userController.showProfile)
 
 router.route("/check-session").get(userController.checkUser)
 

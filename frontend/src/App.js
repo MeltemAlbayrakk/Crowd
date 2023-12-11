@@ -11,6 +11,8 @@ import Homepage from './pages/homepage/homepage';
 import Profile from './pages/profile/index';
 import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
+import ShowProfile from './pages/profile/tabs/profile/personal/showProfile.js';
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,6 +60,8 @@ function App() {
       />
       <Route path="/loading/profile" element={<LoadingProfile />} />
       <Route path="/profile/:id" element={<Profile />} />
+      <Route path="/showProfile" element={<ShowProfile />} />
+
     </Routes>
   );
 }

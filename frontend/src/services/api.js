@@ -58,6 +58,11 @@ export default {
         const response = await instance.get(`/user/profile/${id}`,{withCredentials:true});
         return response.data;
       },
+      async showProfile(id){
+        const response = await instance.post(`/user/showProfile/${id}`,{withCredentials:true});
+        return response.data;
+   
+    },
       async update(type, payload) {
         if (type === "personal") {
           const response = await instance.post(

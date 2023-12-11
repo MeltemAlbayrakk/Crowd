@@ -399,5 +399,20 @@ const beFreelancer= async (req,res)=>{
     res.status(500).json({ message: 'İç sunucu hatası' });
   }
 };
- export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture,addCompanyDetail,
-  beFreelancer}
+const showProfile = async(req,res)=>{
+
+  try {
+    
+    const {id} = req.body;
+console.log("bu gelen id:",id)
+    const newUser = await UserModel.findById(id);
+    res.status(200).json(newUser);
+
+
+  } catch (error) {
+    res.status(500).json({message:"server hatası."})
+  }
+}
+
+export {registerCompanyUser,registerPersonelUser,login,logout,addPersonalDetail,getProfile,checkUser,addProfilePicture,addCompanyDetail,
+beFreelancer,showProfile}
