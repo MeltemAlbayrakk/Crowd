@@ -86,7 +86,7 @@ export default function ShowAI(props) {
     setLoading(true);
 
     axios
-      .post("http://localhost:3001/job/ai", {
+      .post("http://16.171.64.79:3001/job/ai", {
         previousMonth,
         nextMonth,
         jobTitle: `${jobCategory} - ${jobSubCategory}`,

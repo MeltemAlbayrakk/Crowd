@@ -58,7 +58,7 @@ export default function Index() {
 
 
     try {
-      const response = await axios.get("http://localhost:3001/user/logout", { withCredentials: true });
+      const response = await axios.get("http://16.171.64.79:3001/user/logout", { withCredentials: true });
     
     
           setIsLoggedIn(false);
@@ -114,7 +114,7 @@ export default function Index() {
 
   const checkSession = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
+      const response = await axios.get("http://16.171.64.79:3001/user/check-session", { withCredentials: true });
 
       if (response.data.loggedIn) {
         setIsLoggedIn(true); // Oturum varsa true yap

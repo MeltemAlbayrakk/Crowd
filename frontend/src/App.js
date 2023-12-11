@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/user/check-session', { withCredentials: true });
+        const response = await axios.get('http://16.171.64.79:3001/user/check-session', { withCredentials: true });
 
         if (response.data.loggedIn) {
           setIsLoggedIn(true);

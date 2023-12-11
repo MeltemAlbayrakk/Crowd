@@ -46,7 +46,7 @@ import { useState, useEffect } from "react";
     const login = async (event) => {
       event.preventDefault();
       try {
-        const response = await axios.post('http://localhost:3001/user/login', {
+        const response = await axios.post('http://16.171.64.79:3001/user/login', {
           email:email,
           password:password
         }, { withCredentials: true });
@@ -86,7 +86,7 @@ import { useState, useEffect } from "react";
       event.preventDefault();
 
 try {
-  const response = await axios.get("http://localhost:3001/user/logout", { withCredentials: true });
+  const response = await axios.get("http://16.171.64.79:3001/user/logout", { withCredentials: true });
 
 
       setIsLoggedIn(false);
@@ -108,7 +108,7 @@ try {
       if (activeTab==="corporate"){
 
       try {
-      const response = await axios.post("http://localhost:3001/user/company/register",{
+      const response = await axios.post("http://16.171.64.79:3001/user/company/register",{
       registerData:registerData});
 
       if (response.status === 201) {
@@ -142,7 +142,7 @@ try {
     else if (activeTab==="individual"){
     
       try {
-        const response = await axios.post("http://localhost:3001/user/personal/register",{
+        const response = await axios.post("http://16.171.64.79:3001/user/personal/register",{
         registerData:registerData});
     
         if (response.status === 201) {
@@ -176,7 +176,7 @@ try {
 
     const checkSession = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
+        const response = await axios.get("http://16.171.64.79:3001/user/check-session", { withCredentials: true });
 
         if (response.data.loggedIn) {
           setIsLoggedIn(true); // Oturum varsa true yap

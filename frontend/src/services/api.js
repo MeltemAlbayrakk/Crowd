@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "http://16.171.64.79:3001/",
 });
 
 instance.interceptors.request.use((config) => {
@@ -182,7 +182,7 @@ export default {
       },
       async getall(type, payload) {
         if (type === "company") {
-          const response = await instance.get("http://localhost:3001/job/jobs",payload,{withCredentials: true});
+          const response = await instance.get("http://16.171.64.79:3001/job/jobs",payload,{withCredentials: true});
           return response.data;
         }
       },
