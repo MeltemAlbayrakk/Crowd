@@ -112,7 +112,7 @@ export default function DetailBox(props) {
               >
                 X
               </a>
-              
+{/*               
               {resp?<Table 
               loading={loading}
               headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />:<div className="nodata">No data found!</div>}
@@ -120,7 +120,7 @@ export default function DetailBox(props) {
 
 // Seçilen işin kimliğini detay kutusuna aktar
 userId=  {selecteduserId}     
-/>
+/> */}
             </div>
           </div>
         </div>

@@ -124,7 +124,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAimDXcEiCMPvEKF6yhDILFXHODuMIfNeEDAPi_fVkChcWVtU216VSK6GVKZppNjnctX9g.",
+    "eAicYiGWyy_PWgQwbqA_RX8WT_Zvu_sHgG8mE6pTullhD0dwlOkYcpyH3TSrPMVFQj485g.",
     {
       verbose: true,
       fetch: fetch,
@@ -146,7 +146,9 @@ const aiAnalysis = async (req, res) => {
   try {
     const { previousMonth, nextMonth, jobTitle } = req.body;
 
-    const [jobCategory, jobSubCategory] = jobTitle.split(" - ");
+    console.log("önceki ay:",previousMonth)
+    console.log("sonraki ay:",nextMonth)
+    console.log("bu vbaslık:",jobTitle)
 
     const today = new Date();
     const currentMonth = today.getMonth() + 1; 
@@ -162,7 +164,7 @@ const aiAnalysis = async (req, res) => {
     const startDate = new Date(startYear, startMonth > 0 ? startMonth - 1 : 11, 1); 
     const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
     const jobs = await JobModel.find({
-      subcategory: jobSubCategory,
+      subcategory: jobTitle,
       date: { $gte: startDate, $lte: endDate }
     });
 
