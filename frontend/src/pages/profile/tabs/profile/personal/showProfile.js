@@ -102,7 +102,7 @@ export default function Profile(props) {
   useEffect(() => {
     getProfile1();
   }, []);
-
+  
   useEffect(() => {
     if (form?.languages) {
       setSelectedLanguages(form.languages.map((lang) => ({ label: lang, value: lang })));
@@ -111,7 +111,6 @@ export default function Profile(props) {
       setSelectedSkills(form.skills.map((skill) => ({ label: skill, value: skill })));
     }
   }, [form]);
- 
 
   const formattedEducations = form?.educations.map((education) => ({
     id: education._id,

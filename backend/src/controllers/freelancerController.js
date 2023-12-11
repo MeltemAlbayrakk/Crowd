@@ -10,7 +10,7 @@ const getFreelancers = async (req, res) => {
 
       // Başvuruları bulmak için tek bir sorgu yapın ve Accepted başvuruları alın
       const acceptedApplicants = await ApplicantModel.find({ job: { $in: jobIds }, status: "Accepted" });
-      console.log("bune:",acceptedApplicants)
+
       const responseArray = [];
 
       for (const applicant of acceptedApplicants) {

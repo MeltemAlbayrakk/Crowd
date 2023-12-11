@@ -6,7 +6,7 @@ const add= async (req,res)=>{
   try {
 
         console.log("bu session:",req.session.userId)
-        const {title,description,budget,deadline,category} = req.body;
+        const {title,description,budget,deadline,category,subCategory} = req.body;
 
         const userId= req.session.userId;
         const user= await UserModel.findById(userId);
@@ -16,6 +16,7 @@ const add= async (req,res)=>{
         title:title,
         description:description,
         category:category,
+        subcategory:subCategory,
         budget:budget,
         deadline:deadline,
         jobOwnerId:req.session.userId
@@ -112,4 +113,89 @@ const deleteJob = async (req,res)=>{
   }
 }
 
-export {add,get,search,deleteJob,getall}
+
+import Bard from "bard-ai";
+
+const getAlljobs = async (req, res) => {
+  const jobs = await JobModel.find({});
+
+  res.status(201).json(jobs);
+};
+
+async function ai(content) {
+  let myBard = new Bard(
+    "eAimDXcEiCMPvEKF6yhDILFXHODuMIfNeEDAPi_fVkChcWVtU216VSK6GVKZppNjnctX9g.",
+    {
+      verbose: true,
+      fetch: fetch,
+    }
+  );
+
+  try {
+    const aicontent = await myBard.ask(`${content}`);
+    
+    console.log(aicontent);
+    return aicontent;
+  } catch (error) {
+console.error(error);
+    throw error;
+  }
+}
+
+const aiAnalysis = async (req, res) => {
+  try {
+    const { previousMonth, nextMonth, jobTitle } = req.body;
+
+    const [jobCategory, jobSubCategory] = jobTitle.split(" - ");
+
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; 
+    const startMonth = currentMonth - previousMonth; 
+    const endMonth = currentMonth - 1; 
+
+    const year = today.getFullYear();
+
+    
+    const startYear = startMonth > 0 ? year : year - 1;
+    const endYear = endMonth > 0 ? year : year - 1;
+
+    const startDate = new Date(startYear, startMonth > 0 ? startMonth - 1 : 11, 1); 
+    const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
+    const jobs = await JobModel.find({
+      subcategory: jobSubCategory,
+      date: { $gte: startDate, $lte: endDate }
+    });
+
+    const numberOfJobsByMonth = {};
+
+    
+    for (let i = startMonth; i <= endMonth; i++) {
+      numberOfJobsByMonth[i] = jobs.filter(job => {
+        const jobMonth = job.date.getMonth() + 1;
+        const jobYear = job.date.getFullYear();
+        return jobMonth === i && jobYear === (i === 12 ? endYear : startYear);
+      }).length;
+    }
+
+    let question = Object.values(numberOfJobsByMonth).join("\n") +
+      "\nGeçmiş aylardaki " + previousMonth +
+      " aylık veriye bakarak gelecek " +
+      nextMonth + " ay içinde ne yönlü bir gelişme olabilir tahmin yapabilir misin?" +
+      "Bu bir sitede bir programlama diline olan talep sayısıdır." +
+      "Gelecek aylar içinde ay ay sayı vererek tahmin yap.Dilin adı :  " + jobTitle;
+
+  
+    const data = await ai(question);
+
+console.log(question)
+console.log(jobTitle)
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "ai cookie patladı" });
+  }
+};
+
+
+
+export {add,get,search,deleteJob,getall,aiAnalysis}
