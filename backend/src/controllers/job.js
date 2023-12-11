@@ -124,7 +124,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAimDXF7AgQ5XojSDBU3FlEeG_SKs019Zb87vFM6aDQ_iHn5P20AsVEsLMWi66EKm5YRWA.",
+    "eAimDXcEiCMPvEKF6yhDILFXHODuMIfNeEDAPi_fVkChcWVtU216VSK6GVKZppNjnctX9g.",
     {
       verbose: true,
       fetch: fetch,
@@ -186,6 +186,9 @@ const aiAnalysis = async (req, res) => {
 
   
     const data = await ai(question);
+
+console.log(question)
+console.log(jobTitle)
     res.status(200).json(data);
   } catch (error) {
     console.error(error);

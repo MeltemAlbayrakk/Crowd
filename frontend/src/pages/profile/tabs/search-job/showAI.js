@@ -47,7 +47,7 @@ export default function ShowAI(props) {
         { label: "PHP", value: "PHP" },
         { label: "TypeScript", value: "TypeScript" },
         { label: "Go", value: "Go" },
-        { label: "rust", value: "rust" },
+        { label: "Rust", value: "Rust" },
         { label: "R", value: "R" },
         { label: "Perl", value: "Perl" },
         { label: "Haskell", value: "Haskell" },
