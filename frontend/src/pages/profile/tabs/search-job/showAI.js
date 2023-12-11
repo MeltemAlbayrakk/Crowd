@@ -10,7 +10,7 @@ export default function ShowAI(props) {
   const [jobSubCategory, setJobSubCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState([]);
-  // const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
 
   const sampleCategories = [
@@ -109,22 +109,22 @@ export default function ShowAI(props) {
     setCategoryOptions(sampleCategories);
   }, []);
 
-  const handlePreviousMonthChange = (event) => {
-    setPreviousMonth(event.target.value);
+  const handlePreviousMonthChange = (selectedOption) => {
+    setPreviousMonth(selectedOption);
   };
 
-  const handleNextMonthChange = (event) => {
-    setNextMonth(event.target.value);
+  const handleNextMonthChange = (selectedOption) => {
+    setNextMonth(selectedOption);
   };
 
-  // const handleCategoryChange = (selectedCategory) => {
-  //   const category = categoryOptions.find(
-  //     (cat) => cat.value === selectedCategory
-  //   );
-  //   setJobCategory(selectedCategory);
-  //   setSubCategoryOptions(category ? category.subCategories : []);
-  //   setJobSubCategory("");
-  // };
+  const handleCategoryChange = (selectedCategory) => {
+    const category = categoryOptions.find(
+      (cat) => cat.value === selectedCategory
+    );
+    setJobCategory(selectedCategory);
+    setSubCategoryOptions(category ? category.subCategories : []);
+    setJobSubCategory("");
+  };
 
   const handleSubCategoryChange = (selectedSubCategory) => {
     setJobSubCategory(selectedSubCategory);
@@ -169,15 +169,12 @@ export default function ShowAI(props) {
             <Select
               value={previousMonth}
               options={PreviousMonthOptions}
-            
               className="react-select-container"
                 classNamePrefix="react-select" 
                 unstyled
-                onChange={handlePreviousMonthChange}>
-              {/* {[...Array(12)].map((_, index) => (
-                <option key={index + 1} value={index + 1}>
-                  {index + 1}
-                </option> */}
+                onChange={(e) => handlePreviousMonthChange(e)}>
+                   
+            
             
             </Select>
           </div>
@@ -189,21 +186,37 @@ export default function ShowAI(props) {
             <Select 
             value={nextMonth}
             options={NextMonthOptions}
+          
             className="react-select-container"
             classNamePrefix="react-select" 
+         
+            onChange={(e) => handleNextMonthChange(e)}
             unstyled
-
-
-            //  {[...Array(12)].map((_, index) => (
-            //   <option key={index + 1} value={index + 1}>
-            //     {index + 1}
-            //   </option>
-          
-             onChange={handleNextMonthChange}>
+            >
             
              
                    
              
+            </Select>
+          </div>
+          <div>
+          
+            <label>Job Category</label>
+            <Select
+              value={jobCategory}
+            options={sampleCategories}
+              className="react-select-container"
+              classNamePrefix="react-select" 
+              onChange={(e) => handleCategoryChange(e)}
+              unstyled
+            >
+               <option value="">Select Category</option>
+              {categoryOptions.map((category) => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
+              
             </Select>
           </div>
 
@@ -213,10 +226,13 @@ export default function ShowAI(props) {
             <label>Sub Category</label>
             <Select
               value={jobSubCategory}
-              options={subCategoriesOptions}
+             
+             
               className="react-select-container"
               classNamePrefix="react-select" 
-              onChange={(e) => handleSubCategoryChange(e.target.value)}
+              onChange={(e) => handleSubCategoryChange(e)}
+              disabled={!jobCategory}
+              options={subCategoriesOptions}
               unstyled
             >
              
