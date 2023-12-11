@@ -161,14 +161,14 @@ export default function ShowAI(props) {
           </div>
 
           <button onClick={handleAnalysis} disabled={loading}>
-            {loading ? "Analiz Ediliyor..." : "Analiz Et"}
+            {loading ? "Analyzing..." : "Analyze"}
           </button>
         </div>
 
                 <div>
-        <h3>Analiz Sonucu:</h3>
+        <h3>Analysis Result:</h3>
         {loading ? (
-          <p>Analiz yapılıyor...</p>
+          <p>Analyzing...</p>
         ) : (
           <p>{analysisResult}</p>
         )}

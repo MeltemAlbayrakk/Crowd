@@ -124,7 +124,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAimDXcEiCMPvEKF6yhDILFXHODuMIfNeEDAPi_fVkChcWVtU216VSK6GVKZppNjnctX9g.",
+    "eAhK0hVHsKaV9ve1gUhUfZETdln4CdiVWF9pYPUWV8L1FBMWSxJnIjzoeHhJKIwm4cIVOQ.",
     {
       verbose: true,
       fetch: fetch,
@@ -161,10 +161,21 @@ const aiAnalysis = async (req, res) => {
 
     const startDate = new Date(startYear, startMonth > 0 ? startMonth - 1 : 11, 1); 
     const endDate = new Date(endYear, endMonth > 0 ? endMonth - 1 : 11, 31); 
-    const jobs = await JobModel.find({
-      subcategory: jobSubCategory,
-      date: { $gte: startDate, $lte: endDate }
-    });
+
+    let jobs;
+    
+
+    if (jobSubCategory != null && jobSubCategory !== '') {
+      jobs = await JobModel.find({
+        subcategory: jobSubCategory,
+        date: { $gte: startDate, $lte: endDate }
+      });
+    } else if (jobCategory != null && jobCategory !== '') {
+      jobs = await JobModel.find({
+        category: jobCategory,
+        date: { $gte: startDate, $lte: endDate }
+      });
+    }
 
     const numberOfJobsByMonth = {};
 
@@ -175,7 +186,8 @@ const aiAnalysis = async (req, res) => {
         const jobYear = job.date.getFullYear();
         return jobMonth === i && jobYear === (i === 12 ? endYear : startYear);
       }).length;
-    }
+    } 
+
 
     let question = Object.values(numberOfJobsByMonth).join("\n") +
       "\nGeçmiş aylardaki " + previousMonth +
@@ -186,9 +198,8 @@ const aiAnalysis = async (req, res) => {
 
   
     const data = await ai(question);
-
-console.log(question)
-console.log(jobTitle)
+console.log("soru : "+ question)
+//console.log(jobTitle)
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
