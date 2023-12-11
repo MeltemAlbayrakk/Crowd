@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import MyFoto from "../../../../../src/images/konfeti.gif";
+import Select from "react-select";
 
 export default function ShowAI(props) {
   const [previousMonth, setPreviousMonth] = useState("");
@@ -8,7 +10,7 @@ export default function ShowAI(props) {
   const [jobSubCategory, setJobSubCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState([]);
-  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+  // const [subCategoryOptions, setSubCategoryOptions] = useState([]);
   const [analysisResult, setAnalysisResult] = useState("");
 
   const sampleCategories = [
@@ -56,12 +58,56 @@ export default function ShowAI(props) {
     },
   ];
 
+  const PreviousMonthOptions = [
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+    { label: "6", value: "6" },
+    { label: "7", value: "7" },
+    { label: "8", value: "8" },
+    { label: "9", value: "9" },
+    { label: "10", value: "10" },
+    { label: "11", value: "11" },
+    { label: "12", value: "12" },
+  ];
+
+  const NextMonthOptions = [
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+    { label: "6", value: "6" },
+    { label: "7", value: "7" },
+    { label: "8", value: "8" },
+    { label: "9", value: "9" },
+    { label: "10", value: "10" },
+    { label: "11", value: "11" },
+    { label: "12", value: "12" },
+  ];
+  const subCategoriesOptions = [
+    { label: "JavaScript", value: "JavaScript" },
+    { label: "Python", value: "Python" },
+    { label: "Java", value: "Java" },
+    { label: "C++", value: "C++" },
+    { label: "Ruby", value: "Ruby" },
+    { label: "Swift", value: "Swift" },
+    { label: "Kotlin", value: "Kotlin" },
+    { label: "PHP", value: "PHP" },
+    { label: "TypeScript", value: "TypeScript" },
+    { label: "Go", value: "Go" },
+    { label: "Rust", value: "Rust" },
+    { label: "R", value: "R" },
+    { label: "Perl", value: "Perl" },
+    { label: "Haskell", value: "Haskell" },
+    { label: "Scala", value: "Scala" },
+  ];
+
   useEffect(() => {
     setCategoryOptions(sampleCategories);
   }, []);
-
-
-
 
   const handlePreviousMonthChange = (event) => {
     setPreviousMonth(event.target.value);
@@ -71,12 +117,14 @@ export default function ShowAI(props) {
     setNextMonth(event.target.value);
   };
 
-  const handleCategoryChange = (selectedCategory) => {
-    const category = categoryOptions.find((cat) => cat.value === selectedCategory);
-    setJobCategory(selectedCategory);
-    setSubCategoryOptions(category ? category.subCategories : []);
-    setJobSubCategory(""); 
-  };
+  // const handleCategoryChange = (selectedCategory) => {
+  //   const category = categoryOptions.find(
+  //     (cat) => cat.value === selectedCategory
+  //   );
+  //   setJobCategory(selectedCategory);
+  //   setSubCategoryOptions(category ? category.subCategories : []);
+  //   setJobSubCategory("");
+  // };
 
   const handleSubCategoryChange = (selectedSubCategory) => {
     setJobSubCategory(selectedSubCategory);
@@ -105,76 +153,100 @@ export default function ShowAI(props) {
 
   return (
     <>
-      <div className="wrapper">
-        <div className="container">
-          <div>
+   
+      <div class="wrapper">
+      <div class="content">
+      <div class="container profile">
+      <div class="profile__right">
+      <div class="container">
+      <div class="content-profile">
+    
+      
+          <div class="options">
+         
             <label>Previous Month</label>
-            <input
-              type="text"
-              value={previousMonth}
-              onChange={handlePreviousMonthChange}
-            />
-          </div>
-
-          <div>
-            <label>Next Month</label>
-            <input
-              type="text"
-              value={nextMonth}
-              onChange={handleNextMonthChange}
-            />
-          </div>
-
-          <div>
           
-            <label>Job Category</label>
-            <select
-              value={jobCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              unstyled
-            >
-              <option value="">Select Category</option>
-              {categoryOptions.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.label}
-                </option>
-              ))}
-              
-            </select>
+            <Select
+              value={previousMonth}
+              options={PreviousMonthOptions}
+            
+              className="react-select-container"
+                classNamePrefix="react-select" 
+                unstyled
+                onChange={handlePreviousMonthChange}>
+              {/* {[...Array(12)].map((_, index) => (
+                <option key={index + 1} value={index + 1}>
+                  {index + 1}
+                </option> */}
+            
+            </Select>
+          </div>
+          <div>
+            <br></br>
+            <br></br>
+            <label>Next Month</label>
+
+            <Select 
+            value={nextMonth}
+            options={NextMonthOptions}
+            className="react-select-container"
+            classNamePrefix="react-select" 
+            unstyled
+
+
+            //  {[...Array(12)].map((_, index) => (
+            //   <option key={index + 1} value={index + 1}>
+            //     {index + 1}
+            //   </option>
+          
+             onChange={handleNextMonthChange}>
+            
+             
+                   
+             
+            </Select>
           </div>
 
+          <br></br>
+            <br></br>
           <div>
             <label>Sub Category</label>
-            <select
+            <Select
               value={jobSubCategory}
+              options={subCategoriesOptions}
+              className="react-select-container"
+              classNamePrefix="react-select" 
               onChange={(e) => handleSubCategoryChange(e.target.value)}
-              disabled={!jobCategory}
               unstyled
             >
-              <option value="">Select Subcategory</option>
-              {subCategoryOptions.map((subcategory) => (
-                <option key={subcategory.value} value={subcategory.value}>
-                  {subcategory.label}
-                </option>
-              ))}
-            </select>
+             
+            </Select>
           </div>
 
           <button onClick={handleAnalysis} disabled={loading}>
             {loading ? "Analiz Ediliyor..." : "Analiz Et"}
           </button>
         </div>
+        <br></br>
+            <br></br> <br></br>
+            
+        <div>
+          <h3>Analiz Sonucu:</h3>
+          {loading ? <p>Analiz yapılıyor...</p> : <p>{analysisResult}</p>}
+        </div>
 
-                <div>
-        <h3>Analiz Sonucu:</h3>
-        {loading ? (
-          <p>Analiz yapılıyor...</p>
-        ) : (
-          <p>{analysisResult}</p>
-        )}
+        <div>
+          <img src={MyFoto} alt="GIF Image" />
+        </div>
       </div>
-
       </div>
-    </>
+      </div>
+      </div>
+      </div>
+     
+      
+    
+      
+    </> 
   );
 }
