@@ -132,6 +132,7 @@ const setActions = async (req, res) => {
           email:user.email,
           offer:applicant.offer,
           status:applicant.status
+          
         };
   
         usersData.push(userData);

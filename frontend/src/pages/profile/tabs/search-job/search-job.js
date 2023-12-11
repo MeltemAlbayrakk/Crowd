@@ -1,13 +1,19 @@
 import api from "../../../../services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 export default function SearchJob(props) {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
   const [form,setForm]=useState({
     offer: '',
     selectedJob: null,
@@ -71,13 +77,36 @@ export default function SearchJob(props) {
 
  
 
+  const showAI = async ()=>{
+    //setSelecteduserId=userId
+    // console.log(selecteduserId+"showww")
+    //  const Profile = await api.user.profile.get(userId);
+    // console.log("Profil value:",Profile.lastName) 
+    navigate('/showAI');
+   }
+
   return (
+
+
     <div className="search__job">
+<<<<<<< HEAD
               <div>
 <button onClick={()=>(showAI)}  >AI</button>
 </div>
       <div className="search__job__header title">
       
+=======
+
+<div>
+<button onClick={(showAI)}  >AI</button>
+
+</div>
+
+      <div className="search__job__header title">
+
+
+
+>>>>>>> dev
         <label>Search Job</label>
 
 
