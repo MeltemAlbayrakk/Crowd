@@ -12,10 +12,9 @@ export default function ShowAI(props) {
 
   const [loading, setLoading] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState([]);
+  const [changeGif, setChangeGif] = useState(gifHello);
 
   const [analysisResult, setAnalysisResult] = useState("");
-  const [gifPath,setGifPath] = useState(null);
-
 
   const PreviousMonthOptions = [
     { label: "1", value: "1" },
@@ -46,6 +45,7 @@ export default function ShowAI(props) {
     { label: "11", value: "11" },
     { label: "12", value: "12" },
   ];
+
   const CategoryOptions = [
     { label: "JavaScript", value: "JavaScript" },
     { label: "Python", value: "Python" },
@@ -68,14 +68,22 @@ export default function ShowAI(props) {
     setCategoryOptions(CategoryOptions);
   }, []);
 
+  useEffect(() => {
+    setChangeGif(gifHello);
+  }, []);
+  useEffect(() => {
+    if (loading) {
+      setChangeGif(gifSearching);
+    }
+  }, [loading]);
+  
+
   const handlePreviousMonthChange = (event) => {
     setPreviousMonth(event);
-
   };
 
   const handleNextMonthChange = (event) => {
     setNextMonth(event);
-
   };
 
   const handleJobCategoryChange = (selectedCategory) => {
@@ -87,131 +95,96 @@ export default function ShowAI(props) {
 
     axios
       .post("http://localhost:3001/job/ai", {
-        previousMonth:previousMonth.value,
-        nextMonth:nextMonth.value,
+        previousMonth: previousMonth.value,
+        nextMonth: nextMonth.value,
         jobTitle: `${jobCategory.value}`,
       })
       .then((response) => {
         console.log("Backend'den gelen yanıt: ", response.data);
         setAnalysisResult(response.data);
-
-        setLoading(false);
       })
       .catch((error) => {
         console.error("API isteği hatası: ", error);
+      })
+      .finally(() => {
         setLoading(false);
+        setChangeGif(gifHappy); // Analiz tamamlandığında gifHappy'e geç
       });
-  };
-  const handleImageLoad = () => {
-    // Resim yüklendiğinde yapılacak işlemler burada
-    setLoading(false);
   };
 
   return (
     <>
-  <div class="wrapper">
-      <div class="content">
-      <div class="container profile">
-      
-     
-        
-        <div class="profile__right"
-        style={{
-        display:"inline-block",
-        fontSize:"20px",
-        lineHeight:"40px"}}>
-        
-        {/* <img  style={{position:"fixed", right:"400px", float:"right"}} src={gifPath} alt="GIF Image" />
-         */}
-{/* 
-        {loading ? (
-            <img style={{position:"fixed", right:"400px", float:"right"}} src={gifSearching} alt="Loading GIF" />
-          ) : (
-            <img style={{position:"fixed", right:"400px", float:"right"}} src={gifHappy} alt="Other GIF" />
-          )} */}
-
-<img
-        src={loading ? {gifSearching} : gifHappy}
-       
-        onLoad={handleImageLoad}
-      />
-
-      {/* Başlangıçta gösterilecek resim */}
-      {loading && <img src={gifHello} alt="Initial Image" />}
-
-        <div style={{}}>
-          <div style={{  maxWidth:600}}>
-            <label>Previous Month</label>
-          
-            <Select
-              value={previousMonth}
-              options={PreviousMonthOptions}
-              className="react-select-container"
-              classNamePrefix="react-select" 
-              unstyled
-
-              onChange={handlePreviousMonthChange}
-             >
-                    
-             </Select>
-          </div>
-          <div style={{ maxWidth:600}}>
-            <label>Next Month</label>
-
-            <Select 
-            value={nextMonth}
-            options={NextMonthOptions}
-            className="react-select-container"
-            classNamePrefix="react-select" 
-            unstyled
-            
-            onChange={handleNextMonthChange}
-          
-            
+      <div className="wrapper">
+        <div className="content">
+          <div className="container profile">
+            <div
+              className="profile__right"
+              style={{
+                display: "inline-block",
+                fontSize: "20px",
+                lineHeight: "40px",
+              }}
             >
-            </Select>
-            
-          </div>
-
-
-          <div style={{ maxWidth:600}}>
-            <label>Sub Category</label>
-            <Select
-              value={jobCategory}
-              options={CategoryOptions}
-              className="react-select-container"
-              classNamePrefix="react-select" 
-              onChange={handleJobCategoryChange}
-              disabled={!jobCategory}
-              unstyled>
              
-            </Select>
-          </div>
+    <img
+                style={{ position: "fixed", right: "400px", float: "right" }}
+                src={changeGif}
+                alt="Other GIF"
+              />
+
+
+              <div style={{}}>
+                <div style={{ maxWidth: 600 }}>
+                  <label>Previous Month</label>
+                  <Select
+                    value={previousMonth}
+                    options={PreviousMonthOptions}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    unstyled
+                    onChange={handlePreviousMonthChange}
+                  ></Select>
+                </div>
+                <div style={{ maxWidth: 600 }}>
+                  <label>Next Month</label>
+                  <Select
+                    value={nextMonth}
+                    options={NextMonthOptions}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    unstyled
+                    onChange={handleNextMonthChange}
+                  ></Select>
+                </div>
+
+                <div style={{ maxWidth: 600 }}>
+                  <label>Sub Category</label>
+                  <Select
+                    value={jobCategory}
+                    options={CategoryOptions}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                    onChange={handleJobCategoryChange}
+                    disabled={!jobCategory}
+                    unstyled
+                  ></Select>
+                </div>
 
           <button onClick={handleAnalysis} disabled={loading}>
-            {loading ? "Analiz Ediliyor..." : "Analiz Et"}
+            {loading ? "Analyzing..." : "Analyze"}
           </button>
-          </div>
-          <br></br>
-          <br></br>
-          <div>
-          <label>Analiz Sonucu:</label>
-          <div>
-          {loading ? <p>Analiz yapılıyor...</p> : <p>{analysisResult}</p>}
-
-          </div>
-        </div>
         </div>
 
-       
-
-        </div>
-        </div>
+                <div>
+        <h3>Analysis Result:</h3>
+        {loading ? (
+          <p>Analyzing...</p>
+        ) : (
+          <p>{analysisResult}</p>
+        )}
       </div>
-      {/* </div>
-      */}
-    
-      
-    </> 
+
+      </div></div></div></div>
+    </>
   );
 }
