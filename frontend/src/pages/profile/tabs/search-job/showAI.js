@@ -125,11 +125,13 @@ export default function ShowAI(props) {
                 lineHeight: "40px",
               }}
             >
-              <img
+             
+    <img
                 style={{ position: "fixed", right: "400px", float: "right" }}
                 src={changeGif}
                 alt="Other GIF"
               />
+
 
               <div style={{}}>
                 <div style={{ maxWidth: 600 }}>
@@ -182,7 +184,7 @@ export default function ShowAI(props) {
         )}
       </div>
 
-      </div>
+      </div></div></div></div>
     </>
   );
 }
