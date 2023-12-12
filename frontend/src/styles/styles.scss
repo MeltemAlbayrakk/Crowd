@@ -53,7 +53,12 @@ button {
     color: #f1bd4c;
   }
 }
-
+#accept:hover{
+  background-color:rgb(15, 114, 15);
+}
+#reject:hover{
+  background-color:rgb(129, 16, 16);
+}
 input {
   font-family: "Poppins";
   border: 0;
@@ -106,6 +111,7 @@ select {
   & option {
     border: none;
   }
+
   &:hover,
   &:focus {
     outline: none;
@@ -159,7 +165,7 @@ select {
 }
 
 
-.content > .container {
+.content>.container {
   max-width: 100%;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid #f1bd4c05;
@@ -213,16 +219,14 @@ select {
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow:auto;
+  overflow: auto;
 }
 
 .wrapper {
-  background: radial-gradient(
-    59.13% 83.79% at 67.08% 62.68%,
-    #204878 0%,
-    #252f57 50.14%,
-    #12123c 100%
-  );
+  background: radial-gradient(59.13% 83.79% at 67.08% 62.68%,
+      #204878 0%,
+      #252f57 50.14%,
+      #12123c 100%);
 
   &.homepage {
     min-height: 100%;
@@ -240,18 +244,28 @@ select {
   justify-content: center;
 }
 
+.wrapper .content-profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  
+  align-items: center;
+  padding: 0 30px;
+  justify-content: center;
+}
+
+
+
 .wrapper .landing ul {
   margin-bottom: 0;
 }
 
 .wrapper .banner {
   height: calc(100vh - 124px);
-  background: radial-gradient(
-    59.13% 83.79% at 67.08% 62.68%,
-    #204878 0%,
-    #252f57 50.14%,
-    #12123c 100%
-  );
+  background: radial-gradient(59.13% 83.79% at 67.08% 62.68%,
+      #204878 0%,
+      #252f57 50.14%,
+      #12123c 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -387,27 +401,20 @@ select {
   border-radius: 2rem;
   color: #ffffff;
   border: 0.7rem solid;
-  border-image: repeating-linear-gradient(
-      135deg,
+  border-image: repeating-linear-gradient(135deg,
       #00aaff 0 10px,
       #ff00aa 0 20px,
-      #aaff00 0 30px
-    )
-    8;
-  -webkit-mask: conic-gradient(
-        from 180deg at top 10px right 10px,
-        #0000 0deg,
-        #000 0
-      )
-      var(--_i, 200%) 0 /200% var(--_i, 8px) border-box no-repeat,
-    conic-gradient(at bottom 8px left 8px, #0000 90deg, #000 0) 0
-      var(--_i, 200%) / var(--_i, 8px) 200% border-box no-repeat,
+      #aaff00 0 30px) 8;
+  -webkit-mask: conic-gradient(from 180deg at top 10px right 10px,
+      #0000 0deg,
+      #000 0) var(--_i, 200%) 0 /200% var(--_i, 8px) border-box no-repeat,
+    conic-gradient(at bottom 8px left 8px, #0000 90deg, #000 0) 0 var(--_i, 200%) / var(--_i, 8px) 200% border-box no-repeat,
     linear-gradient(#000 0 0) padding-box no-repeat;
   transition: 0.3s, -webkit-mask-position 0.3s 0.3s;
 }
 
 .wrapper .banner__left {
-  > & h3 {
+  >& h3 {
     font-family: system-ui, sans-serif;
     font-size: 1.1rem;
     margin: 1.5rem 0;
@@ -418,13 +425,10 @@ select {
 .banner__left__button:hover {
   --_i: 100%;
   color: #cc333f;
-  border-image: repeating-linear-gradient(
-      135deg,
+  border-image: repeating-linear-gradient(135deg,
       #f8ca00 0 10px,
       #e97f02 0 20px,
-      #bd1550 0 30px
-    )
-    8;
+      #bd1550 0 30px) 8;
   transition: 0.3s, -webkit-mask-size 0.3s 0.3s;
   background-color: #f1bd4c;
   border-radius: 0%;
@@ -543,12 +547,10 @@ select {
   padding: 64px 40px 64px 64px;
   margin-left: 5%;
   height: 527px;
-  background: radial-gradient(
-    95.78% 152.18% at 10.18% 50%,
-    #204878 0%,
-    #151740 72.77%,
-    #13133c 100%
-  );
+  background: radial-gradient(95.78% 152.18% at 10.18% 50%,
+      #204878 0%,
+      #151740 72.77%,
+      #13133c 100%);
   border-radius: 400px 0px 0px 400px;
   gap: 45px;
 }
@@ -700,12 +702,10 @@ select {
   width: 362px;
   max-width: 100%;
   padding: 30px;
-  background: radial-gradient(
-    59.13% 83.79% at 67.08% 62.68%,
-    #204878 0%,
-    #252f57 50.14%,
-    #12123c 100%
-  );
+  background: radial-gradient(59.13% 83.79% at 67.08% 62.68%,
+      #204878 0%,
+      #252f57 50.14%,
+      #12123c 100%);
   border: 1px solid #eaeaea0e;
   border-radius: 14px;
   justify-content: flex-start;
@@ -766,7 +766,7 @@ select {
   opacity: 0.25;
 }
 
-.wrapper .modal .container form > div {
+.wrapper .modal .container form>div {
   padding-bottom: 15px;
 }
 
@@ -965,7 +965,8 @@ select {
     &.freelancer {
       display: flex !important;
       flex-direction: column;
-      & > div {
+
+      &>div {
         width: 100%;
       }
     }
@@ -997,13 +998,13 @@ select {
     }
 
     &__body,
-    &__body > section {
+    &__body>section {
       display: grid;
       gap: 30px;
       grid-template-columns: repeat(2, 1fr);
 
-      & > section > li,
-      & > li {
+      &>section>li,
+      &>li {
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -1026,7 +1027,7 @@ select {
         }
       }
 
-      & > section {
+      &>section {
         border: 1px solid #555;
         padding: 0 15px;
         display: flex;
@@ -1067,6 +1068,7 @@ select {
           width: calc(100% - 20px) !important;
         }
       }
+
       & .reset {
         padding: 0 0 30px 0;
         margin: -20px 0 0 0;
@@ -1083,6 +1085,7 @@ select {
   }
 
   &__control {
+
     #{ $self }__placeholder,
     #{ $self }__single-value {
       color: #fff;
@@ -1094,6 +1097,7 @@ select {
     }
 
     &--is-focused {
+
       #{ $self }__placeholder,
       #{ $self }__single-value {
         border-bottom-color: #fff;
@@ -1203,7 +1207,8 @@ select {
         border: 1px solid #fff;
         box-shadow: -10px 0 10px #7da2cc6b;
       }
-      & > div {
+
+      &>div {
         & b {
           color: #fff;
           font-size: 18px;
@@ -1228,7 +1233,7 @@ select {
 .settings {
   width: 100%;
 
-  & > ul {
+  &>ul {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
@@ -1262,7 +1267,7 @@ select {
       transition: all 0.5s ease-in-out;
     }
 
-    & > li > ul {
+    &>li>ul {
       margin-top: 15px;
       display: flex;
       flex-direction: column;
@@ -1271,13 +1276,13 @@ select {
       gap: 15px;
       padding: 15px;
 
-      & > li {
+      &>li {
         display: flex;
         align-items: center;
         gap: 5px;
         justify-content: center;
 
-        & > input {
+        &>input {
           width: unset;
         }
       }
@@ -1311,4 +1316,18 @@ select {
       opacity: 0.65;
     }
   }
+}
+.showAI{
+  position: relative;
+  left:250px;
+  top:10px;
+  height:45px ;
+  text-align: center;
+}
+
+#searchJob{
+  position: absolute;
+  top:60px;
+
+
 }

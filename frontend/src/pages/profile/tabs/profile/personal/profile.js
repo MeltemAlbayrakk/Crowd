@@ -6,6 +6,8 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../../../../styles/styles.scss"
+import { useParams } from 'react-router-dom';
+
 
 export default function Profile(props) {
   const languages = [
@@ -62,14 +64,10 @@ export default function Profile(props) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
 
-  const [isPersonalDEtailsCollapsed, setIsPersonalDetailsCollapsed] = useState(true);
   const [isEducationsCollapsed, setIsEducationsCollapsed] = useState(true);
   const [isProjectsCollapsed, setIsProjectsCollapsed] = useState(true);
   const [isAchievementsCollapsed, setIsAchievementsCollapsed] = useState(true);
   const [isExperiencesCollapsed, setIsExperiencesCollapsed] = useState(true);
-
-  const [activePersonalDetail, setactivePersonalDetail] = useState({});
-  const [activePersonalDetailErrors, setactivePersonalDetailErrors] = useState(null);
 
   const [activeEducations, setActiveEducations] = useState({});
   const [activeEducationsErrors, setActiveEducationsErrors] = useState(null);
@@ -83,14 +81,67 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
+ 
+
+  const [languagesOptions, setLanguagesOptions] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState([]); 
+
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+
+  const { id } = useParams();
+  const [userProfile, setUserProfile] = useState(null);
 
 
   const getProfile1 = async () => {
    
-    const res = await axios.get("http://localhost:3001/user/profile", {
-      withCredentials: true,
-    });
-    setForm(res.data);
+    try {
+
+      console.log(id,"profildeki id")
+  
+
+      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
+        withCredentials: true,
+
+      });
+        //setUserProfile(res.data);
+
+      setForm(res.data);
+      const languagesFromApi = res.data.languages || []; 
+      const skillsFromApi = res.data.skills || []; 
+
+      const formattedLanguages = languages.map((lang) => ({
+        label: lang.label,
+        value: lang.value,
+      }));
+      setLanguagesOptions(formattedLanguages);
+      setSelectedLanguages(
+        languagesFromApi.map((lang) => ({
+          label: lang,
+          value: lang,
+        }))
+      );
+      setSkillsOptions(
+        skills.map((skill) => ({
+          label: skill.label,
+          value: skill.value,
+        }))
+      );
+
+      setSelectedSkills(
+        skillsFromApi.map((skill) => ({
+          label: skill,
+          value: skill,
+        }))
+      );
+
+
+    } catch (error) {
+
+    }
+    
+    
+    
   };
 
   const onChange = async (prop, value) => {
@@ -98,41 +149,23 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
+    console.log("form :",form)
   };
 
   const onBlur = async (prop, value) => {
-    await api.user.profile.update("personal", form);
+
+    
+    try {
+      
+      const res = await api.user.profile.update("personal", form);
+     
+    } catch (error) {
+      console.log("onblur hatası:",error.message)
+    }
+    
+    
   };
 
-
-const addPersonalDetail = async ()=>{
-  setLoading(true);
-  setactivePersonalDetailErrors(null);
-  console.log("deneme seysi")
-   const res = await api.user.profile.update("personal",form)
-   .catch((err) => {
-    setactivePersonalDetailErrors(err.response.data.errorMessage);
-    setLoading(false);
-   });
-   console.log("bu profile de ki res :",res)
-   if(res.user){
-    setactivePersonalDetail({
-      ...form,
-      firstName:"",
-      lastName:"",
-      birthday:"",
-      gender:"",
-      languages:"",
-      skills:"",
-      description:"",
-      address:""
-    });
-    setIsPersonalDetailsCollapsed(true);
-    props.getProfile();
-   }
-   setLoading(false);
-   
-};
 
   const addEducation = async () => {
     setLoading(true);
@@ -171,7 +204,7 @@ const addPersonalDetail = async ()=>{
     if (res.id) {
       setActiveProject({
         ...activeProject,
-        project: "",
+        headline: "",
         description: "",
         date: "",
       });
@@ -185,22 +218,40 @@ const addPersonalDetail = async ()=>{
   const addAchievement = async () => {
     setLoading(true);
     setActiveAchievementErrors(null);
-    const res = await api.user.profile.achievement
+
+    try {
+      const res = await api.user.profile.achievement
       .add("personal", activeAchievement)
       .catch((err) => {
         setActiveAchievementErrors(err.response.data.errorMessage);
         setLoading(false);
       });
 
-    if (res.id) {
-      setActiveAchievement({
-        ...activeAchievement,
-        name: "",
-        description: "",
-      });
-      setIsAchievementsCollapsed(true);
-      props.getProfile();
+      console.log("res ne ",res)
+      if(res.status ===201){
+        setActiveAchievement({
+          ...activeAchievement,
+          headline: "",
+          description: "",
+        });
+        setIsAchievementsCollapsed(true);
+        props.getProfile();
+      }
+      else if (res.status ===404){
+      
+        alert("This field is required and can not be empty:!!")
+       
+
+      }
+      else{
+  
+        alert("server error ")
+      }
+    } catch (error) {
+      console.log("profil hatası")
     }
+    
+     
 
     setLoading(false);
   };
@@ -218,9 +269,10 @@ const addPersonalDetail = async ()=>{
     if (res.id) {
       setActiveExperience({
         ...activeExperience,
-        name: "",
+        headline: "",
         company: "",
         description: "",
+        date:"",
       });
       setIsExperiencesCollapsed(true);
       props.getProfile();
@@ -257,16 +309,46 @@ const addPersonalDetail = async ()=>{
     setLoading(false);
   };
 
+ 
+
+  
+ 
   useEffect(() => {
     getProfile1();
+    
   }, []);
+
+ 
+
+  const formattedEducations = form?.educations.map((education) => ({
+    id: education._id,
+    school: education.school,
+    section: education.section,
+    date: education.date,
+  }));
+
+  const formattedProjects = form?.projects.map((project)=>({
+    id:project._id,
+    headline:project.headline,
+    description:project.description,
+    date:project.date
+  }))
+  const formattedAchievements = form?.achievements.map((achievement)=>({
+    id:achievement._id,
+    headline:achievement.headline,
+    description:achievement.description,
+  }))
+  const formattedExperiences = form?.experiences.map((experience)=>({
+    id:experience._id,
+    headline:experience.headline,
+    company: experience.company,
+    description:experience.description,
+    date:experience.date
+  }))
 
   return (
     <>
-   <div className="wrapper">
    
-    
-    <div className="">
 
       <div class="container">
       <div className=" cards">
@@ -300,15 +382,15 @@ const addPersonalDetail = async ()=>{
               <input
                 type="date"
                 required
-                defaultValue={form?.birthDay}
-                onChange={(e) => onChange("birthDay", e.target.value)}
-                onBlur={(e) => onBlur("birthDay", e.target.value)}
+                defaultValue={form?.birthday}
+                onChange={(e) => onChange("birthday", e.target.value)}
+                onBlur={(e) => onBlur("birthday", e.target.value)}
               />
             </li>
             <li>
               <label>Gender</label>
               <Select
-                defaultValue={form?.gender}
+                value={form?.gender}
                 options={genderOptions}
                 getOptionLabel={(x) => x.label}
                 getOptionValue={(x) => x.value}
@@ -318,35 +400,39 @@ const addPersonalDetail = async ()=>{
                 onChange={(e) => onChange("gender", e)}
                 onBlur={(e) => onBlur("gender", e)}
               />
-            </li>
+              </li>
             <li>
               <label>Languages</label>
               <Select
-                defaultValue={form?.languages}
-                options={languages}
-                getOptionLabel={(x) => x.label}
-                getOptionValue={(x) => x.value}
-                unstyled
+                value={selectedLanguages}
+                options={languagesOptions}
                 isMulti
-                className="react-select-container"
+                unstyled
                 classNamePrefix="react-select"
-                onChange={(e) => onChange("languages", e)}
-                onBlur={(e) => onBlur("languages", e)}
+                className="react-select-container" 
+                onChange={(selectedOptions) => {
+                  setSelectedLanguages(selectedOptions);
+                  const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+                  onChange("languages", selectedLanguageValues);
+                }}
+                onBlur={() => onBlur("languages", selectedLanguages)}
               />
             </li>
             <li>
               <label>Skills</label>
               <Select
-                defaultValue={form?.skills}
-                getOptionLabel={(x) => x.label}
-                getOptionValue={(x) => x.value}
-                options={skills}
-                unstyled
-                isMulti
-                className="react-select-container"
-                classNamePrefix="react-select"
-                onChange={(e) => onChange("skills", e)}
-                onBlur={(e) => onBlur("skills", e)}
+                 value={selectedSkills}
+                 options={skillsOptions}
+                 isMulti
+                 unstyled
+                 classNamePrefix="react-select"
+                 className="react-select-container" 
+                 onChange={(selectedOptions) => {
+                   setSelectedSkills(selectedOptions);
+                   const selectedSkillValues = selectedOptions.map((skill) => skill.value);
+                   onChange("skills", selectedSkillValues);
+                 }}
+                 onBlur={() => onBlur("skills", selectedSkills)}
               />
             </li>
             <li>
@@ -368,23 +454,17 @@ const addPersonalDetail = async ()=>{
               />
             </li>
           </ul>
-          <button
-            className={loading ? "loading" : undefined}
-            onClick={addPersonalDetail}
-          >
-            Save
-          </button>
+          
         </div>
         <div className="card">
           <div className="card__header">Education Information</div>
           <ul className="card__body">
-            <Table
-              data={profileData?.educations}
+          <Table
+              data={formattedEducations}
               headline={educationHeadlines}
-              onRemove={deleteEducation}
+              onRemove={(id) => deleteEducation(id)}
               loading={loading}
             />
-
             <section
               className={isEducationsCollapsed ? "collapsed" : undefined}
             >
@@ -458,9 +538,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Projects</div>
           <ul className="card__body">
             <Table
-              data={profileData?.projects}
+              data={formattedProjects}
               headline={projectHeadlines}
-              onRemove={deleteProject}
+              onRemove={(id) => deleteProject(id)}
               loading={loading}
             />
             <section className={isProjectsCollapsed ? "collapsed" : undefined}>
@@ -535,9 +615,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Achievement</div>
           <ul className="card__body">
             <Table
-              data={profileData?.achievements}
+              data={formattedAchievements}
               headline={achievementHeadlines}
-              onRemove={deleteAchievement}
+              onRemove={(id) => deleteAchievement(id)}
               loading={loading}
             />
 
@@ -603,9 +683,9 @@ const addPersonalDetail = async ()=>{
           <div className="card__header">Experiences</div>
           <ul className="card__body">
             <Table
-              data={profileData?.experiences}
+              data={formattedExperiences}
               headline={experienceHeadlines}
-              onRemove={deleteExperience}
+              onRemove={(id) => deleteExperience(id)}
               loading={loading}
             />
 
@@ -697,9 +777,8 @@ const addPersonalDetail = async ()=>{
 
       </div>
       </div>
-      </div>
-   </div>
       
     </>
   );
 }
+
