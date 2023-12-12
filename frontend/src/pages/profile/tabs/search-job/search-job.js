@@ -82,11 +82,7 @@ export default function SearchJob(props) {
 onClick={(showAI)}  >AI</button>
 
 </div>
- 
-
         <label id="searchJob"> Search Job</label>
-
-
         <input
           type="text"
           placeholder="Search..."

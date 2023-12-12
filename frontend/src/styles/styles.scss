@@ -1226,10 +1226,11 @@ select {
 .showAI{
   position: relative;
   left:250px;
+  top:10px;
+  height:45px ;
+  text-align: center;
 }
-.showAI:hover{
-  background-color:#204878;
-}
+
 #searchJob{
   position: absolute;
   top:60px;
