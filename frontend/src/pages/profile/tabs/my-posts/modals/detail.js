@@ -8,7 +8,8 @@ export default function DetailBox(props) {
   const {
     detailBoxVisibility,
     setDetailBoxVisibility,
-    jobId
+    jobId,
+    userId
   } = props;
 
   const appliedMyPostDetailsHeadlines = [
@@ -25,7 +26,7 @@ export default function DetailBox(props) {
   const [Profile, setProfile] = useState([]);
   const navigate = useNavigate();
 
-
+  const [selecteduserId, setSelecteduserId] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -45,7 +46,7 @@ export default function DetailBox(props) {
             lastName: item.lastName,
             email: item.email,
             offer: item.offer,
-            actions: renderActions(item._id) 
+            actions: renderActions(item._id,item.userId) 
           }));
           setMyPostDetail(data);
         }
@@ -57,16 +58,18 @@ export default function DetailBox(props) {
     getData();
   }, [jobId]);
 
-  const showProfile = async ()=>{
-  /*   const Profile = await api.user.profile.get("65590d6087e8c71e81e39160");
-    console.log("Profil value:",Profile.lastName) */
-    navigate('/showProfile', { state: { Profile} });
+  const showProfile = async (userId)=>{
+    //setSelecteduserId=userId
+    console.log(selecteduserId+"showww")
+     const Profile = await api.user.profile.get(userId);
+    console.log("Profil value:",Profile.lastName) 
+    navigate('/showProfile', { state: { userId } });
    }
 
-  const renderActions = (applicantId) => {
+  const renderActions = (applicantId,userId) => {
     return (
       <div>
-        <button onClick={() => showProfile()} >Show Profile</button>
+        <button onClick={() => showProfile(userId)} >Show Profile</button>
         <button id="accept"onClick={() => handleAccept(applicantId)}>Accept</button>
         <button id="reject"onClick={() => handleReject(applicantId)}>Reject</button>
       </div>
@@ -113,7 +116,11 @@ export default function DetailBox(props) {
               {resp?<Table 
               loading={loading}
               headline={appliedMyPostDetailsHeadlines} data={myPostDetail} />:<div className="nodata">No data found!</div>}
-              
+              <box
+
+// Seçilen işin kimliğini detay kutusuna aktar
+userId=  {selecteduserId}     
+/>
             </div>
           </div>
         </div>
