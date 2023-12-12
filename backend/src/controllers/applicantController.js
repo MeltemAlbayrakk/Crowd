@@ -116,6 +116,7 @@ const setActions = async (req, res) => {
   
       const applicants = await ApplicantModel.find({ job: req.params.id });
   
+     
       const usersData = [];
   
       for (let i = 0; i < applicants.length; i++) {

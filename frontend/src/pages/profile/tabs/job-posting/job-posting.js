@@ -202,11 +202,12 @@ export default function JobPosting(props) {
         <li>
           <label>Estimated Budget</label>
           <input
-            type="text"
+            type="number"
             name="estimatedBudget"
             placeholder="Estimated Budget"
             value={form.budget}
             required
+            min="0"
             onChange={(e) => onChange("budget", e.currentTarget.value)}
           />
         </li>
