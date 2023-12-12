@@ -73,16 +73,20 @@ export default function SearchJob(props) {
 
     <div className="search__job">
 
-<div>
-<button onClick={(showAI)}  >AI</button>
-
-</div>
 
       <div className="search__job__header title">
 
+      <div>
+<button 
+ class="showAI"
+onClick={(showAI)}  >AI</button>
+
+</div>
+ 
+
+        <label id="searchJob"> Search Job</label>
 
 
-        <label>Search Job</label>
         <input
           type="text"
           placeholder="Search..."

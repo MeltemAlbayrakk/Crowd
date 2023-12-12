@@ -1220,7 +1220,23 @@ select {
       }
     }
   }
+ 
+
 }
+.showAI{
+  position: relative;
+  left:250px;
+}
+.showAI:hover{
+  background-color:#204878;
+}
+#searchJob{
+  position: absolute;
+  top:60px;
+  
+
+}
+
 
 .applied__bids {
   width: 100%;
@@ -1323,3 +1339,4 @@ select {
     }
   }
 }
+

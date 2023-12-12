@@ -1,62 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import MyFoto from "../../../../../src/images/konfeti.gif";
+import gifHello from "../../../../../src/images/a-unscreen.gif";
+import gifSearching from "../../../../../src/images/2-unscreen.gif";
+import gifHappy from "../../../../../src/images/b-unscreen.gif";
 import Select from "react-select";
 
 export default function ShowAI(props) {
-  const [previousMonth, setPreviousMonth] = useState("");
-  const [nextMonth, setNextMonth] = useState("");
-  const [jobCategory, setJobCategory] = useState("");
-  const [jobSubCategory, setJobSubCategory] = useState("");
+  const [previousMonth, setPreviousMonth] = useState(null);
+  const [nextMonth, setNextMonth] = useState(null);
+  const [jobCategory, setJobCategory] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [categoryOptions, setCategoryOptions] = useState([]);
-  const [subCategoryOptions, setSubCategoryOptions] = useState([]);
-  const [analysisResult, setAnalysisResult] = useState("");
 
-  const sampleCategories = [
-    {
-      label: "Graphic Designer",
-      value: "Graphic Designer",
-      subCategories: [
-        { label: "Adobe Photoshop", value: "Adobe Photoshop" },
-        { label: "Adobe Illustrator", value: "Adobe Illustrator" },
-        { label: "CorelDRAW", value: "CorelDRAW" },
-        { label: "InDesign", value: "InDesign" },
-        { label: "Sketch", value: "Sketch" },
-        { label: "GIMP", value: "GIMP" },
-        { label: "Figma", value: "Figma" },
-        { label: "Affinity Designer", value: "Affinity Designer" },
-        { label: "Canva", value: "Canva" },
-        { label: "Procreate", value: "Procreate" },
-        { label: "Adobe XD", value: "Adobe XD" },
-        { label: "Blender", value: "Blender" },
-        { label: "ZBrush", value: "ZBrush" },
-        { label: "Cinema 4D", value: "Cinema 4D" },
-        { label: "Adobe After Effects", value: "Adobe After Effects" },
-      ],
-    },
-    {
-      label: "Software Technology",
-      value: "Software Technology",
-      subCategories: [
-        { label: "JavaScript", value: "JavaScript" },
-        { label: "Python", value: "Python" },
-        { label: "Java", value: "Java" },
-        { label: "C++", value: "C++" },
-        { label: "Ruby", value: "Ruby" },
-        { label: "Swift", value: "Swift" },
-        { label: "Kotlin", value: "Kotlin" },
-        { label: "PHP", value: "PHP" },
-        { label: "TypeScript", value: "TypeScript" },
-        { label: "Go", value: "Go" },
-        { label: "Rust", value: "Rust" },
-        { label: "R", value: "R" },
-        { label: "Perl", value: "Perl" },
-        { label: "Haskell", value: "Haskell" },
-        { label: "Scala", value: "Scala" },
-      ],
-    },
-  ];
+  const [analysisResult, setAnalysisResult] = useState("");
+  const [gifPath,setGifPath] = useState(null);
+
 
   const PreviousMonthOptions = [
     { label: "1", value: "1" },
@@ -87,7 +46,7 @@ export default function ShowAI(props) {
     { label: "11", value: "11" },
     { label: "12", value: "12" },
   ];
-  const subCategoriesOptions = [
+  const CategoryOptions = [
     { label: "JavaScript", value: "JavaScript" },
     { label: "Python", value: "Python" },
     { label: "Java", value: "Java" },
@@ -106,28 +65,21 @@ export default function ShowAI(props) {
   ];
 
   useEffect(() => {
-    setCategoryOptions(sampleCategories);
+    setCategoryOptions(CategoryOptions);
   }, []);
 
-  const handlePreviousMonthChange = (selectedOption) => {
-    setPreviousMonth(selectedOption);
+  const handlePreviousMonthChange = (event) => {
+    setPreviousMonth(event);
+
   };
 
-  const handleNextMonthChange = (selectedOption) => {
-    setNextMonth(selectedOption);
+  const handleNextMonthChange = (event) => {
+    setNextMonth(event);
+
   };
 
-  const handleCategoryChange = (selectedCategory) => {
-    const category = categoryOptions.find(
-      (cat) => cat.value === selectedCategory
-    );
+  const handleJobCategoryChange = (selectedCategory) => {
     setJobCategory(selectedCategory);
-    setSubCategoryOptions(category ? category.subCategories : []);
-    setJobSubCategory("");
-  };
-
-  const handleSubCategoryChange = (selectedSubCategory) => {
-    setJobSubCategory(selectedSubCategory);
   };
 
   const handleAnalysis = () => {
@@ -135,9 +87,9 @@ export default function ShowAI(props) {
 
     axios
       .post("http://localhost:3001/job/ai", {
-        previousMonth,
-        nextMonth,
-        jobTitle: `${jobCategory} - ${jobSubCategory}`,
+        previousMonth:previousMonth.value,
+        nextMonth:nextMonth.value,
+        jobTitle: `${jobCategory.value}`,
       })
       .then((response) => {
         console.log("Backend'den gelen yanıt: ", response.data);
@@ -150,91 +102,88 @@ export default function ShowAI(props) {
         setLoading(false);
       });
   };
+  const handleImageLoad = () => {
+    // Resim yüklendiğinde yapılacak işlemler burada
+    setLoading(false);
+  };
 
   return (
     <>
-   
-      <div class="wrapper">
+  <div class="wrapper">
       <div class="content">
       <div class="container profile">
-      <div class="profile__right">
-      <div class="container">
-      <div class="content-profile">
-    
       
-          <div class="options">
-         
+     
+        
+        <div class="profile__right"
+        style={{
+        display:"inline-block",
+        fontSize:"20px",
+        lineHeight:"40px"}}>
+        
+        {/* <img  style={{position:"fixed", right:"400px", float:"right"}} src={gifPath} alt="GIF Image" />
+         */}
+{/* 
+        {loading ? (
+            <img style={{position:"fixed", right:"400px", float:"right"}} src={gifSearching} alt="Loading GIF" />
+          ) : (
+            <img style={{position:"fixed", right:"400px", float:"right"}} src={gifHappy} alt="Other GIF" />
+          )} */}
+
+<img
+        src={loading ? {gifSearching} : gifHappy}
+       
+        onLoad={handleImageLoad}
+      />
+
+      {/* Başlangıçta gösterilecek resim */}
+      {loading && <img src={gifHello} alt="Initial Image" />}
+
+        <div style={{}}>
+          <div style={{  maxWidth:600}}>
             <label>Previous Month</label>
           
             <Select
               value={previousMonth}
               options={PreviousMonthOptions}
               className="react-select-container"
-                classNamePrefix="react-select" 
-                unstyled
-                onChange={(e) => handlePreviousMonthChange(e)}>
-                   
-            
-            
-            </Select>
+              classNamePrefix="react-select" 
+              unstyled
+
+              onChange={handlePreviousMonthChange}
+             >
+                    
+             </Select>
           </div>
-          <div>
-            <br></br>
-            <br></br>
+          <div style={{ maxWidth:600}}>
             <label>Next Month</label>
 
             <Select 
             value={nextMonth}
             options={NextMonthOptions}
-          
             className="react-select-container"
             classNamePrefix="react-select" 
-         
-            onChange={(e) => handleNextMonthChange(e)}
             unstyled
-            >
             
-             
-                   
-             
-            </Select>
-          </div>
-          <div>
+            onChange={handleNextMonthChange}
           
-            <label>Job Category</label>
-            <Select
-              value={jobCategory}
-            options={sampleCategories}
-              className="react-select-container"
-              classNamePrefix="react-select" 
-              onChange={(e) => handleCategoryChange(e)}
-              unstyled
+            
             >
-               <option value="">Select Category</option>
-              {categoryOptions.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.label}
-                </option>
-              ))}
-              
             </Select>
+            
           </div>
 
-          <br></br>
-            <br></br>
-          <div>
+
+          <div style={{ maxWidth:600}}>
             <label>Sub Category</label>
             <Select
-              value={jobSubCategory}
-             
-             
+              value={jobCategory}
+              options={CategoryOptions}
               className="react-select-container"
               classNamePrefix="react-select" 
-              onChange={(e) => handleSubCategoryChange(e)}
+              onChange={handleJobCategoryChange}
               disabled={!jobCategory}
-              options={subCategoriesOptions}
-              unstyled
-            >
+              unstyled>
              
             </Select>
           </div>
@@ -242,25 +191,25 @@ export default function ShowAI(props) {
           <button onClick={handleAnalysis} disabled={loading}>
             {loading ? "Analiz Ediliyor..." : "Analiz Et"}
           </button>
-        </div>
-        <br></br>
-            <br></br> <br></br>
-            
-        <div>
-          <h3>Analiz Sonucu:</h3>
+          </div>
+          <br></br>
+          <br></br>
+          <div>
+          <label>Analiz Sonucu:</label>
+          <div>
           {loading ? <p>Analiz yapılıyor...</p> : <p>{analysisResult}</p>}
+
+          </div>
+        </div>
         </div>
 
-        <div>
-          <img src={MyFoto} alt="GIF Image" />
+       
+
+        </div>
         </div>
       </div>
-      </div>
-      </div>
-      </div>
-      </div>
-     
-      
+      {/* </div>
+      */}
     
       
     </> 
