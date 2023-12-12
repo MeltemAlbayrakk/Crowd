@@ -168,25 +168,20 @@ export default function ShowAI(props) {
                   ></Select>
                 </div>
 
-                <button onClick={handleAnalysis} disabled={loading}>
-                  {loading ? "Analiz Ediliyor..." : "Analiz Et"}
-                </button>
-              </div>
-              <br></br>
-              <br></br>
-              <div>
-                <label>Analiz Sonucu:</label>
-                <div>
-                  {loading ? (
-                    <p>Analiz yapılıyor...</p>
-                  ) : (
-                    <p>{analysisResult}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <button onClick={handleAnalysis} disabled={loading}>
+            {loading ? "Analyzing..." : "Analyze"}
+          </button>
         </div>
+
+                <div>
+        <h3>Analysis Result:</h3>
+        {loading ? (
+          <p>Analyzing...</p>
+        ) : (
+          <p>{analysisResult}</p>
+        )}
+      </div>
+
       </div>
     </>
   );

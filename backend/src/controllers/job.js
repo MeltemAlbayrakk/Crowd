@@ -124,7 +124,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAhK0oFZdtwINpQ5MT6dSHF5S6PazRTieaW337SVVZXvsqX3K7aZQ6NXTPnrJA66-P5UAA.",
+    "eAhK0hVHsKaV9ve1gUhUfZETdln4CdiVWF9pYPUWV8L1FBMWSxJnIjzoeHhJKIwm4cIVOQ.",
     {
       verbose: true,
       fetch: fetch,
@@ -177,7 +177,8 @@ const aiAnalysis = async (req, res) => {
         const jobYear = job.date.getFullYear();
         return jobMonth === i && jobYear === (i === 12 ? endYear : startYear);
       }).length;
-    }
+    } 
+
 
     let question = Object.values(numberOfJobsByMonth).join("\n") +
       "\nGeçmiş aylardaki " + previousMonth +
@@ -188,9 +189,8 @@ const aiAnalysis = async (req, res) => {
 
   
     const data = await ai(question);
-
-console.log(question)
-console.log(jobTitle)
+console.log("soru : "+ question)
+//console.log(jobTitle)
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
