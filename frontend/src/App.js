@@ -13,6 +13,8 @@ import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
  import Showprofile from './pages/profile/tabs/profile/personal/showProfile';
  import ShowAI from "./pages/profile/tabs/search-job/showAI";
+
+ 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null); // Kullanıcının ID'sini saklamak için

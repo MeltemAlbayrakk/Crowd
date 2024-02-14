@@ -49,7 +49,7 @@ const getApplicant = async(req,res)=>{
            
             const applicant = await ApplicantModel.findById(app1);
             
-          console.log("appliacnt",applicant)
+   
               const job = await JobModel.findById(applicant.job);
             const responseObject = {
                 title: job?.title,
@@ -61,7 +61,6 @@ const getApplicant = async(req,res)=>{
 
             responseArray.push(responseObject);
         }
-
         res.status(200).json(responseArray);
 
         res.status(500).json({message:"server error"})
