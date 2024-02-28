@@ -42,8 +42,14 @@ import { useState, useEffect } from "react";
 
     const navigate = useNavigate();
 
-    
-    const login = async (event) => {
+    const signInLinkedin= async () =>{
+      window.open(
+        `http://localhost:3001/auth/linkedin`,
+        "_self"
+      );
+    }
+
+    const login = async (event) =>{
       event.preventDefault();
       try {
         const response = await axios.post('http://localhost:3001/user/login', {
@@ -213,6 +219,7 @@ try {
               error={error}
               setError={setError}
               loading={loading}
+              signInLinkedin={signInLinkedin}
             />
             <Registerbox
               register={register}

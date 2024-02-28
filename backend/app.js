@@ -7,10 +7,14 @@ import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
 import applicantRoute from './src/routes/applicantRoute.js'
 import freelancerRoute from './src/routes/freelancerRoute.js'
+import linkedinAuth from './src/routes/linkedinAuth.js'
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import multer from 'multer';
 import path from 'path';
+import passport from 'passport'
+
+
 dotenv.config()
 
 const app = express()
@@ -30,6 +34,11 @@ app.use(upload.single('profilePhoto'));
 
 
 
+//////////////////////////
+
+
+
+//////////////////////////
 
 app.use(session({
   secret: process.env.SECRET_TOKEN,
@@ -40,12 +49,12 @@ app.use(session({
 }));
 
 
-app.use(session({
-  secret: process.env.SECRET_TOKEN, 
-  resave: true,
-  saveUninitialized: true,
-   //cookie: { secure: false }
-}));
+// app.use(session({
+//   secret: process.env.SECRET_TOKEN, 
+//   resave: true,
+//   saveUninitialized: true,
+//    //cookie: { secure: false }
+// }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -53,7 +62,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-access-token");
   res.header("Access-Control-Allow-Credentials", "true");
 
-  res.locals.user = req.session.user;
+   res.locals.user = req.session.user;
   next();
 });
 
@@ -63,6 +72,7 @@ app.use(express.json())
 
 conn()
 
+app.use('/auth',linkedinAuth)
 app.use('/freelancer',freelancerRoute);
 app.use('/user', userRoute);
 app.use('/job',jobRoute);
