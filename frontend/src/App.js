@@ -37,12 +37,14 @@ function App() {
 
         if (linkedinId) {
           setIsLoggedIn(true);
+          console.log(isLoggedIn)
           console.log(linkedinId)
           setUserId(linkedinId)
           console.log(userId)
         }
         else if (response.data.userId) {
           setIsLoggedIn(true);
+          console.log(isLoggedIn)
 
           console.log(response.data.userId)
 
@@ -51,6 +53,7 @@ function App() {
         else {
           setIsLoggedIn(false);
         }
+        console.log(isLoggedIn)
       } catch (error) {
         console.error('Oturum kontrolünde hata:', error);
         setIsLoggedIn(false);
@@ -62,7 +65,7 @@ function App() {
 
 
 
-  }, []);
+  }, [linkedinId, setIsLoggedIn]);
 
 
 
@@ -79,7 +82,7 @@ function App() {
               <LoadingProfile />
             )
           ) : (
-            <Navigate to="/profile/:id" />
+            <Navigate to="/" />
           )
         }
       />

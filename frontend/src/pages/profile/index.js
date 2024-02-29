@@ -98,7 +98,6 @@ export default function Index() {
 
   useEffect(() => {
 
-    if (!isLoggedIn) navigate("/");
     if (!profile) {
 
       const getData = async () => {
