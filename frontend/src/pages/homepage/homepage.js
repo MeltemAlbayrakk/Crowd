@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../../components/layout/header/header";
@@ -7,6 +8,8 @@ import Banner from "../../components/banner/banner";
 import Sidebox from "../../components/sidebox/sidebox";
 import Loginbox from "../../components/layout/loginbox/loginbox";
 import Registerbox from "../../components/layout/registerbox/registerbox";
+import linkedInLoginImage from '../../images/signin-button.png'
+
 
 export default function Homepage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,11 +54,13 @@ export default function Homepage() {
         password: password
       }, { withCredentials: true });
 
-
+      console.log("cevap bu login:", response.data.token)
       if (response.status === 201) {
 
         setIsLoggedIn(true);
         setLoginboxVisibility(false);
+
+        localStorage.setItem("userToken", response.data.token)
         setLoading(false);
 
         window.location.reload();
@@ -90,8 +95,9 @@ export default function Homepage() {
 
 
       setIsLoggedIn(false);
+      localStorage.removeItem("userToken")
       setLoginboxVisibility(false);
-      //localStorage.removeItem("auth");
+   
 
 
     } catch (error) {
@@ -181,7 +187,11 @@ export default function Homepage() {
 
   const checkSession = async () => {
     try {
+
+      console.log("bu ıslıgged ın", isLoggedIn)
+
       const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
+      console.log("bu ıslıgged ın", isLoggedIn)
 
       if (response.data.loggedIn) {
         setIsLoggedIn(true); // Oturum varsa true yap
@@ -194,64 +204,6 @@ export default function Homepage() {
     }
   };
 
-  const loginLinkedin = async () => {
-    // const response = await axios.get("http://localhost:3001/auth/linkedin");
-    // console.log(response)
-    const windowOpen = window.open(
-      `http://localhost:3001/auth/linkedin`,
-      "_self"
-    );
-
-    console.log(windowOpen)
-
-    if (windowOpen != null) {
-      window.location.href = 'http://localhost:7000'
-      const response = await axios.get("http://localhost:3001/auth/linkedin");
-      console.log(response)
-    }
-  };
-
-  // const LinkedInOAuth = () => {
-  //   const handleLogin = async (code) => {
-  //     // Exchange the code for an access token
-  //     const data = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
-  //       method: 'POST',
-  //       body: new URLSearchParams({
-  //         grant_type: 'authorization_code',
-  //         code,
-  //         redirect_uri: 'http://localhost:3001/auth/linkedin/callback',
-  //         client_id: '7787gti63ys60o',
-  //         client_secret: 'UerCC3JrJBBpPWIu',
-  //       })
-  //     }).then((response) => response.json());
-
-  //     const accessToken = data.access_token;
-
-  //     // Fetch the user's LinkedIn profile
-  //     const userProfile = await axios.get('https://api.linkedin.com/v2/userinfo', {
-  //       headers: {
-  //         'Authorization': `Bearer ${accessToken}`,
-  //         'Connection': 'Keep-Alive',
-  //       }
-  //     });
-
-  //     // Handle the user profile data (e.g., store it in your database and log the user in)
-  //     console.log(
-  //       `Welcome, ${userProfile} `
-  //     );
-  //   };
-
-  //   const handleLinkedInCallback = () => {
-  //     const queryString = window.location.search;
-  //     const urlParams = new URLSearchParams(queryString);
-  //     const code = urlParams.get('code');
-  //     if (code) handleLogin(code);
-  //   };
-
-  //   React.useEffect(() => {
-  //     handleLinkedInCallback();
-  //   }, []);
-
   return (
     <div className="wrapper homepage">
       <Header
@@ -259,7 +211,7 @@ export default function Homepage() {
         logout={logout}
         setLoginboxVisibility={setLoginboxVisibility}
         setRegisterboxVisibility={setRegisterboxVisibility}
-      />
+      />,
       <Banner setRegisterboxVisibility={setRegisterboxVisibility} />
       <Sidebox />
       <Footer />
@@ -276,8 +228,7 @@ export default function Homepage() {
             error={error}
             setError={setError}
             loading={loading}
-            loginLinkedin={loginLinkedin}
-
+            setIsLoggedIn={setIsLoggedIn}
           />
           <Registerbox
             register={register}

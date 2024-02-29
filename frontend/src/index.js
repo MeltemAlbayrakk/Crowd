@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import LinkedinProvider from './context/LinkedinProvider'
 
 import App from "./App";
 
@@ -10,9 +11,10 @@ import App from "./App";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-      <BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
         <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  );
+    </BrowserRouter>
+
+  </React.StrictMode>
+);

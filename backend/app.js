@@ -12,13 +12,11 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import multer from 'multer';
 import path from 'path';
-import cors from 'cors';
 dotenv.config()
 
 
 const app = express()
 
-app.use(cors());
 const port = 3001
 
 const storage = multer.diskStorage({
@@ -49,6 +47,7 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET, POST ,PUT,DELETE,PATCH");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
@@ -56,8 +55,6 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
 });
-
-
 
 app.use(express.json())
 
