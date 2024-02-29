@@ -11,6 +11,7 @@ export default function Loginbox(props) {
     setError,
     signInLinkedin,
     loading,
+    loginLinkedin,
   } = props;
 
   return (
@@ -50,15 +51,15 @@ export default function Loginbox(props) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        
+
           <button className={loading ? "loading" : undefined}>Login</button>
-          
-          
+
+
+
           {error && <p>{error}</p>}
         </form>
-        <button onClick={signInLinkedin} className={loading ? "loading" : undefined}>Sign In with Linkedin</button>
-          
-        
+
+        <button onClick={loginLinkedin}>sign In with linkedin</button>
       </div>
     </div>
   );

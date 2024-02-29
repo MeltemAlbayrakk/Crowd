@@ -5,6 +5,7 @@ import UserModel from './src/models/User.js'
 import bcrypt from 'bcrypt'
 import userRoute from './src/routes/userRoute.js';
 import jobRoute from './src/routes/jobRoute.js';
+import authRoute from './src/routes/authRoute.js';
 import applicantRoute from './src/routes/applicantRoute.js'
 import freelancerRoute from './src/routes/freelancerRoute.js'
 import linkedinAuth from './src/routes/linkedinAuth.js'
@@ -12,15 +13,17 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import multer from 'multer';
 import path from 'path';
+import cors from 'cors';
 import passport from 'passport'
 
 
 dotenv.config()
 
+
 const app = express()
+
+app.use(cors());
 const port = 3001
-
-
 
 const storage = multer.diskStorage({
   destination: '../frontend/public/uploads',
@@ -57,9 +60,8 @@ app.use(session({
 // }));
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET, POST ,PUT,DELETE,PATCH");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-access-token");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
 
    res.locals.user = req.session.user;
@@ -75,9 +77,10 @@ conn()
 app.use('/auth',linkedinAuth)
 app.use('/freelancer',freelancerRoute);
 app.use('/user', userRoute);
-app.use('/job',jobRoute);
-app.use('/applicant',applicantRoute)
-app.use('/uploads',express.static('uploads'));
+app.use('/job', jobRoute);
+app.use('/applicant', applicantRoute)
+app.use('/auth', authRoute)
+app.use('/uploads', express.static('uploads'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
