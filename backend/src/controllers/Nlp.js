@@ -10,9 +10,7 @@ const cvNlp = async () => {
     const parseContentArray = data.map((doc) => doc.ParseContent);
     console.log(parseContentArray);
     res.status(200).json({ parseContentArray });
-    
-
-   
+     
   } catch (error) {
     console.error(error);
     // Handle the error appropriately
