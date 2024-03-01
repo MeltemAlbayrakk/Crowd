@@ -102,7 +102,7 @@ export default function Index() {
 
       const getData = async () => {
         const resp = await api.user.profile.get(id);
-        //console.log("bu respti",resp)
+        console.log("bu indexe gelen profile",resp)
         setProfile(resp);
 
 

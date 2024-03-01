@@ -4,7 +4,7 @@ import * as userAchievement from '../controllers/userAchievement.js';
 import * as userEducation from '../controllers/userEducation.js';
 import * as userProject from '../controllers/userProject.js';
 import * as userExperience from '../controllers/userExperience.js';
-import checkAuth from '../middlewares/checkAuth.js';
+import {authenticate} from '../middlewares/authMiddleware.js';
 
 const router=express.Router()
 

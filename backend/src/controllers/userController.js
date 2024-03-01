@@ -30,12 +30,12 @@ const registerCompanyUser=async (req,res)=>{
     });
   }
 
-  if (phoneNumber) {
+  /*if (phoneNumber) {
     return res.status(401).json({
       succeeded: false,
       error: 'Sistemde kayıtlı telefon numarası bulunmaktadır. Farklı bir numara deneyiniz.',
     });
-  }
+  }*/
 
   if (email) {
     return res.status(401).json({
@@ -84,12 +84,12 @@ const registerPersonelUser=async (req,res)=>{
      });
    }
 
-   if (phoneNumber) {
+   /*if (phoneNumber) {
      return res.status(401).json({
        succeeded: false,
        error: 'Sistemde kayıtlı telefon numarası bulunmaktadır. Farklı bir numara deneyiniz.',
      });
-   }
+   }*/
 
    if (email) {
      return res.status(401).json({
@@ -226,8 +226,10 @@ console.log(req.params.id,"backenddesin")
   const addPersonalDetail= async (req,res)=>{
 
     try {
-
+      console.log("auth calıstı mı1",req.user)
       const {firstName,lastName,birthday,gender,languages,skills,profileDescription,address} = req.body;
+      
+      console.log("auth calıstı mı2",req.user)
       if (req.session.userId) {
         const personalDetails = await UserModel.findByIdAndUpdate(req.session.userId,{
 

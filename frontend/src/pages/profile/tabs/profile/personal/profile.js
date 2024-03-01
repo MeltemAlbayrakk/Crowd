@@ -1,5 +1,5 @@
 import api from "../../../../../services/api";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Select from "react-select";
 import Table from "../../../../../components/layout/table/table";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../../../../styles/styles.scss"
 import { useParams } from 'react-router-dom';
+import LinkedinContext from "../../../../../context/LinkedinContext";
 
 
 export default function Profile(props) {
@@ -60,6 +61,7 @@ export default function Profile(props) {
 
   //profile data dbden geliyor formu dolduruyor
 
+  const {linkedinId} = useContext(LinkedinContext)
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(profileData);
@@ -89,7 +91,7 @@ export default function Profile(props) {
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  const { id } = useParams();
+  const { id  } = useParams();
   const [userProfile, setUserProfile] = useState(null);
 
 
@@ -99,13 +101,18 @@ export default function Profile(props) {
 
       console.log(id,"profildeki id")
   
-
-      const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
+      console.log(linkedinId ,"linkedin id")
+    if(linkedinId){
+      const res = await axios.get(`http://localhost:3001/user/profile/${linkedinId}`, {
         withCredentials: true,
 
       });
-        //setUserProfile(res.data);
+    }else{ const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
+        withCredentials: true, 
 
+      });
+        //setUserProfile(res.data);
+    }
       setForm(res.data);
       const languagesFromApi = res.data.languages || []; 
       const skillsFromApi = res.data.skills || []; 
@@ -156,9 +163,10 @@ export default function Profile(props) {
 
     
     try {
-      
+      console.log("update onblur calsıtı")
       const res = await api.user.profile.update("personal", form);
      
+      console.log("updatten sonra gelen cevap:",res)
     } catch (error) {
       console.log("onblur hatası:",error.message)
     }
