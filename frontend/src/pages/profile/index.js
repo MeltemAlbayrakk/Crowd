@@ -41,7 +41,7 @@ export default function Index() {
 
 
   useEffect(() => {
-    checkSession();
+    //checkSession();
 
     document.querySelector("#root.homepage")?.classList.remove("homepage");
   }, []);
@@ -53,27 +53,27 @@ export default function Index() {
 
   const navigate = useNavigate();
 
-  const logout =async (event) => {
+  const logout = async (event) => {
     event.preventDefault();
 
 
     try {
       const response = await axios.get("http://localhost:3001/user/logout", { withCredentials: true });
-    
-    
-          setIsLoggedIn(false);
-         navigate("/");
-          //setLoginboxVisibility(false);
-          //localStorage.removeItem("auth");
-    
-    
-    }catch(error){
-    
-    }
-         
-        };
 
-       
+
+      setIsLoggedIn(false);
+      navigate("/");
+      //setLoginboxVisibility(false);
+      //localStorage.removeItem("auth");
+
+
+    } catch (error) {
+
+    }
+
+  };
+
+
   const getProfile = async () => {
     setProfile(await api.user.profile.get(id));
     setLoadloading(false);
@@ -90,15 +90,14 @@ export default function Index() {
     const form = new FormData();
     form.append("profilePhoto", e.target.files[0]);
 
-    const response = await api.user.profile.updatePicture(form); 
+    const response = await api.user.profile.updatePicture(form);
 
     setProfile(response)
     getProfile();
   };
 
   useEffect(() => {
-  
-    if (!isLoggedIn) navigate("/");
+
     if (!profile) {
 
       const getData = async () => {
@@ -106,7 +105,7 @@ export default function Index() {
         //console.log("bu respti",resp)
         setProfile(resp);
 
-        
+
       };
       getData();
     }
@@ -115,7 +114,7 @@ export default function Index() {
   const checkSession = async () => {
     try {
       const response = await axios.get("http://localhost:3001/user/check-session", { withCredentials: true });
-
+      console.log("checksessıon resp:", response)
       if (response.data.loggedIn) {
         setIsLoggedIn(true); // Oturum varsa true yap
       } else {
@@ -133,9 +132,9 @@ export default function Index() {
   return (
     profile && (
 
-      
+
       <div className="wrapper">
-  
+
         <Header auth={isLoggedIn} logout={logout} isProfileHidden={true} />
         <div className="content">
           {profile && (
@@ -146,16 +145,15 @@ export default function Index() {
                     loading ? "profile__avatar loading" : "profile__avatar"
                   }
                   style={{
-                    backgroundImage: `url(${
-                      (profile && profile.profilePhoto) ||
+                    backgroundImage: `url(${(profile && profile.profilePhoto) ||
                       require("../../images/profile.png")
-                    })`,
+                      })`,
                   }}
                 >
                   {/* <img src="../../../../backend/uploads/profilePhoto-1701075220944.png"></img> */}
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
-                  
+
                 <div className="profile__fullname">
                   {profile.firstName + " " + profile.lastName}
                 </div>
@@ -254,43 +252,43 @@ export default function Index() {
                 )}
               </div>
               <div className="profile__right">
-               <div class="container">
-       
-                <div class="content-profile">
-                {activeTab == "profile" && profile.role == "personal" ? (
-                  <PersonalProfile profile={profile} getProfile={getProfile} />
-                ) : null}
+                <div class="container">
 
-                {activeTab == "profile" && profile.role == "company" ? (
-                  <CompanyProfile profile={profile} getProfile={getProfile} />
-                ) : null}
+                  <div class="content-profile">
+                    {activeTab == "profile" && profile.role == "personal" ? (
+                      <PersonalProfile profile={profile} getProfile={getProfile} />
+                    ) : null}
 
-                {activeTab == "become-freelancer" ? (
-                  <BecomeFreelancer
-                    profile={profile}
-                    getProfile={getProfile}
-                    setActiveTab={setActiveTab}
-                  />
-                ) : null}
-                {activeTab == "search-job" ? <SearchJob /> : null}
-                {activeTab == "applied-bids" ? <AppliedBids /> : null}
-                {activeTab == "settings" ? (
-                  <Settings setActiveTab={setActiveTab} />
-                ) : null}
-                {activeTab == "job-posting" ? <JobPosting /> : null}
-                {activeTab == "my-posts" ? <MyPosts /> : null}
-                {activeTab == "freelancers" ? <Freelancers /> : null}
+                    {activeTab == "profile" && profile.role == "company" ? (
+                      <CompanyProfile profile={profile} getProfile={getProfile} />
+                    ) : null}
+
+                    {activeTab == "become-freelancer" ? (
+                      <BecomeFreelancer
+                        profile={profile}
+                        getProfile={getProfile}
+                        setActiveTab={setActiveTab}
+                      />
+                    ) : null}
+                    {activeTab == "search-job" ? <SearchJob /> : null}
+                    {activeTab == "applied-bids" ? <AppliedBids /> : null}
+                    {activeTab == "settings" ? (
+                      <Settings setActiveTab={setActiveTab} />
+                    ) : null}
+                    {activeTab == "job-posting" ? <JobPosting /> : null}
+                    {activeTab == "my-posts" ? <MyPosts /> : null}
+                    {activeTab == "freelancers" ? <Freelancers /> : null}
+                  </div>
                 </div>
               </div>
-          </div>
             </div>
           )}
         </div>
         <Footer />
       </div>
-    
+
     )
   );
 
-  
+
 }

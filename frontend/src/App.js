@@ -3,43 +3,71 @@ import "./styles/styles.scss";
 import "./styles/responsive.scss";
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
 import Homepage from './pages/homepage/homepage';
 import Profile from './pages/profile/index';
 import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
- import Showprofile from './pages/profile/tabs/profile/personal/showProfile';
- import ShowAI from "./pages/profile/tabs/search-job/showAI";
+import Showprofile from './pages/profile/tabs/profile/personal/showProfile';
+import ShowAI from "./pages/profile/tabs/search-job/showAI";
+import LinkedinContext from './context/LinkedinContext.js'
+import handlePostMessage from './components/layout/loginbox/loginbox.js'
 
- 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null); // Kullanıcının ID'sini saklamak için
+  const { linkedinId } = useContext(LinkedinContext);
+  console.log(linkedinId)
 
   useEffect(() => {
     const checkSession = async () => {
+
+
+
+      console.log(linkedinId)
+      setUserId(linkedinId)
+
       try {
         const response = await axios.get('http://localhost:3001/user/check-session', { withCredentials: true });
+        console.log(response)
 
-        if (response.data.loggedIn) {
+        const token = localStorage.getItem("userToken")
+
+        if (linkedinId) {
           setIsLoggedIn(true);
+          console.log(isLoggedIn)
+          console.log(linkedinId)
+          setUserId(linkedinId)
+          console.log(userId)
+        }
+        else if (response.data.userId) {
+          setIsLoggedIn(true);
+          console.log(isLoggedIn)
 
           console.log(response.data.userId)
+
           setUserId(response.data.userId); // Kullanıcının ID'sini sakla
-        } else {
+        }
+        else {
           setIsLoggedIn(false);
         }
+        console.log(isLoggedIn)
       } catch (error) {
         console.error('Oturum kontrolünde hata:', error);
         setIsLoggedIn(false);
+        localStorage.removeItem("userToken")
       }
     };
 
     checkSession();
-  }, []);
+
+
+
+  }, [linkedinId, setIsLoggedIn]);
+
+
 
   return (
     <Routes>
@@ -49,8 +77,7 @@ function App() {
         path="/profile"
         element={
           isLoggedIn ? (
-            userId ? (
-              <Navigate to={`/profile/${userId}`} replace={true} />
+            userId ? (<Navigate to={`/profile/${userId}`} replace={true} />
             ) : (
               <LoadingProfile />
             )
