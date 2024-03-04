@@ -1,7 +1,22 @@
 import ExperienceModel from "../models/profile/Experience.js";
+import ExperiencePdfDoc from "../models/profile/ExperiencePdfDoc.js";
 import UserModel from "../models/User.js";
 
+const addExperience = async (req, res) => {
+  try {
+    const { headline, company, description, date } = req.body;
+    const userId = req.session.userId;
+    const experience = await ExperienceModel.create({
+      headline,
+      company,
+      description,
+      date,
+      userId,
+    });
 
+    res.status(201).json({
+      message: "Experience information has been added successfully",
+    });
 
 const addExperience = async (req, res) => {
   try {
@@ -35,11 +50,13 @@ const deleteExperience = async (req, res) => {
   try {
 
 
+
     const deletedExperience = await ExperienceModel.findByIdAndDelete(req.params.id);
 
     const user = await UserModel.findById(req.session.userId)
     if (user) {
       user.experiences = user.experiences.filter(ExpId => ExpId.toString() !== req.params.id);
+
 
       await user.save();
     }
@@ -58,3 +75,4 @@ const deleteExperience = async (req, res) => {
 };
 
 export { addExperience, deleteExperience }
+

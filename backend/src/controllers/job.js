@@ -124,7 +124,7 @@ const getAlljobs = async (req, res) => {
 
 async function ai(content) {
   let myBard = new Bard(
-    "eAhK0hVHsKaV9ve1gUhUfZETdln4CdiVWF9pYPUWV8L1FBMWSxJnIjzoeHhJKIwm4cIVOQ.",
+    "fgimDSPeh41gyUcuM3l3RpTWYaycuZG8Yr65oKtbY4NnI4kW6TPLUXdF7730SdJ_ZZdSbA.",
     {
       verbose: true,
       fetch: fetch,
@@ -146,9 +146,6 @@ const aiAnalysis = async (req, res) => {
   try {
     const { previousMonth, nextMonth, jobTitle } = req.body;
 
-    console.log("önceki ay:",previousMonth)
-    console.log("sonraki ay:",nextMonth)
-    console.log("bu vbaslık:",jobTitle)
 
     const today = new Date();
     const currentMonth = today.getMonth() + 1; 
@@ -190,11 +187,11 @@ const aiAnalysis = async (req, res) => {
   
     const data = await ai(question);
 console.log("soru : "+ question)
-//console.log(jobTitle)
+
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "ai cookie patladı" });
+    res.status(500).json({ error: "ai cookie error" });
   }
 };
 

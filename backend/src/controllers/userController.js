@@ -370,7 +370,6 @@ const addProfilePicture = async (req, res) => {
 
 }
 
-
 const beFreelancer = async (req, res) => {
 
   try {

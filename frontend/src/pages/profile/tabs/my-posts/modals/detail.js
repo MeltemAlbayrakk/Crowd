@@ -60,9 +60,9 @@ export default function DetailBox(props) {
 
   const showProfile = async (userId)=>{
     //setSelecteduserId=userId
-    console.log(selecteduserId+"showww")
+ 
      const Profile = await api.user.profile.get(userId);
-    console.log("Profil value:",Profile.lastName) 
+
     navigate('/showProfile', { state: { userId } });
    }
 

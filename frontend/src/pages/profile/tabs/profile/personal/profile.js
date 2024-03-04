@@ -5,9 +5,8 @@ import Table from "../../../../../components/layout/table/table";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp, faPlus } from "@fortawesome/free-solid-svg-icons";
-import "../../../../../styles/styles.scss"
-import { useParams } from 'react-router-dom';
-
+import "../../../../../styles/styles.scss";
+import { useParams } from "react-router-dom";
 
 export default function Profile(props) {
   const languages = [
@@ -81,30 +80,38 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
-
-
   const [languagesOptions, setLanguagesOptions] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
 
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
+  const [cvFile,setCvFile] = useState(null);
+  const [projectDoc,setProjectDoc] = useState(null);
+  const [certificate,setCertificate] = useState(null);
+  const [errorMessageCv, setErrorMessageCv] = useState('');
+  const [errorMessagePd, setErrorMessagePd] = useState('');
+  const [errorMessageC, setErrorMessageC] = useState('');
+
+
   const { id } = useParams();
   const [userProfile, setUserProfile] = useState(null);
 
-
   const getProfile1 = async () => {
+
 
     try {
 
       console.log(id, "profildeki id")
 
 
+
       const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
-
       });
+
       setUserProfile(res.data);
+
 
       setForm(res.data);
       const languagesFromApi = res.data.languages || [];
@@ -136,10 +143,10 @@ export default function Profile(props) {
       );
 
 
+
     } catch (error) {
 
     }
-
 
 
   };
@@ -149,6 +156,7 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
+
     console.log("form :", form)
   };
 
@@ -165,7 +173,6 @@ export default function Profile(props) {
 
 
   };
-
 
   const addEducation = async () => {
     setLoading(true);
@@ -227,8 +234,10 @@ export default function Profile(props) {
           setLoading(false);
         });
 
+
       console.log("res ne ", res)
       if (res.message == 'Achievement information has been added successfully') {
+
         setActiveAchievement({
           ...activeAchievement,
           headline: "",
@@ -236,6 +245,7 @@ export default function Profile(props) {
         });
         setIsAchievementsCollapsed(true);
         props.getProfile();
+
       }
       else if (res.status === 404) {
 
@@ -246,11 +256,11 @@ export default function Profile(props) {
       else {
 
         alert("server error ")
+
       }
     } catch (error) {
-      console.log("profil hatası")
+      console.log("profil hatası");
     }
-
 
 
     setLoading(false);
@@ -351,29 +361,88 @@ export default function Profile(props) {
     id: project._id,
     headline: project.headline,
     description: project.description,
+
     date: project.date
   }))
+
   const formattedAchievements = form?.achievements.map((achievement) => ({
     id: achievement._id,
     headline: achievement.headline,
     description: achievement.description,
-  }))
+  }));
+
   const formattedExperiences = form?.experiences.map((experience) => ({
     id: experience._id,
     headline: experience.headline,
     company: experience.company,
     description: experience.description,
-    date: experience.date
-  }))
+    date: experience.date,
+  }));
+
+  const submitCV = async (e) => {
+    e.preventDefault();
+    if (cvFile && cvFile.type === 'application/pdf') {
+      const formData = new FormData();
+      formData.append('file', cvFile);
+    const res =   await axios.post('http://localhost:3001/user/personal/experience/cv', formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if(res.status = 200){
+        alert("CV successfully uploaded")
+      }
+      setErrorMessageCv(''); // Clear any previous error message
+    } else {
+      setErrorMessageCv('Please select a valid PDF file.');
+    }
+
+  }
+  
+  const submitPrjDoc = async (e) => {
+    e.preventDefault();
+    if (cvFile && cvFile.type === 'application/pdf') {
+      const formData = new FormData();
+      formData.append('file', projectDoc);
+      const res = await axios.post('http://localhost:3001/user/personal/experience/projectDocuments', formData, {
+      withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if(res.status = 200){
+        alert("Project Document successfully uploaded")
+      }
+      setErrorMessagePd(''); // Clear any previous error message
+    } else {
+      setErrorMessagePd('Please select a valid PDF file.');
+    }
+   
+  }
+
+  const submitCertificate = async (e) => {
+    e.preventDefault();
+    if (cvFile && cvFile.type === 'application/pdf') {
+      const formData = new FormData();
+      formData.append('file', certificate);
+      const res = await axios.post('http://localhost:3001/user/personal/experience/certificate', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+      if(res.status = 200){
+        alert("Certificate successfully uploaded")
+      }
+      setErrorMessageC(''); // Clear any previous error message
+    } else {
+      setErrorMessageC('Please select a valid PDF file.');
+    }
+   
+  
+  }
+
 
   return (
     <>
-
-
       <div class="container">
         <div className=" cards">
           <div className="card">
-
             <div className="card__header">Personal Details</div>
 
             <ul className="card__body">
@@ -432,7 +501,9 @@ export default function Profile(props) {
                   className="react-select-container"
                   onChange={(selectedOptions) => {
                     setSelectedLanguages(selectedOptions);
+
                     const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+
                     onChange("languages", selectedLanguageValues);
                   }}
                   onBlur={() => onBlur("languages", selectedLanguages)}
@@ -449,7 +520,9 @@ export default function Profile(props) {
                   className="react-select-container"
                   onChange={(selectedOptions) => {
                     setSelectedSkills(selectedOptions);
+
                     const selectedSkillValues = selectedOptions.map((skill) => skill.value);
+
                     onChange("skills", selectedSkillValues);
                   }}
                   onBlur={() => onBlur("skills", selectedSkills)}
@@ -460,7 +533,9 @@ export default function Profile(props) {
                 <textarea
                   required
                   value={form?.profileDescription}
+
                   onChange={(e) => onChange("profileDescription", e.target.value)}
+
                   onBlur={(e) => onBlur("profileDescription", e.target.value)}
                 />
               </li>
@@ -474,7 +549,6 @@ export default function Profile(props) {
                 />
               </li>
             </ul>
-
           </div>
           <div className="card">
             <div className="card__header">Education Information</div>
@@ -490,7 +564,9 @@ export default function Profile(props) {
               >
                 <div
                   className="card__header"
+
                   onClick={() => setIsEducationsCollapsed(!isEducationsCollapsed)}
+
                 >
                   <span>Add New Education</span>
                   {isEducationsCollapsed ? (
@@ -563,7 +639,9 @@ export default function Profile(props) {
                 onRemove={(id) => deleteProject(id)}
                 loading={loading}
               />
+
               <section className={isProjectsCollapsed ? "collapsed" : undefined}>
+
                 <div
                   className="card__header"
                   onClick={() => setIsProjectsCollapsed(!isProjectsCollapsed)}
@@ -791,14 +869,48 @@ export default function Profile(props) {
                 )}
               </section>
             </ul>
+            <form enctype="multipart/form-data" className="experiences-form" onSubmit={submitCV}>
+              <div>CV</div>
+              <input
+                type="file"
+                class="form-control"
+                accept="application/pdf"
+                id="pdfFile"
+                required
+                onChange={(e) => setCvFile(e.target.files[0]) }
+              ></input>
+                 
+              <button type="submit" >SAVE</button>
+            </form>
+             {errorMessageCv && <p style={{ color: 'red' }}>{errorMessageCv}</p>}
+            <form enctype="multipart/form-data" className="experiences-form" onSubmit={submitPrjDoc}>
+              <div>Project Documents</div>
+              <input
+                type="file"
+                class="form-control"
+                accept="application/pdf"
+                required
+                onChange={(e) => setProjectDoc(e.target.files[0]) }
+              ></input>
+              <button type="submit" >SAVE</button>
+            </form>
+            {errorMessagePd && <p style={{ color: 'red' }}>{errorMessagePd}</p>}
+            <form enctype="multipart/form-data" className="experiences-form" onSubmit={submitCertificate}>
+              <div>Certificate</div>
+              <input
+                type="file"
+                class="form-control"
+                accept="application/pdf"
+                required
+                onChange={(e) => setCertificate(e.target.files[0]) }
+              ></input>
+              <button type="submit" >SAVE</button>
+            </form>
+            {errorMessageC && <p style={{ color: 'red' }}>{errorMessageC}</p>}
           </div>
-
-
-
+          
         </div>
       </div>
-
     </>
   );
 }
-

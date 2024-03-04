@@ -107,8 +107,8 @@ export default function MyPosts(props) {
     setLoading(true);
     console.log("id  details degeri:",id)
     await api.job.jobdetails("company", id);
-/*     props.getProfile();
-*/    setLoading(false);
+
+   setLoading(false);
   };
   const deleteRow = (id) => {
     return <button onClick={() => deleteJob(id)}>Delete</button>;
