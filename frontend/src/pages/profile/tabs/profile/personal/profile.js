@@ -81,10 +81,10 @@ export default function Profile(props) {
   const [activeExperience, setActiveExperience] = useState({});
   const [activeExperienceErrors, setActiveExperienceErrors] = useState(null);
 
- 
+
 
   const [languagesOptions, setLanguagesOptions] = useState([]);
-  const [selectedLanguages, setSelectedLanguages] = useState([]); 
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
 
   const [skillsOptions, setSkillsOptions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -94,21 +94,21 @@ export default function Profile(props) {
 
 
   const getProfile1 = async () => {
-   
+
     try {
 
-      console.log(id,"profildeki id")
-  
+      console.log(id, "profildeki id")
+
 
       const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
 
       });
-        //setUserProfile(res.data);
+      setUserProfile(res.data);
 
       setForm(res.data);
-      const languagesFromApi = res.data.languages || []; 
-      const skillsFromApi = res.data.skills || []; 
+      const languagesFromApi = res.data.languages || [];
+      const skillsFromApi = res.data.skills || [];
 
       const formattedLanguages = languages.map((lang) => ({
         label: lang.label,
@@ -139,9 +139,9 @@ export default function Profile(props) {
     } catch (error) {
 
     }
-    
-    
-    
+
+
+
   };
 
   const onChange = async (prop, value) => {
@@ -149,21 +149,21 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
-    console.log("form :",form)
+    console.log("form :", form)
   };
 
   const onBlur = async (prop, value) => {
 
-    
+
     try {
-      
+      console.log('asd')
       const res = await api.user.profile.update("personal", form);
-     
+      console.log(res)
     } catch (error) {
-      console.log("onblur hatası:",error.message)
+      console.log("onblur hatası:", error.message)
     }
-    
-    
+
+
   };
 
 
@@ -200,7 +200,7 @@ export default function Profile(props) {
         setActiveProjectErrors(err.response.data.errorMessage);
         setLoading(false);
       });
-
+    console.log(res)
     if (res.id) {
       setActiveProject({
         ...activeProject,
@@ -221,14 +221,14 @@ export default function Profile(props) {
 
     try {
       const res = await api.user.profile.achievement
-      .add("personal", activeAchievement)
-      .catch((err) => {
-        setActiveAchievementErrors(err.response.data.errorMessage);
-        setLoading(false);
-      });
+        .add("personal", activeAchievement)
+        .catch((err) => {
+          setActiveAchievementErrors(err.response.data.errorMessage);
+          setLoading(false);
+        });
 
-      console.log("res ne ",res)
-      if(res.status ===201){
+      console.log("res ne ", res)
+      if (res.message == 'Achievement information has been added successfully') {
         setActiveAchievement({
           ...activeAchievement,
           headline: "",
@@ -237,21 +237,21 @@ export default function Profile(props) {
         setIsAchievementsCollapsed(true);
         props.getProfile();
       }
-      else if (res.status ===404){
-      
+      else if (res.status === 404) {
+
         alert("This field is required and can not be empty:!!")
-       
+
 
       }
-      else{
-  
+      else {
+
         alert("server error ")
       }
     } catch (error) {
       console.log("profil hatası")
     }
-    
-     
+
+
 
     setLoading(false);
   };
@@ -272,7 +272,7 @@ export default function Profile(props) {
         headline: "",
         company: "",
         description: "",
-        date:"",
+        date: "",
       });
       setIsExperiencesCollapsed(true);
       props.getProfile();
@@ -309,16 +309,36 @@ export default function Profile(props) {
     setLoading(false);
   };
 
- 
 
-  
- 
+
+
+
   useEffect(() => {
     getProfile1();
-    
+
+    setActiveEducations({
+      ...activeEducations,
+      _id: id
+    })
+
+    setActiveAchievement({
+      ...activeAchievement,
+      _id: id
+    })
+
+    setActiveExperience({
+      ...activeExperience,
+      _id: id
+    })
+
+    setActiveProject({
+      ...activeProject,
+      _id: id,
+    })
+
   }, []);
 
- 
+
 
   const formattedEducations = form?.educations.map((education) => ({
     id: education._id,
@@ -327,457 +347,457 @@ export default function Profile(props) {
     date: education.date,
   }));
 
-  const formattedProjects = form?.projects.map((project)=>({
-    id:project._id,
-    headline:project.headline,
-    description:project.description,
-    date:project.date
+  const formattedProjects = form?.projects.map((project) => ({
+    id: project._id,
+    headline: project.headline,
+    description: project.description,
+    date: project.date
   }))
-  const formattedAchievements = form?.achievements.map((achievement)=>({
-    id:achievement._id,
-    headline:achievement.headline,
-    description:achievement.description,
+  const formattedAchievements = form?.achievements.map((achievement) => ({
+    id: achievement._id,
+    headline: achievement.headline,
+    description: achievement.description,
   }))
-  const formattedExperiences = form?.experiences.map((experience)=>({
-    id:experience._id,
-    headline:experience.headline,
+  const formattedExperiences = form?.experiences.map((experience) => ({
+    id: experience._id,
+    headline: experience.headline,
     company: experience.company,
-    description:experience.description,
-    date:experience.date
+    description: experience.description,
+    date: experience.date
   }))
 
   return (
     <>
-   
+
 
       <div class="container">
-      <div className=" cards">
-        <div className="card">
-        
-       <div className="card__header">Personal Details</div>
+        <div className=" cards">
+          <div className="card">
 
-          <ul className="card__body">
-            <li>
-              <label class="">First Name</label>
-              <input
-                type="input"
-                value={form?.firstName}
-                required
-                onChange={(e) => onChange("firstName", e.target.value)}
-                onBlur={(e) => onBlur("firstName", e.target.value)}
-              />
-            </li>
-            <li>
-              <label>Last Name</label>
-              <input
-                type="input"
-                required
-                value={form?.lastName}
-                onChange={(e) => onChange("lastName", e.target.value)}
-                onBlur={(e) => onBlur("lastName", e.target.value)}
-              />
-            </li>
-            <li>
-              <label>Birthday</label>
-              <input
-                type="date"
-                required
-                defaultValue={form?.birthday}
-                onChange={(e) => onChange("birthday", e.target.value)}
-                onBlur={(e) => onBlur("birthday", e.target.value)}
-              />
-            </li>
-            <li>
-              <label>Gender</label>
-              <Select
-                value={form?.gender}
-                options={genderOptions}
-                getOptionLabel={(x) => x.label}
-                getOptionValue={(x) => x.value}
-                unstyled
-                className="react-select-container"
-                classNamePrefix="react-select"
-                onChange={(e) => onChange("gender", e)}
-                onBlur={(e) => onBlur("gender", e)}
-              />
+            <div className="card__header">Personal Details</div>
+
+            <ul className="card__body">
+              <li>
+                <label class="">First Name</label>
+                <input
+                  type="input"
+                  value={form?.firstName}
+                  required
+                  onChange={(e) => onChange("firstName", e.target.value)}
+                  onBlur={(e) => onBlur("firstName", e.target.value)}
+                />
               </li>
-            <li>
-              <label>Languages</label>
-              <Select
-                value={selectedLanguages}
-                options={languagesOptions}
-                isMulti
-                unstyled
-                classNamePrefix="react-select"
-                className="react-select-container" 
-                onChange={(selectedOptions) => {
-                  setSelectedLanguages(selectedOptions);
-                  const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
-                  onChange("languages", selectedLanguageValues);
-                }}
-                onBlur={() => onBlur("languages", selectedLanguages)}
+              <li>
+                <label>Last Name</label>
+                <input
+                  type="input"
+                  required
+                  value={form?.lastName}
+                  onChange={(e) => onChange("lastName", e.target.value)}
+                  onBlur={(e) => onBlur("lastName", e.target.value)}
+                />
+              </li>
+              <li>
+                <label>Birthday</label>
+                <input
+                  type="date"
+                  required
+                  defaultValue={form?.birthday}
+                  onChange={(e) => onChange("birthday", e.target.value)}
+                  onBlur={(e) => onBlur("birthday", e.target.value)}
+                />
+              </li>
+              <li>
+                <label>Gender</label>
+                <Select
+                  value={form?.gender}
+                  options={genderOptions}
+                  getOptionLabel={(x) => x.label}
+                  getOptionValue={(x) => x.value}
+                  unstyled
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  onChange={(e) => onChange("gender", e)}
+                  onBlur={(e) => onBlur("gender", e)}
+                />
+              </li>
+              <li>
+                <label>Languages</label>
+                <Select
+                  value={selectedLanguages}
+                  options={languagesOptions}
+                  isMulti
+                  unstyled
+                  classNamePrefix="react-select"
+                  className="react-select-container"
+                  onChange={(selectedOptions) => {
+                    setSelectedLanguages(selectedOptions);
+                    const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+                    onChange("languages", selectedLanguageValues);
+                  }}
+                  onBlur={() => onBlur("languages", selectedLanguages)}
+                />
+              </li>
+              <li>
+                <label>Skills</label>
+                <Select
+                  value={selectedSkills}
+                  options={skillsOptions}
+                  isMulti
+                  unstyled
+                  classNamePrefix="react-select"
+                  className="react-select-container"
+                  onChange={(selectedOptions) => {
+                    setSelectedSkills(selectedOptions);
+                    const selectedSkillValues = selectedOptions.map((skill) => skill.value);
+                    onChange("skills", selectedSkillValues);
+                  }}
+                  onBlur={() => onBlur("skills", selectedSkills)}
+                />
+              </li>
+              <li>
+                <label>Description</label>
+                <textarea
+                  required
+                  value={form?.profileDescription}
+                  onChange={(e) => onChange("profileDescription", e.target.value)}
+                  onBlur={(e) => onBlur("profileDescription", e.target.value)}
+                />
+              </li>
+              <li>
+                <label>Address</label>
+                <textarea
+                  value={form?.address}
+                  required
+                  onChange={(e) => onChange("address", e.target.value)}
+                  onBlur={(e) => onBlur("address", e.target.value)}
+                />
+              </li>
+            </ul>
+
+          </div>
+          <div className="card">
+            <div className="card__header">Education Information</div>
+            <ul className="card__body">
+              <Table
+                data={formattedEducations}
+                headline={educationHeadlines}
+                onRemove={(id) => deleteEducation(id)}
+                loading={loading}
               />
-            </li>
-            <li>
-              <label>Skills</label>
-              <Select
-                 value={selectedSkills}
-                 options={skillsOptions}
-                 isMulti
-                 unstyled
-                 classNamePrefix="react-select"
-                 className="react-select-container" 
-                 onChange={(selectedOptions) => {
-                   setSelectedSkills(selectedOptions);
-                   const selectedSkillValues = selectedOptions.map((skill) => skill.value);
-                   onChange("skills", selectedSkillValues);
-                 }}
-                 onBlur={() => onBlur("skills", selectedSkills)}
+              <section
+                className={isEducationsCollapsed ? "collapsed" : undefined}
+              >
+                <div
+                  className="card__header"
+                  onClick={() => setIsEducationsCollapsed(!isEducationsCollapsed)}
+                >
+                  <span>Add New Education</span>
+                  {isEducationsCollapsed ? (
+                    <FontAwesomeIcon icon={faPlus} />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowUp} />
+                  )}
+                </div>
+                <ul className="card__body">
+                  <li>
+                    <label>School Name</label>
+                    <input
+                      type="text"
+                      value={activeEducations?.school}
+                      onChange={(e) =>
+                        setActiveEducations({
+                          ...activeEducations,
+                          school: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Section</label>
+                    <input
+                      type="text"
+                      value={activeEducations?.section}
+                      onChange={(e) =>
+                        setActiveEducations({
+                          ...activeEducations,
+                          section: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Graduation Date</label>
+                    <input
+                      value={activeEducations?.date}
+                      onChange={(e) =>
+                        setActiveEducations({
+                          ...activeEducations,
+                          date: e.target.value,
+                        })
+                      }
+                      type="date"
+                    />
+                  </li>
+                  <li className="reset">
+                    <button
+                      className={loading ? "loading" : undefined}
+                      onClick={addEducation}
+                    >
+                      Save
+                    </button>
+                  </li>
+                </ul>
+                {activeEducationsErrors && (
+                  <span className="error">{activeEducationsErrors}</span>
+                )}
+              </section>
+            </ul>
+          </div>
+          <div className="card">
+            <div className="card__header">Projects</div>
+            <ul className="card__body">
+              <Table
+                data={formattedProjects}
+                headline={projectHeadlines}
+                onRemove={(id) => deleteProject(id)}
+                loading={loading}
               />
-            </li>
-            <li>
-              <label>Description</label>
-              <textarea
-                required
-                value={form?.profileDescription}
-                onChange={(e) => onChange("profileDescription", e.target.value)}
-                onBlur={(e) => onBlur("profileDescription", e.target.value)}
+              <section className={isProjectsCollapsed ? "collapsed" : undefined}>
+                <div
+                  className="card__header"
+                  onClick={() => setIsProjectsCollapsed(!isProjectsCollapsed)}
+                >
+                  <span>Add New Project</span>
+                  {isProjectsCollapsed ? (
+                    <FontAwesomeIcon icon={faPlus} />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowUp} />
+                  )}
+                </div>{" "}
+                <ul className="card__body">
+                  <li>
+                    <label>Project Name</label>
+                    <input
+                      type="text"
+                      value={activeProject.headline}
+                      onChange={(e) =>
+                        setActiveProject({
+                          ...activeProject,
+                          headline: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Description</label>
+                    <input
+                      type="text"
+                      value={activeProject.description}
+                      onChange={(e) =>
+                        setActiveProject({
+                          ...activeProject,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Date</label>
+                    <input
+                      value={activeProject.date}
+                      onChange={(e) =>
+                        setActiveProject({
+                          ...activeProject,
+                          date: e.target.value,
+                        })
+                      }
+                      type="date"
+                    />
+                  </li>
+                  <li className="reset">
+                    <button
+                      className={loading ? "loading" : undefined}
+                      onClick={addProject}
+                    >
+                      Save
+                    </button>
+                  </li>
+                </ul>{" "}
+                {activeProjectErrors && (
+                  <span className="error">{activeProjectErrors}</span>
+                )}
+              </section>
+            </ul>
+          </div>
+
+          <div className="card">
+            <div className="card__header">Achievement</div>
+            <ul className="card__body">
+              <Table
+                data={formattedAchievements}
+                headline={achievementHeadlines}
+                onRemove={(id) => deleteAchievement(id)}
+                loading={loading}
               />
-            </li>
-            <li>
-              <label>Address</label>
-              <textarea
-                value={form?.address}
-                required
-                onChange={(e) => onChange("address", e.target.value)}
-                onBlur={(e) => onBlur("address", e.target.value)}
+
+              <section
+                className={isAchievementsCollapsed ? "collapsed" : undefined}
+              >
+                <div
+                  className="card__header"
+                  onClick={() =>
+                    setIsAchievementsCollapsed(!isAchievementsCollapsed)
+                  }
+                >
+                  <span>Add New Achievement</span>
+                  {isAchievementsCollapsed ? (
+                    <FontAwesomeIcon icon={faPlus} />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowUp} />
+                  )}
+                </div>
+                <ul className="card__body">
+                  <li>
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      value={activeAchievement.headline}
+                      onChange={(e) =>
+                        setActiveAchievement({
+                          ...activeAchievement,
+                          headline: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Description</label>
+                    <input
+                      type="text"
+                      value={activeAchievement.description}
+                      onChange={(e) =>
+                        setActiveAchievement({
+                          ...activeAchievement,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li className="reset">
+                    <button
+                      className={loading ? "loading" : undefined}
+                      onClick={addAchievement}
+                    >
+                      Save
+                    </button>
+                  </li>
+                </ul>
+                {activeAchievementErrors && (
+                  <span className="error">{activeAchievementErrors}</span>
+                )}
+              </section>
+            </ul>
+          </div>
+          <div className="card">
+            <div className="card__header">Experiences</div>
+            <ul className="card__body">
+              <Table
+                data={formattedExperiences}
+                headline={experienceHeadlines}
+                onRemove={(id) => deleteExperience(id)}
+                loading={loading}
               />
-            </li>
-          </ul>
-          
-        </div>
-        <div className="card">
-          <div className="card__header">Education Information</div>
-          <ul className="card__body">
-          <Table
-              data={formattedEducations}
-              headline={educationHeadlines}
-              onRemove={(id) => deleteEducation(id)}
-              loading={loading}
-            />
-            <section
-              className={isEducationsCollapsed ? "collapsed" : undefined}
-            >
-              <div
-                className="card__header"
-                onClick={() => setIsEducationsCollapsed(!isEducationsCollapsed)}
+
+              <section
+                className={isExperiencesCollapsed ? "collapsed" : undefined}
               >
-                <span>Add New Education</span>
-                {isEducationsCollapsed ? (
-                  <FontAwesomeIcon icon={faPlus} />
-                ) : (
-                  <FontAwesomeIcon icon={faArrowUp} />
+                <div
+                  className="card__header"
+                  onClick={() =>
+                    setIsExperiencesCollapsed(!isExperiencesCollapsed)
+                  }
+                >
+                  <span>Add New Experience</span>
+                  {isExperiencesCollapsed ? (
+                    <FontAwesomeIcon icon={faPlus} />
+                  ) : (
+                    <FontAwesomeIcon icon={faArrowUp} />
+                  )}
+                </div>
+                <ul className="card__body">
+                  <li>
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      value={activeExperience.headline}
+                      onChange={(e) =>
+                        setActiveExperience({
+                          ...activeExperience,
+                          headline: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Company</label>
+                    <input
+                      type="text"
+                      value={activeExperience.company}
+                      onChange={(e) =>
+                        setActiveExperience({
+                          ...activeExperience,
+                          company: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Description</label>
+                    <textarea
+                      value={activeExperience.description}
+                      onChange={(e) =>
+                        setActiveExperience({
+                          ...activeExperience,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </li>
+                  <li>
+                    <label>Date</label>
+                    <input
+                      value={activeExperience.date}
+                      onChange={(e) =>
+                        setActiveExperience({
+                          ...activeExperience,
+                          date: e.target.value,
+                        })
+                      }
+                      type="date"
+                    />
+                  </li>
+                  <li className="reset">
+                    <button
+                      className={loading ? "loading" : undefined}
+                      onClick={addExperience}
+                    >
+                      Save
+                    </button>
+                  </li>
+                </ul>
+                {activeExperienceErrors && (
+                  <span className="error">{activeExperienceErrors}</span>
                 )}
-              </div>
-              <ul className="card__body">
-                <li>
-                  <label>School Name</label>
-                  <input
-                    type="text"
-                    value={activeEducations?.school}
-                    onChange={(e) =>
-                      setActiveEducations({
-                        ...activeEducations,
-                        school: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Section</label>
-                  <input
-                    type="text"
-                    value={activeEducations?.section}
-                    onChange={(e) =>
-                      setActiveEducations({
-                        ...activeEducations,
-                        section: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Graduation Date</label>
-                  <input
-                    value={activeEducations?.date}
-                    onChange={(e) =>
-                      setActiveEducations({
-                        ...activeEducations,
-                        date: e.target.value,
-                      })
-                    }
-                    type="date"
-                  />
-                </li>
-                <li className="reset">
-                  <button
-                    className={loading ? "loading" : undefined}
-                    onClick={addEducation}
-                  >
-                    Save
-                  </button>
-                </li>
-              </ul>
-              {activeEducationsErrors && (
-                <span className="error">{activeEducationsErrors}</span>
-              )}
-            </section>
-          </ul>
+              </section>
+            </ul>
+          </div>
+
+
+
         </div>
-        <div className="card">
-          <div className="card__header">Projects</div>
-          <ul className="card__body">
-            <Table
-              data={formattedProjects}
-              headline={projectHeadlines}
-              onRemove={(id) => deleteProject(id)}
-              loading={loading}
-            />
-            <section className={isProjectsCollapsed ? "collapsed" : undefined}>
-              <div
-                className="card__header"
-                onClick={() => setIsProjectsCollapsed(!isProjectsCollapsed)}
-              >
-                <span>Add New Project</span>
-                {isProjectsCollapsed ? (
-                  <FontAwesomeIcon icon={faPlus} />
-                ) : (
-                  <FontAwesomeIcon icon={faArrowUp} />
-                )}
-              </div>{" "}
-              <ul className="card__body">
-                <li>
-                  <label>Project Name</label>
-                  <input
-                    type="text"
-                    value={activeProject.headline}
-                    onChange={(e) =>
-                      setActiveProject({
-                        ...activeProject,
-                        headline: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    value={activeProject.description}
-                    onChange={(e) =>
-                      setActiveProject({
-                        ...activeProject,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Date</label>
-                  <input
-                    value={activeProject.date}
-                    onChange={(e) =>
-                      setActiveProject({
-                        ...activeProject,
-                        date: e.target.value,
-                      })
-                    }
-                    type="date"
-                  />
-                </li>
-                <li className="reset">
-                  <button
-                    className={loading ? "loading" : undefined}
-                    onClick={addProject}
-                  >
-                    Save
-                  </button>
-                </li>
-              </ul>{" "}
-              {activeProjectErrors && (
-                <span className="error">{activeProjectErrors}</span>
-              )}
-            </section>
-          </ul>
-        </div>
-        
-        <div className="card">
-          <div className="card__header">Achievement</div>
-          <ul className="card__body">
-            <Table
-              data={formattedAchievements}
-              headline={achievementHeadlines}
-              onRemove={(id) => deleteAchievement(id)}
-              loading={loading}
-            />
-
-            <section
-              className={isAchievementsCollapsed ? "collapsed" : undefined}
-            >
-              <div
-                className="card__header"
-                onClick={() =>
-                  setIsAchievementsCollapsed(!isAchievementsCollapsed)
-                }
-              >
-                <span>Add New Achievement</span>
-                {isAchievementsCollapsed ? (
-                  <FontAwesomeIcon icon={faPlus} />
-                ) : (
-                  <FontAwesomeIcon icon={faArrowUp} />
-                )}
-              </div>
-              <ul className="card__body">
-                <li>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    value={activeAchievement.headline}
-                    onChange={(e) =>
-                      setActiveAchievement({
-                        ...activeAchievement,
-                        headline: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    value={activeAchievement.description}
-                    onChange={(e) =>
-                      setActiveAchievement({
-                        ...activeAchievement,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li className="reset">
-                  <button
-                    className={loading ? "loading" : undefined}
-                    onClick={addAchievement}
-                  >
-                    Save
-                  </button>
-                </li>
-              </ul>
-              {activeAchievementErrors && (
-                <span className="error">{activeAchievementErrors}</span>
-              )}
-            </section>
-          </ul>
-        </div>
-        <div className="card">
-          <div className="card__header">Experiences</div>
-          <ul className="card__body">
-            <Table
-              data={formattedExperiences}
-              headline={experienceHeadlines}
-              onRemove={(id) => deleteExperience(id)}
-              loading={loading}
-            />
-
-            <section
-              className={isExperiencesCollapsed ? "collapsed" : undefined}
-            >
-              <div
-                className="card__header"
-                onClick={() =>
-                  setIsExperiencesCollapsed(!isExperiencesCollapsed)
-                }
-              >
-                <span>Add New Experience</span>
-                {isExperiencesCollapsed ? (
-                  <FontAwesomeIcon icon={faPlus} />
-                ) : (
-                  <FontAwesomeIcon icon={faArrowUp} />
-                )}
-              </div>
-              <ul className="card__body">
-                <li>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    value={activeExperience.headline}
-                    onChange={(e) =>
-                      setActiveExperience({
-                        ...activeExperience,
-                        headline: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Company</label>
-                  <input
-                    type="text"
-                    value={activeExperience.company}
-                    onChange={(e) =>
-                      setActiveExperience({
-                        ...activeExperience,
-                        company: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Description</label>
-                  <textarea
-                    value={activeExperience.description}
-                    onChange={(e) =>
-                      setActiveExperience({
-                        ...activeExperience,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </li>
-                <li>
-                  <label>Date</label>
-                  <input
-                    value={activeExperience.date}
-                    onChange={(e) =>
-                      setActiveExperience({
-                        ...activeExperience,
-                        date: e.target.value,
-                      })
-                    }
-                    type="date"
-                  />
-                </li>
-                <li className="reset">
-                  <button
-                    className={loading ? "loading" : undefined}
-                    onClick={addExperience}
-                  >
-                    Save
-                  </button>
-                </li>
-              </ul>
-              {activeExperienceErrors && (
-                <span className="error">{activeExperienceErrors}</span>
-              )}
-            </section>
-          </ul>
-        </div>
-
-
-
       </div>
-      </div>
-      
+
     </>
   );
 }

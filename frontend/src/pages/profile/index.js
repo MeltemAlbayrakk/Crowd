@@ -41,7 +41,7 @@ export default function Index() {
 
 
   useEffect(() => {
-    checkSession();
+    //checkSession();
 
     document.querySelector("#root.homepage")?.classList.remove("homepage");
   }, []);

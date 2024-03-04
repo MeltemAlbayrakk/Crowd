@@ -26,7 +26,7 @@ export default function DetailBox(props) {
     const fetchData = async () => {
       try {
         console.log(jobId);
-        const response = await api.job.jobdetails("company", jobId);
+        const response = await api.job.jobdetails("company", {jobId:jobId});
         console.log(response); 
         setJobDetails({
           firstName: response.firstName || "",

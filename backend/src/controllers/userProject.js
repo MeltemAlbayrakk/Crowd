@@ -2,13 +2,12 @@ import UserModel from '../models/User.js';
 import ProjectModel from '../models/profile/Project.js';
 
 
-const addProject = async (req,res)=>{
+const addProject = async (req, res) => {
 
     try {
-        const {headline ,description, date} =req.body;
-        const userId = req.session.userId;
-
-
+        const { _id, headline, description, date } = req.body;
+        console.log("project id : ", _id)
+        const userId = _id
         const project = await ProjectModel.create({
             headline,
             description,
@@ -16,29 +15,33 @@ const addProject = async (req,res)=>{
             userId
         })
 
-        res.status(201).json({
-           message:'Project information has been added succesfully'
-        });
-
-        const user = await UserModel.findById(userId);
+        const user = await UserModel.findById(_id);
         user.projects.push(project._id);
         await user.save();
+
+
+        res.status(201).json({
+            message: 'Project information has been added succesfully'
+        });
+
+
+        console.log("project id 4: ", _id)
 
     } catch (error) {
         res.status(500).json({ message: 'server error ' });
     }
 }
 
-const deleteProject = async (req,res)=>{
+const deleteProject = async (req, res) => {
     try {
         const deletedProject = await ProjectModel.findByIdAndDelete(req.params.id);
 
         const user = await UserModel.findById(req.session.userId)
-        if(user){
-            user.projects= user.projects.filter(proId =>proId.toString() !== req.params.id);
+        if (user) {
+            user.projects = user.projects.filter(proId => proId.toString() !== req.params.id);
             await user.save();
         }
-        if(!deletedProject){
+        if (!deletedProject) {
             console.log('no data to delete was found');
             return res.status(404).send('No data to delete was found');
         }
@@ -51,4 +54,4 @@ const deleteProject = async (req,res)=>{
 }
 
 
-export {addProject,deleteProject}
+export { addProject, deleteProject }

@@ -226,11 +226,9 @@ export default {
         return response.data;
       }
     },
-    async get(type,id) {
+    async getApplicant(type,id) {
       if (type === "personal") {
-        const response = await instance.get("/applicant/",
-
-        {withCredentials: true});
+        const response = await instance.post("/applicant/getApplicant",id,{withCredentials: true});
         return response.data;
       }
     },

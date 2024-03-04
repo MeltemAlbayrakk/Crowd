@@ -132,14 +132,44 @@ router.get('/linkedin/callback', function (req, res, next) {
                     </html>
                 `);
             } else {
-                // const newUser = new UserModel({
-                //     firstName: userProfile.given_name,
-                //     lastName: userProfile.family_name,
-                //     email: userProfile.email,
-                //     profilePhoto: userProfile.picture,
-                // });
+                const newUser = new UserModel({
+                    firstName: userProfile.given_name,
+                    lastName: userProfile.family_name,
+                    email: userProfile.email,
+                    profilePhoto: userProfile.picture,
+                    role: userRoles.PERSONAL,
+                    phone: "54456645645",
+                });
 
-                // await newUser.save(); 
+                await newUser.save();
+                console.log('Yeni kullanıcı bilgileri', newUser)
+
+                const token = jwt.sign({ id: newUser._id }, process.env.SECRET_TOKEN, {
+                    expiresIn: '1h',
+
+                });
+                console.log("tokenn : ", token)
+
+                res.send(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Loading...</title>
+                        <link rel='stylesheet' href='/stylesheets/style.css' />
+                    </head>
+                    <body>
+                        <h1>Login Successful</h1>
+                    </body>
+                    <script>
+                        var profile = ${JSON.stringify(userProfile)}
+                        var token = ${JSON.stringify(token)}
+                        var id = ${JSON.stringify(newUser._id)}
+
+                        window.opener.postMessage({'type': 'profile', 'profile': profile},'*')
+                        window.close();
+                        </script>
+                    </html>
+                `);
             }
 
 
@@ -164,22 +194,5 @@ router.get('/linkedin/callback', function (req, res, next) {
         });
 }
 );
-
-// router.get('/linkedinUser', function (req, res) {
-//     const userProfile = {
-//         firstName: req.query.firstName,
-//         lastName: req.query.lastName,
-//         email: req.query.email,
-//         profilePhoto: req.query.profilePhoto,
-//     };
-
-//     if (!req) {
-//         res.json({ userProfile })
-//     }
-//     else {
-//         res.json({ userProfile });
-//     }
-
-// });
 
 export default router
