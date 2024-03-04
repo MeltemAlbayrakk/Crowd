@@ -98,13 +98,20 @@ export default function Profile(props) {
   const [userProfile, setUserProfile] = useState(null);
 
   const getProfile1 = async () => {
+
+
     try {
-      console.log(id, "profildeki id");
+
+      console.log(id, "profildeki id")
+
+
 
       const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
       });
-      //setUserProfile(res.data);
+
+      setUserProfile(res.data);
+
 
       setForm(res.data);
       const languagesFromApi = res.data.languages || [];
@@ -134,7 +141,14 @@ export default function Profile(props) {
           value: skill,
         }))
       );
-    } catch (error) {}
+
+
+
+    } catch (error) {
+
+    }
+
+
   };
 
   const onChange = async (prop, value) => {
@@ -142,15 +156,22 @@ export default function Profile(props) {
       ...form,
       [prop]: value,
     });
-    console.log("form :", form);
+
+    console.log("form :", form)
   };
 
   const onBlur = async (prop, value) => {
+
+
     try {
+      console.log('asd')
       const res = await api.user.profile.update("personal", form);
+      console.log(res)
     } catch (error) {
-      console.log("onblur hatası:", error.message);
+      console.log("onblur hatası:", error.message)
     }
+
+
   };
 
   const addEducation = async () => {
@@ -186,7 +207,7 @@ export default function Profile(props) {
         setActiveProjectErrors(err.response.data.errorMessage);
         setLoading(false);
       });
-
+    console.log(res)
     if (res.id) {
       setActiveProject({
         ...activeProject,
@@ -213,8 +234,10 @@ export default function Profile(props) {
           setLoading(false);
         });
 
-      console.log("res ne ", res);
-      if (res.status === 201) {
+
+      console.log("res ne ", res)
+      if (res.message == 'Achievement information has been added successfully') {
+
         setActiveAchievement({
           ...activeAchievement,
           headline: "",
@@ -222,14 +245,23 @@ export default function Profile(props) {
         });
         setIsAchievementsCollapsed(true);
         props.getProfile();
-      } else if (res.status === 404) {
-        alert("This field is required and can not be empty:!!");
-      } else {
-        alert("server error ");
+
+      }
+      else if (res.status === 404) {
+
+        alert("This field is required and can not be empty:!!")
+
+
+      }
+      else {
+
+        alert("server error ")
+
       }
     } catch (error) {
       console.log("profil hatası");
     }
+
 
     setLoading(false);
   };
@@ -287,9 +319,36 @@ export default function Profile(props) {
     setLoading(false);
   };
 
+
+
+
+
   useEffect(() => {
     getProfile1();
+
+    setActiveEducations({
+      ...activeEducations,
+      _id: id
+    })
+
+    setActiveAchievement({
+      ...activeAchievement,
+      _id: id
+    })
+
+    setActiveExperience({
+      ...activeExperience,
+      _id: id
+    })
+
+    setActiveProject({
+      ...activeProject,
+      _id: id,
+    })
+
   }, []);
+
+
 
   const formattedEducations = form?.educations.map((education) => ({
     id: education._id,
@@ -302,13 +361,16 @@ export default function Profile(props) {
     id: project._id,
     headline: project.headline,
     description: project.description,
-    date: project.date,
-  }));
+
+    date: project.date
+  }))
+
   const formattedAchievements = form?.achievements.map((achievement) => ({
     id: achievement._id,
     headline: achievement.headline,
     description: achievement.description,
   }));
+
   const formattedExperiences = form?.experiences.map((experience) => ({
     id: experience._id,
     headline: experience.headline,
@@ -375,6 +437,7 @@ export default function Profile(props) {
   
   }
 
+
   return (
     <>
       <div class="container">
@@ -438,9 +501,9 @@ export default function Profile(props) {
                   className="react-select-container"
                   onChange={(selectedOptions) => {
                     setSelectedLanguages(selectedOptions);
-                    const selectedLanguageValues = selectedOptions.map(
-                      (lang) => lang.value
-                    );
+
+                    const selectedLanguageValues = selectedOptions.map((lang) => lang.value);
+
                     onChange("languages", selectedLanguageValues);
                   }}
                   onBlur={() => onBlur("languages", selectedLanguages)}
@@ -457,9 +520,9 @@ export default function Profile(props) {
                   className="react-select-container"
                   onChange={(selectedOptions) => {
                     setSelectedSkills(selectedOptions);
-                    const selectedSkillValues = selectedOptions.map(
-                      (skill) => skill.value
-                    );
+
+                    const selectedSkillValues = selectedOptions.map((skill) => skill.value);
+
                     onChange("skills", selectedSkillValues);
                   }}
                   onBlur={() => onBlur("skills", selectedSkills)}
@@ -470,9 +533,9 @@ export default function Profile(props) {
                 <textarea
                   required
                   value={form?.profileDescription}
-                  onChange={(e) =>
-                    onChange("profileDescription", e.target.value)
-                  }
+
+                  onChange={(e) => onChange("profileDescription", e.target.value)}
+
                   onBlur={(e) => onBlur("profileDescription", e.target.value)}
                 />
               </li>
@@ -501,9 +564,9 @@ export default function Profile(props) {
               >
                 <div
                   className="card__header"
-                  onClick={() =>
-                    setIsEducationsCollapsed(!isEducationsCollapsed)
-                  }
+
+                  onClick={() => setIsEducationsCollapsed(!isEducationsCollapsed)}
+
                 >
                   <span>Add New Education</span>
                   {isEducationsCollapsed ? (
@@ -576,9 +639,9 @@ export default function Profile(props) {
                 onRemove={(id) => deleteProject(id)}
                 loading={loading}
               />
-              <section
-                className={isProjectsCollapsed ? "collapsed" : undefined}
-              >
+
+              <section className={isProjectsCollapsed ? "collapsed" : undefined}>
+
                 <div
                   className="card__header"
                   onClick={() => setIsProjectsCollapsed(!isProjectsCollapsed)}

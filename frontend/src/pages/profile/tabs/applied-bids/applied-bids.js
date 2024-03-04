@@ -13,8 +13,8 @@ export default function AppliedBids(props) {
     try {
       const user = await api.user.profile.get(id);
       console.log("user:", user._id);
-
-      const resp = await api.applicant.get("personal");
+      console.log(id)
+      const resp = await api.applicant.getApplicant("personal",{id:id});
       console.log("resp degeri:", resp);
 
       const newData = resp.map((item) => ({
@@ -36,6 +36,11 @@ export default function AppliedBids(props) {
   useEffect(() => {
     getApplicant(id, 0.1);
   }, [id]);
+
+  useEffect(() => {
+    getApplicant(id, 0.1);
+  }, []);
+
 
   const appliedBidsHeadlines = [
     "Title",
