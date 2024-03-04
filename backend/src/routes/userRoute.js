@@ -5,7 +5,6 @@ import * as userEducation from '../controllers/userEducation.js';
 import * as userProject from '../controllers/userProject.js';
 import * as userExperience from '../controllers/userExperience.js';
 import * as userExperienceDoc from '../controllers/userExperienceDoc.js';
-import * as Nlp from '../controllers/Nlp.js'
 import checkAuth from '../middlewares/checkAuth.js';
 import multer from 'multer';
 import path from 'path';
@@ -60,6 +59,4 @@ router.route("/profile/:id").get(userController.getProfile)
 router.route("/showProfile/:id").post(userController.showProfile)
 
 router.route("/check-session").get(userController.checkUser)
-//
-router.route("/nlp").get(Nlp.cvNlp);
 export default router   

@@ -4,7 +4,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const ParseSchema = new Schema({
-    ParseContent: [{ type: String }], 
+  resultArray: {
+    type: Array,
+    required: true,
+  }, 
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User' 
