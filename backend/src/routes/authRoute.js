@@ -194,21 +194,4 @@ router.get('/linkedin/callback', function (req, res, next) {
 }
 );
 
-// router.get('/linkedinUser', function (req, res) {
-//     const userProfile = {
-//         firstName: req.query.firstName,
-//         lastName: req.query.lastName,
-//         email: req.query.email,
-//         profilePhoto: req.query.profilePhoto,
-//     };
-
-//     if (!req) {
-//         res.json({ userProfile })
-//     }
-//     else {
-//         res.json({ userProfile });
-//     }
-
-// });
-
 export default router

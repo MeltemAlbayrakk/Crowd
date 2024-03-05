@@ -49,6 +49,7 @@ export default function Loginbox(props) {
     handlePostMessage = event => {
       console.log("4: ", event);
       console.log(event.data)
+
       if (event.data.type === 'profile') {
         console.log(event.data);
         const { id, token, profile } = event.data;

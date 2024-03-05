@@ -10,6 +10,7 @@ import Homepage from './pages/homepage/homepage';
 import Profile from './pages/profile/index';
 import LoadingProfile from './pages/loading/index';
 import UpdateUser from './pages/profile/tabs/profile/personal/profile';
+
 import Showprofile from './pages/profile/tabs/profile/personal/showProfile';
 import ShowAI from "./pages/profile/tabs/search-job/showAI";
 import LinkedinContext from './context/LinkedinContext.js'

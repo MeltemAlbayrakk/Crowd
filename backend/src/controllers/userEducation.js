@@ -6,20 +6,21 @@ import UserModel from "../models/User.js";
 
 const addEducation = async (req, res) => {
   try {
-    const { school, section, date } = req.body;
-    const userId = req.session.userId; 
+    const { _id, school, section, date } = req.body;
+    //const userId = req.session.userId; 
+    const userId = _id
     const education = await EducationModel.create({
       school,
       section,
       date,
-      userId 
+      userId
     });
 
     res.status(201).json({
       message: 'Education information has been added successfully',
     });
 
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(_id);
     user.educations.push(education._id);
     await user.save();
 
@@ -31,12 +32,12 @@ const addEducation = async (req, res) => {
 
 const deleteEducation = async (req, res) => {
   try {
-   
+
 
     const deletedEducation = await EducationModel.findByIdAndDelete(req.params.id);
 
     const user = await UserModel.findById(req.session.userId)
-    if(user){
+    if (user) {
       user.educations = user.educations.filter(eduId => eduId.toString() !== req.params.id);
 
       await user.save();
@@ -56,4 +57,4 @@ const deleteEducation = async (req, res) => {
 };
 
 
-export { addEducation,deleteEducation};
+export { addEducation, deleteEducation };
