@@ -97,35 +97,31 @@ export default function Profile(props) {
   const [errorMessageC, setErrorMessageC] = useState('');
 
 
-  const [cvFile,setCvFile] = useState(null);
-  const [projectDoc,setProjectDoc] = useState(null);
-  const [certificate,setCertificate] = useState(null);
-  const [errorMessageCv, setErrorMessageCv] = useState('');
-  const [errorMessagePd, setErrorMessagePd] = useState('');
-  const [errorMessageC, setErrorMessageC] = useState('');
 
 
   const { id  } = useParams();
   const [userProfile, setUserProfile] = useState(null);
 
   const getProfile1 = async () => {
-
-
+ 
+ 
     try {
-
+ 
       console.log(id, "profildeki id")
-
-
-
+ 
+ 
+ 
       const res = await axios.get(`http://localhost:3001/user/profile/${id}`, {
         withCredentials: true,
       });
-        //setUserProfile(res.data);
-    }
+ 
+      setUserProfile(res.data);
+ 
+ 
       setForm(res.data);
       const languagesFromApi = res.data.languages || [];
       const skillsFromApi = res.data.skills || [];
-
+ 
       const formattedLanguages = languages.map((lang) => ({
         label: lang.label,
         value: lang.value,
@@ -143,21 +139,21 @@ export default function Profile(props) {
           value: skill.value,
         }))
       );
-
+ 
       setSelectedSkills(
         skillsFromApi.map((skill) => ({
           label: skill,
           value: skill,
         }))
       );
-
-
-
+ 
+ 
+ 
     } catch (error) {
-
+ 
     }
-
-
+ 
+ 
   };
 
   const onChange = async (prop, value) => {
