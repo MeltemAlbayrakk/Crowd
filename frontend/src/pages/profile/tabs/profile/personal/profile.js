@@ -182,6 +182,7 @@ export default function Profile(props) {
   const addEducation = async () => {
     setLoading(true);
     setActiveEducationsErrors(null);
+
     const res = await api.user.profile.education
       .add("personal", activeEducations)
       .catch((err) => {
@@ -189,7 +190,7 @@ export default function Profile(props) {
         setLoading(false);
       });
 
-    if (res.user) {
+    if (res.message=== 'Education information has been added successfully') {
       setActiveEducations({
         ...activeEducations,
         school: "",
@@ -198,9 +199,16 @@ export default function Profile(props) {
       });
       setIsEducationsCollapsed(true);
       props.getProfile();
-    }
+      window.location.reload()
+    } 
+  else {
+
+      alert("server error ")
+
+   }
 
     setLoading(false);
+    
   };
 
   const addProject = async () => {
@@ -213,7 +221,7 @@ export default function Profile(props) {
         setLoading(false);
       });
     console.log(res)
-    if (res.id) {
+    if (res.message=== 'Project information has been added succesfully') {
       setActiveProject({
         ...activeProject,
         headline: "",
@@ -222,7 +230,12 @@ export default function Profile(props) {
       });
       setIsProjectsCollapsed(true);
       props.getProfile();
-    }
+      window.location.reload()
+    }else {
+
+      alert("server error ")
+
+   }
 
     setLoading(false);
   };
@@ -241,7 +254,8 @@ export default function Profile(props) {
 
 
       console.log("res ne ", res)
-      if (res.message == 'Achievement information has been added successfully') {
+     
+          if (res.message == 'Achievement information has been added successfully') {
 
         setActiveAchievement({
           ...activeAchievement,
@@ -250,25 +264,20 @@ export default function Profile(props) {
         });
         setIsAchievementsCollapsed(true);
         props.getProfile();
-
+        window.location.reload()
       }
-      else if (res.status === 404) {
-
-        alert("This field is required and can not be empty:!!")
-
-
-      }
-      else {
+     
+    else {
 
         alert("server error ")
 
-      }
+     }
     } catch (error) {
       console.log("profil hatası");
     }
 
-
-    setLoading(false);
+ setLoading(false);
+   
   };
 
   const addExperience = async () => {
@@ -281,7 +290,7 @@ export default function Profile(props) {
         setLoading(false);
       });
 
-    if (res.id) {
+    if (res.message=== 'Experience information has been added successfully') {
       setActiveExperience({
         ...activeExperience,
         headline: "",
@@ -291,7 +300,12 @@ export default function Profile(props) {
       });
       setIsExperiencesCollapsed(true);
       props.getProfile();
-    }
+      window.location.reload()
+    } else {
+
+      alert("server error ")
+
+   }
 
     setLoading(false);
   };
@@ -300,6 +314,7 @@ export default function Profile(props) {
     setLoading(true);
     await api.user.profile.education.delete("personal", id);
     props.getProfile();
+    window.location.reload()
     setLoading(false);
   };
 
@@ -307,6 +322,7 @@ export default function Profile(props) {
     setLoading(true);
     await api.user.profile.project.delete("personal", id);
     props.getProfile();
+    window.location.reload()
     setLoading(false);
   };
 
@@ -314,6 +330,7 @@ export default function Profile(props) {
     setLoading(true);
     await api.user.profile.achievement.delete("personal", id);
     props.getProfile();
+    window.location.reload()
     setLoading(false);
   };
 
@@ -321,6 +338,7 @@ export default function Profile(props) {
     setLoading(true);
     await api.user.profile.experience.delete("personal", id);
     props.getProfile();
+    window.location.reload()
     setLoading(false);
   };
 
@@ -389,6 +407,8 @@ export default function Profile(props) {
     if (cvFile && cvFile.type === 'application/pdf') {
       const formData = new FormData();
       formData.append('file', cvFile);
+      formData.append('userId', id);
+      
     const res =   await axios.post('http://localhost:3001/user/personal/experience/cv', formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -405,18 +425,23 @@ export default function Profile(props) {
   
   const submitPrjDoc = async (e) => {
     e.preventDefault();
-    if (cvFile && cvFile.type === 'application/pdf') {
+    if (projectDoc && projectDoc.type === 'application/pdf') {
       const formData = new FormData();
       formData.append('file', projectDoc);
+      formData.append('userId', id);
+
       const res = await axios.post('http://localhost:3001/user/personal/experience/projectDocuments', formData, {
       withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log("ressss:",res.status)
+
       if(res.status = 200){
         alert("Project Document successfully uploaded")
       }
       setErrorMessagePd(''); // Clear any previous error message
     } else {
+      
       setErrorMessagePd('Please select a valid PDF file.');
     }
    
@@ -424,9 +449,11 @@ export default function Profile(props) {
 
   const submitCertificate = async (e) => {
     e.preventDefault();
-    if (cvFile && cvFile.type === 'application/pdf') {
+    if (certificate && certificate.type === 'application/pdf') {
       const formData = new FormData();
       formData.append('file', certificate);
+      formData.append('userId', id);
+
       const res = await axios.post('http://localhost:3001/user/personal/experience/certificate', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
@@ -657,7 +684,7 @@ export default function Profile(props) {
                   ) : (
                     <FontAwesomeIcon icon={faArrowUp} />
                   )}
-                </div>{" "}
+                </div>
                 <ul className="card__body">
                   <li>
                     <label>Project Name</label>

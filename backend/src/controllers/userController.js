@@ -343,7 +343,7 @@ const checkUser = async (req, res) => {
 const addProfilePicture = async (req, res) => {
   try {
     //const {profilePhoto}= req.body;
-
+console.log("bu i dddddd",req.body.userId)
     const userId = req.session.userId;
     // Varsayalım ki kullanıcı kimliği bir önceki adımda middleware veya başka bir yerde ayarlanmıştır
 
@@ -353,7 +353,7 @@ const addProfilePicture = async (req, res) => {
 
     console.log("id:", userId)
     // Kullanıcıyı bul ve profil fotoğrafını güncelle
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findById(req.body.userId);
 
     if (!user) {
       return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
@@ -362,10 +362,10 @@ const addProfilePicture = async (req, res) => {
     user.profilePhoto = newPhotoPath;
     await user.save();
 
-    res.send(user)
+    return res.send(user);
   } catch (error) {
 
-    res.status(500).json({ error: 'Bir hata oluştu' });
+    res.status(500).json({ error: error.message });
   }
 
 }

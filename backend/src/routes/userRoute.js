@@ -9,9 +9,12 @@ import checkAuth from '../middlewares/checkAuth.js';
 import multer from 'multer';
 import path from 'path';
 import slugify from 'slugify'
+
 const router=express.Router()
 const app = express()
 app.use("/files",express.static("files"))
+app.use("/uploads",express.static("uploads"))
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./files");
@@ -26,8 +29,17 @@ const storage = multer.diskStorage({
 });
   const upload = multer({ storage: storage });
 
-  
 
+  ////////////////////////////////////////
+  
+const storagePhoto = multer.diskStorage({
+  destination: '../frontend/public/uploads',
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  },
+});
+const uploadPhoto = multer({ storage: storagePhoto });
+    
 
 router.route("/login").post(userController.login)
 router.route("/logout").get(userController.logout)
@@ -53,7 +65,7 @@ router.route("/personal/experience/projectDocuments").post(upload.single('file')
 router.route("/personal/experience/certificate").post(upload.single('file'),userExperienceDoc.certificateUpload);
 //
 router.route("/personal/beFreelancer").post(userController.beFreelancer)
-router.route("/addProfilePicture").post(upload.single('profilePhoto'),userController.addProfilePicture);
+router.route("/addProfilePicture").post(uploadPhoto.single('profilePhoto'),userController.addProfilePicture);
 //
 router.route("/profile/:id").get(userController.getProfile)
 router.route("/showProfile/:id").post(userController.showProfile)
