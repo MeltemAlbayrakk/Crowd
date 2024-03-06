@@ -185,6 +185,7 @@ const logout = (req, res) => {
         });
       }
       res.clearCookie('connect.sid');
+    
       res.status(200).json({
         succeded: true,
         message: 'User logged out successfully',

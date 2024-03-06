@@ -41,7 +41,7 @@ const add= async (req,res)=>{
 }
 const get = async (req,res)=>{
   try {
-        const job = await JobModel.find()
+        const job = await JobModel.find().sort({ date: -1 });
 
       if(job){
         res.status(200).json(job)

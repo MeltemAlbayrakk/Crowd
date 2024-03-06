@@ -61,6 +61,7 @@ export default function Index() {
 
 
       setIsLoggedIn(false);
+      localStorage.removeItem("userToken")
       navigate("/");
       //setLoginboxVisibility(false);
       //localStorage.removeItem("auth");
