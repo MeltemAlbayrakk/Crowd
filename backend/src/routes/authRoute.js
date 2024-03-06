@@ -3,8 +3,8 @@ import passport from 'passport';
 import session from 'express-session';
 import axios from 'axios';
 import UserModel from '../models/User.js'
-import { userRoles } from '../constants/constants.js';
 import jwt from 'jsonwebtoken'
+import { userRoles } from '../constants/constants.js';
 
 const router = express.Router()
 router.use(express.json())
@@ -137,39 +137,38 @@ router.get('/linkedin/callback', function (req, res, next) {
                     lastName: userProfile.family_name,
                     email: userProfile.email,
                     profilePhoto: userProfile.picture,
-                    role: userRoles.PERSONAL,
-                    phone: "54456645645",
+                    role:userRoles.PERSONAL
                 });
 
-                await newUser.save();
-                console.log('Yeni kullanıcı bilgileri', newUser)
+                await newUser.save(); 
 
                 const token = jwt.sign({ id: newUser._id }, process.env.SECRET_TOKEN, {
                     expiresIn: '1h',
 
-                });
-                console.log("tokenn : ", token)
+                })
+                console.log("kaydedilen in kullanıcısı:",newUser)
+                console.log("else id bu ",newUser._id)      
 
                 res.send(`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                        <title>Loading...</title>
-                        <link rel='stylesheet' href='/stylesheets/style.css' />
-                    </head>
-                    <body>
-                        <h1>Login Successful</h1>
-                    </body>
-                    <script>
-                        var profile = ${JSON.stringify(userProfile)}
-                        var token = ${JSON.stringify(token)}
-                        var id = ${JSON.stringify(newUser._id)}
-
-                        window.opener.postMessage({'type': 'profile', 'profile': profile},'*')
-                        window.close();
-                        </script>
-                    </html>
-                `);
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Loading...</title>
+                    <link rel='stylesheet' href='/stylesheets/style.css' />
+                </head>
+                <body>
+                    <h1>Login Successful</h1>
+                </body>
+                <script>
+                    var profile = ${JSON.stringify(userProfile)}
+                    var token = ${JSON.stringify(token)}
+                    var id = ${JSON.stringify(newUser._id)}
+                
+                    window.opener.postMessage({'type': 'profile', 'profile': profile,'id':id, 'token':token,'*'})
+                    window.close();
+                    </script>
+                </html>
+            `);
             }
 
 

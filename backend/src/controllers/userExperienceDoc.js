@@ -4,7 +4,8 @@ import ParseContent from "../models/profile/ParseContent.js";
 
 const cvUpload = async (req, res) => {
   const fileName = req.file.filename;
-  const userId = req.session.userId;
+  const userId = req.body.userId;
+  console.log("bu cv id",req.body.userId)
 
   try {
     await ExperiencePdfDoc.create({ cv: fileName, userId: userId });
@@ -17,15 +18,17 @@ const cvUpload = async (req, res) => {
 
 const projectDocumentsUpload = async (req, res) => {
   const fileName = req.file.filename;
-  const userId = req.session.userId;
+  const userId = req.body.userId;
+console.log("bu pro id",req.body.userId)
 
   try {
     await ExperiencePdfDoc.create({
       projectDocuments: fileName,
       userId: userId,
     });
-    await PdfParser(fileName, userId);
     res.send({ status: "ok" });
+    await PdfParser(fileName, userId);
+
   } catch (error) {
     res.json({ status: error });
   }
@@ -33,12 +36,13 @@ const projectDocumentsUpload = async (req, res) => {
 
 const certificateUpload = async (req, res) => {
   const fileName = req.file.filename;
-  const userId = req.session.userId;
-
+  const userId = req.body.userId;
+console.log("bu  cer id",req.body.userId)
   try {
     await ExperiencePdfDoc.create({ certificate: fileName, userId: userId });
-    await PdfParser(fileName, userId);
     res.send({ status: "ok" });
+    await PdfParser(fileName, userId);
+ 
   } catch (error) {
     res.json({ status: error });
   }
