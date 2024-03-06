@@ -32,7 +32,6 @@ import AppliedBids from "./tabs/applied-bids/applied-bids";
 import Settings from "./tabs/settings/settings";
 import { useParams } from 'react-router-dom';
 
-
 export default function Index() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -88,10 +87,11 @@ export default function Index() {
     }
 
     const form = new FormData();
-    form.append("profilePhoto", e.target.files[0]);
-
+   form.append("profilePhoto", e.target.files[0]);
+ form.append("userId",id)
     const response = await api.user.profile.updatePicture(form);
 
+console.log(response)
     setProfile(response)
     getProfile();
   };
@@ -102,13 +102,14 @@ export default function Index() {
 
       const getData = async () => {
         const resp = await api.user.profile.get(id);
-        //console.log("bu respti",resp)
+        console.log("bu indexe gelen profile",resp)
         setProfile(resp);
 
 
       };
       getData();
     }
+    
   });
 
   const checkSession = async () => {
@@ -150,7 +151,7 @@ export default function Index() {
                       })`,
                   }}
                 >
-                  {/* <img src="../../../../backend/uploads/profilePhoto-1701075220944.png"></img> */}
+                 
                   <input type="file" onChange={updateProfilePhoto} />
                 </div>
 

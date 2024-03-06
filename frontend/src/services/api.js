@@ -17,7 +17,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (401 === error.response.status && error.response) {
+    if (401 === error.response && error.response) {
       
       localStorage.clear();
       window.location.href = "/";
@@ -88,7 +88,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         });
-        return response;
+        return response.data;
       },
       project: {
         async add(type, payload) {

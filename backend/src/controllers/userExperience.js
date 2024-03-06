@@ -2,21 +2,6 @@ import ExperienceModel from "../models/profile/Experience.js";
 import ExperiencePdfDoc from "../models/profile/ExperiencePdfDoc.js";
 import UserModel from "../models/User.js";
 
-const addExperience = async (req, res) => {
-  try {
-    const { headline, company, description, date } = req.body;
-    const userId = req.session.userId;
-    const experience = await ExperienceModel.create({
-      headline,
-      company,
-      description,
-      date,
-      userId,
-    });
-
-    res.status(201).json({
-      message: "Experience information has been added successfully",
-    });
 
 const addExperience = async (req, res) => {
   try {

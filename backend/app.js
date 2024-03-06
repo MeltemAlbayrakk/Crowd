@@ -14,12 +14,14 @@ import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
 
+
+
 dotenv.config()
 
 
 const app = express()
 const port = 3001
-app.use(cors());
+
 
 
 

@@ -27,7 +27,7 @@
     "nodemon": "^3.0.1",
 
     "passport": "^0.7.0",
-    "passport-linkedin-api-v2": "^1.1.2"
+    "passport-linkedin-api-v2": "^1.1.2"  ,
 
     "path": "^0.12.7",
     "pdfreader": "^3.0.2",
