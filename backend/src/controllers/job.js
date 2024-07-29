@@ -122,25 +122,46 @@ const getAlljobs = async (req, res) => {
   res.status(201).json(jobs);
 };
 
-async function ai(content) {
-  let myBard = new Bard(
-    "fgimDSPeh41gyUcuM3l3RpTWYaycuZG8Yr65oKtbY4NnI4kW6TPLUXdF7730SdJ_ZZdSbA.",
-    {
-      verbose: true,
-      fetch: fetch,
-    }
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI("AIzaSyA7NKmj1Vxwz1CxyULGhFYe0lnvIbdvmfM");
+
+async function ai(input) {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+
+  
+
+  const result = await model.generateContent(input).then(
   );
 
-  try {
-    const aicontent = await myBard.ask(`${content}`);
-    
-    console.log(aicontent);
-    return aicontent;
-  } catch (error) {
-console.error(error);
-    throw error;
-  }
+  const response = await result.response;
+  const text = response.text();
+
+  return text;
+
 }
+
+// async function ai(content) {
+//   let myBard = new Bard(
+//     "fgimDSPeh41gyUcuM3l3RpTWYaycuZG8Yr65oKtbY4NnI4kW6TPLUXdF7730SdJ_ZZdSbA.",
+//     {
+//       verbose: true,
+//       fetch: fetch,
+//     }
+//   );
+
+//   try {
+//     const aicontent = await myBard.ask(`${content}`);
+    
+//     console.log(aicontent);
+//     return aicontent;
+//   } catch (error) {
+// console.error(error);
+//     throw error;
+//   }
+// }
 
 const aiAnalysis = async (req, res) => {
   try {
@@ -164,6 +185,7 @@ const aiAnalysis = async (req, res) => {
       subcategory: jobTitle,
       date: { $gte: startDate, $lte: endDate }
     });
+ 
 
     const numberOfJobsByMonth = {};
 
@@ -177,13 +199,18 @@ const aiAnalysis = async (req, res) => {
     } 
 
 
-    let question = Object.values(numberOfJobsByMonth).join("\n") +
+    let question1 = Object.values(numberOfJobsByMonth).join("\n") +
       "\nGeçmiş aylardaki " + previousMonth +
       " aylık veriye bakarak gelecek " +
       nextMonth + " ay içinde ne yönlü bir gelişme olabilir tahmin yapabilir misin?" +
       "Bu bir sitede bir programlama diline olan talep sayısıdır." +
       "Gelecek aylar içinde ay ay sayı vererek tahmin yap.Dilin adı :  " + jobTitle;
 
+
+let question2 = Object.values(numberOfJobsByMonth).join("\n") + "Bunlar geçtiğimiz " + previousMonth + " ayın" + jobTitle+ "dilinde iş ilanı sayıları. Bu sayılara bakarak önümüzdeki " 
++ nextMonth + "ay için bu dille ilgili bi tahminde bulunabilir misin? bunu bir paragrafta açıkla"
+
+let question = Object.values(numberOfJobsByMonth).join("\n") + "These are job postings for the latest" +previousMonth+ "month "+jobTitle+" versions. Looking at these numbers, can you make a prediction about this language for "+nextMonth+" months? Explain this in a paragraph"
   
     const data = await ai(question);
 console.log("soru : "+ question)
